@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Compute Services</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --card-gradient: linear-gradient(145deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            --accent-gradient: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
+            --glow-color: rgba(139, 92, 246, 0.4);
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        body {
+            font-family: 'Poppins', 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(51, 65, 85, 0.8) 100%);
+            padding: 80px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 20%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(59, 130, 246, 0.15) 0%, transparent 50%);
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            background: var(--glass-bg);
+            color: white;
+            border: 1px solid var(--glass-border);
+            padding: 14px 24px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 3;
+            letter-spacing: 0.5px;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(139, 92, 246, 0.3);
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 24px;
+            letter-spacing: -0.02em;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-subtitle {
+            font-size: 1.4rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 40px;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 80px 20px;
+            position: relative;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+            gap: 32px;
+            margin-top: 20px;
+        }
+
+        .service-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 1.5rem;
+            padding: 0;
+            backdrop-filter: blur(20px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            height: auto;
+            min-height: 500px;
+            display: block;
+            cursor: pointer;
+            perspective: 1000px;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--accent-gradient);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 1.5rem;
+            z-index: -1;
+        }
+
+        .service-card::after {
+            content: '';
+            position: absolute;
+            top: 1px;
+            left: 1px;
+            right: 1px;
+            bottom: 1px;
+            background: var(--glass-bg);
+            border-radius: calc(1.5rem - 1px);
+            backdrop-filter: blur(20px);
+            z-index: -1;
+        }
+
+        .service-card:hover::before {
+            opacity: 0.1;
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(139, 92, 246, 0.2), 0 8px 32px rgba(0, 0, 0, 0.1);
+            border-color: rgba(139, 92, 246, 0.3);
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            min-height: 500px;
+            text-align: left;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+
+        .service-card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            min-height: 500px;
+            backface-visibility: hidden;
+            border-radius: 1.5rem;
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            overflow-x: hidden;
+            box-sizing: border-box;
+        }
+
+        .card-front::-webkit-scrollbar,
+        .card-back::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .card-front::-webkit-scrollbar-track,
+        .card-back::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+
+        .card-front::-webkit-scrollbar-thumb,
+        .card-back::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            border-radius: 3px;
+        }
+
+        .card-front::-webkit-scrollbar-thumb:hover,
+        .card-back::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #7c3aed, #2563eb);
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            background: linear-gradient(145deg, rgba(248, 250, 252, 0.1) 0%, rgba(241, 245, 249, 0.05) 100%);
+        }
+
+        .service-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .service-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--accent-gradient);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+            margin-right: 20px;
+            box-shadow: 0 8px 32px var(--glow-color), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            transition: all 0.4s ease;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .service-icon::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: var(--accent-gradient);
+            border-radius: 22px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            filter: blur(8px);
+        }
+
+        .service-card:hover .service-icon::before {
+            opacity: 0.6;
+        }
+
+        .service-card:hover .service-icon {
+            transform: scale(1.05) rotate(5deg);
+            box-shadow: 0 12px 40px var(--glow-color);
+        }
+
+        .service-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 15px;
+            
+            line-height: 1.3;
+            margin-bottom: 15px;
+        }
+
+        .floating-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            color: rgba(139, 92, 246, 0.4);
+            animation: float-gentle 3s ease-in-out infinite;
+        }
+
+        @keyframes float-gentle {
+            0%, 100% { transform: translateY(-50%) translateX(0px); }
+            50% { transform: translateY(-50%) translateX(3px); }
+        }
+
+        .service-description {
+            color: #cbd5e1;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            
+            flex-grow: 1;
+        }
+
+        .fact-section {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 16px;
+            padding: 24px;
+            margin: auto;
+            flex-shrink: 0;
+            position: relative;
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+
+        .fact-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--accent-gradient);
+            border-radius: 16px 16px 0 0;
+        }
+
+        .fact-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #27106b;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .fact-label::before {
+            content: '✨';
+            margin-right: 8px;
+            font-size: 1rem;
+        }
+
+        .fact-text {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #e2e8f0;
+            line-height: 1.5;
+        }
+
+        .service-details {
+            background: linear-gradient(135deg, rgba(248, 250, 252, 0.1) 0%, rgba(241, 245, 249, 0.05) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 24px;
+            margin-top: auto;
+            flex-shrink: 0;
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+
+        .service-details::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            border-radius: 16px 16px 0 0;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .detail-row:hover {
+            background: rgba(139, 92, 246, 0.05);
+            padding-left: 16px;
+            padding-right: 16px;
+            margin: 0 -16px;
+            border-radius: 12px;
+            transform: translateX(4px);
+        }
+
+        .detail-label {
+            font-weight: 500;
+            color: #27106b;
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+            gap: 8px;
+            gap: 8px;
+        }
+
+        .detail-label i {
+            margin-right: 10px;
+            color: #27106b;
+            font-size: 1.1rem;
+            width: 18px;
+            text-align: center;
+        }
+
+        .detail-value {
+            color: #e2e8f0;
+            font-weight: 500;
+            text-align: right;
+            max-width: 60%;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 768px) {
+            .services-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+            
+            .hero-title {
+                font-size: 2.8rem;
+            }
+            
+            .service-card {
+                min-height: 450px;
+            }
+            
+            .card-front, .card-back {
+                min-height: 450px;
+                padding: 24px;
+            }
+        }
+
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #6366f1;
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float 20s infinite linear;
+        }
+
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: none;
+        }
+
+        .scroll-to-top.visible {
+            display: block;
+        }
+
+        .scroll-to-top:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-particles"></div>
+    
+    <div class="hero-section">
+        <button class="back-btn" onclick="window.location.href='categories.html'">
+            <i class="fas fa-arrow-left"></i> Back to Categories
+        </button>
+        
+        <div class="hero-content">
+            <h1 class="hero-title">AWS Compute Services</h1>
+            <p class="hero-subtitle">Scalable computing power for every workload</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="services-grid" id="servicesGrid">
+            <!-- Services will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <button id="scroll-to-top" class="scroll-to-top" aria-label="Scroll to top">↑</button>
+
+    <script>
+        const computeServices = [
+            {
+                name: "Amazon EC2",
+                icon: "fas fa-server",
+                floatingIcon: "fas fa-microchip",
+                fact: "Secure, resizable compute capacity in the cloud - pay only for what you use with up to 90% savings on Spot Instances!",
+                description: "Elastic Compute Cloud provides secure, resizable compute capacity in the cloud with complete control of computing resources and proven computing environment.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Virtual Server Service" },
+                    { label: "Pricing", icon: "fas fa-dollar-sign", value: "On-Demand, Spot (90% off), Reserved (72% off)" },
+                    { label: "Instance Types", icon: "fas fa-layer-group", value: "C7g, Inf2, M7g, R7g, Trn1" },
+                    { label: "Features", icon: "fas fa-star", value: "Auto Scaling, Load Balancing, Security Groups" }
+                ]
+            },
+            {
+                name: "Amazon EC2 Auto Scaling",
+                icon: "fas fa-expand-arrows-alt",
+                floatingIcon: "fas fa-chart-line",
+                fact: "Automatically add or remove EC2 instances based on demand - maintain availability with dynamic and predictive scaling!",
+                description: "Maintains application availability and automatically adds or removes EC2 instances according to conditions you define with fleet management features.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Auto Scaling Service" },
+                    { label: "Scaling Types", icon: "fas fa-cogs", value: "Dynamic and Predictive scaling" },
+                    { label: "Features", icon: "fas fa-star", value: "Fleet management, health monitoring" },
+                    { label: "Benefits", icon: "fas fa-check-circle", value: "Application availability, cost optimization" }
+                ]
+            },
+            {
+                name: "Amazon EC2 Image Builder",
+                icon: "fas fa-compact-disc",
+                floatingIcon: "fas fa-tools",
+                fact: "Build, test, and deploy VM and container images with no manual steps or custom automation scripts!",
+                description: "Simplifies building, testing, and deployment of VMs and container images with graphical interface, built-in automation, and AWS security settings.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Image Building Service" },
+                    { label: "Interface", icon: "fas fa-mouse-pointer", value: "Simple graphical interface" },
+                    { label: "Automation", icon: "fas fa-robot", value: "Built-in automation, no manual steps" },
+                    { label: "Cost", icon: "fas fa-dollar-sign", value: "No cost except underlying AWS resources" }
+                ]
+            },
+            {
+                name: "Amazon Lightsail",
+                icon: "fas fa-rocket",
+                floatingIcon: "fas fa-globe",
+                fact: "Easiest way to launch virtual private servers - everything included for a low, predictable price!",
+                description: "Designed to be the easiest way to launch and manage virtual private servers with everything needed for a low, predictable price.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Virtual Private Server" },
+                    { label: "Includes", icon: "fas fa-box", value: "VM, SSD storage, data transfer, DNS, static IP" },
+                    { label: "Pricing", icon: "fas fa-dollar-sign", value: "Low, predictable monthly price" },
+                    { label: "Target", icon: "fas fa-users", value: "Developers, small businesses" }
+                ]
+            },
+            {
+                name: "Amazon Linux 2023",
+                icon: "fas fa-linux",
+                floatingIcon: "fas fa-shield-alt",
+                fact: "Security-by-default Linux OS with 5 years of support and optimized performance for Graviton instances!",
+                description: "New Linux-based operating system designed to provide secure, stable, high-performance environment with seamless AWS integration.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Linux Operating System" },
+                    { label: "Security", icon: "fas fa-shield-alt", value: "Security-by-default, SELinux, IMDSv2" },
+                    { label: "Support", icon: "fas fa-calendar", value: "5 years support, 2-year release cycle" },
+                    { label: "Features", icon: "fas fa-star", value: "Kernel live patching, versioned repos" }
+                ]
+            },
+            {
+                name: "AWS App Runner",
+                icon: "fas fa-running",
+                floatingIcon: "fas fa-container",
+                fact: "Deploy containerized web apps at scale with no infrastructure experience - just bring your code!",
+                description: "Fully managed service for quickly deploying containerized web applications and APIs at scale with automatic builds, deployment, and load balancing.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Containerized App Deployment" },
+                    { label: "Input", icon: "fas fa-code", value: "Source code or container image" },
+                    { label: "Features", icon: "fas fa-star", value: "Auto build, deploy, load balance, encrypt" },
+                    { label: "Scaling", icon: "fas fa-expand-arrows-alt", value: "Auto scales up/down with traffic" }
+                ]
+            },
+            {
+                name: "AWS Batch",
+                icon: "fas fa-tasks",
+                floatingIcon: "fas fa-layer-group",
+                fact: "Run hundreds of thousands of batch jobs efficiently - dynamically provisions optimal compute resources!",
+                description: "Enables easy and efficient running of hundreds of thousands of batch computing jobs with dynamic provisioning of optimal compute resources.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Batch Computing Service" },
+                    { label: "Scale", icon: "fas fa-expand-arrows-alt", value: "Hundreds of thousands of jobs" },
+                    { label: "Resources", icon: "fas fa-microchip", value: "CPU/memory optimized instances" },
+                    { label: "Integration", icon: "fas fa-plug", value: "EC2, Spot Instances, full AWS range" }
+                ]
+            },
+            {
+                name: "AWS Elastic Beanstalk",
+                icon: "fas fa-seedling",
+                floatingIcon: "fas fa-upload",
+                fact: "Upload your code and Beanstalk handles deployment, scaling, and monitoring - retain full control of resources!",
+                description: "Easy-to-use service for deploying and scaling web applications with automatic deployment, capacity provisioning, load balancing, and health monitoring.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Application Deployment Platform" },
+                    { label: "Languages", icon: "fas fa-code", value: "Java, .NET, PHP, Node.js, Python, Ruby, Go" },
+                    { label: "Servers", icon: "fas fa-server", value: "Apache, Nginx, Passenger, IIS" },
+                    { label: "Control", icon: "fas fa-sliders-h", value: "Full control over AWS resources" }
+                ]
+            },
+            {
+                name: "AWS Fargate",
+                icon: "fas fa-ship",
+                floatingIcon: "fas fa-boxes",
+                fact: "Run containers without managing servers or clusters - focus on applications, not infrastructure!",
+                description: "Compute engine for Amazon ECS that allows running containers without managing servers or clusters, removing infrastructure management overhead.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Serverless Container Compute" },
+                    { label: "Management", icon: "fas fa-tools", value: "No servers or clusters to manage" },
+                    { label: "Launch Types", icon: "fas fa-rocket", value: "Fargate and EC2 launch types" },
+                    { label: "Focus", icon: "fas fa-bullseye", value: "Application design vs infrastructure" }
+                ]
+            },
+            {
+                name: "AWS Lambda",
+                icon: "fas fa-bolt",
+                floatingIcon: "fas fa-code",
+                fact: "Run code without servers - pay only for compute time consumed with zero administration!",
+                description: "Lets you run code without provisioning or managing servers with automatic scaling and high availability, paying only for compute time consumed.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Serverless Compute Service" },
+                    { label: "Pricing", icon: "fas fa-dollar-sign", value: "Pay only for compute time used" },
+                    { label: "Triggers", icon: "fas fa-play", value: "AWS services or direct web/mobile calls" },
+                    { label: "Administration", icon: "fas fa-user-cog", value: "Zero administration required" }
+                ]
+            },
+            {
+                name: "AWS Serverless Application Repository",
+                icon: "fas fa-store",
+                floatingIcon: "fas fa-puzzle-piece",
+                fact: "Deploy serverless applications instantly - browse ready-made solutions for common use cases!",
+                description: "Enables quick deployment of code samples, components, and complete applications for common use cases with AWS SAM templates.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Serverless App Marketplace" },
+                    { label: "Use Cases", icon: "fas fa-lightbulb", value: "Web/mobile backends, IoT, monitoring" },
+                    { label: "Templates", icon: "fas fa-file-code", value: "AWS SAM template definitions" },
+                    { label: "Cost", icon: "fas fa-dollar-sign", value: "No additional charge, pay for resources" }
+                ]
+            },
+            {
+                name: "AWS Outposts",
+                icon: "fas fa-building",
+                floatingIcon: "fas fa-home",
+                fact: "Bring native AWS services to your data center - same APIs, tools, and functionality on-premises!",
+                description: "Brings native AWS services, infrastructure, and operating models to virtually any data center or on-premises facility.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Hybrid Cloud Infrastructure" },
+                    { label: "Variants", icon: "fas fa-layer-group", value: "VMware Cloud, AWS-native" },
+                    { label: "Management", icon: "fas fa-tools", value: "Fully managed by AWS" },
+                    { label: "Ordering", icon: "fas fa-shopping-cart", value: "Servers, quarter/half/full racks" }
+                ]
+            },
+            {
+                name: "AWS Wavelength",
+                icon: "fas fa-wifi",
+                floatingIcon: "fas fa-mobile-alt",
+                fact: "Ultra-low latency for 5G applications - compute at the edge of telecommunications networks!",
+                description: "AWS infrastructure optimized for mobile edge computing applications embedded within CSP datacenters at 5G network edge.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Mobile Edge Computing" },
+                    { label: "Network", icon: "fas fa-signal", value: "5G telecommunications network edge" },
+                    { label: "Latency", icon: "fas fa-tachometer-alt", value: "Ultra-low latency applications" },
+                    { label: "Traffic", icon: "fas fa-route", value: "No Internet hops, direct CSP network" }
+                ]
+            },
+            {
+                name: "VMware Cloud on AWS",
+                icon: "fas fa-cloud",
+                floatingIcon: "fas fa-server",
+                fact: "Seamlessly migrate VMware workloads to AWS - same VMware tools with native AWS service integration!",
+                description: "Integrated cloud offering delivering scalable, secure service for migrating VMware vSphere environments to AWS with native service integration.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "VMware Cloud Migration" },
+                    { label: "Technologies", icon: "fas fa-cogs", value: "vSphere, vSAN, NSX, vCenter Server" },
+                    { label: "Integration", icon: "fas fa-plug", value: "Lambda, SQS, S3, RDS, DynamoDB" },
+                    { label: "Compatibility", icon: "fas fa-check-circle", value: "Full VM compatibility, workload portability" }
+                ]
+            }
+        ];
+
+        function createServiceCard(service) {
+            return `
+                <div class="service-card" onclick="flipCard(this)">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="service-header">
+                                <div class="service-icon">
+                                    <i class="${service.icon}"></i>
+                                </div>
+                                <h3 class="service-title">${service.name}</h3>
+                            </div>
+                            <div class="fact-section">
+                                <div class="fact-label">Quick Fact</div>
+                                <div class="fact-text">${service.fact}</div>
+                            </div>
+                        </div>
+                        <div class="card-back">
+                            <div class="service-header">
+                                <div class="service-icon">
+                                    <i class="${service.icon}"></i>
+                                </div>
+                                <h3 class="service-title">${service.name}</h3>
+                            </div>
+                            <p class="service-description">${service.description}</p>
+                            <div class="service-details">
+                                ${service.details.map(detail => `
+                                    <div class="detail-row">
+                                        <div class="detail-label">
+                                            <i class="${detail.icon}"></i>
+                                            ${detail.label}
+                                        </div>
+                                        <div class="detail-value">${detail.value}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function flipCard(card) {
+            card.classList.toggle('flipped');
+        }
+
+        function createParticles() {
+            const particles = document.querySelector('.floating-particles');
+            const particleCount = 25;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                const colors = ['#6366f1', '#8b5cf6', '#3b82f6', '#10b981', '#f59e0b'];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.cssText = `
+                    position: absolute;
+                    width: ${Math.random() * 6 + 2}px;
+                    height: ${Math.random() * 6 + 2}px;
+                    background: ${color};
+                    border-radius: 50%;
+                    left: ${Math.random() * 100}%;
+                    top: ${Math.random() * 100}%;
+                    opacity: ${Math.random() * 0.6 + 0.2};
+                    animation: float ${Math.random() * 30 + 20}s infinite linear;
+                    animation-delay: ${Math.random() * 30}s;
+                    box-shadow: 0 0 ${Math.random() * 10 + 5}px ${color};
+                `;
+                particles.appendChild(particle);
+            }
+        }
+
+        function initializeScrollToTop() {
+            const scrollButton = document.getElementById('scroll-to-top');
+
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    scrollButton.classList.add('visible');
+                } else {
+                    scrollButton.classList.remove('visible');
+                }
+            });
+
+            scrollButton.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const grid = document.getElementById('servicesGrid');
+            grid.innerHTML = computeServices.map(createServiceCard).join('');
+            createParticles();
+            initializeScrollToTop();
+        });
+    </script>
+</body>
+</html>

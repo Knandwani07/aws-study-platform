@@ -1,0 +1,129 @@
+/* Keywords Table Styles */
+.keywords-table-container {
+  padding: 4rem 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.search-container {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.search-input {
+  width: 100%;
+  max-width: 500px;
+  padding: 1rem 1.5rem;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  color: #ffffff;
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.search-input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.search-input:focus {
+  border-color: #6366f1;
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+}
+
+.table-wrapper {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.keywords-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  color: #ffffff;
+}
+
+.keywords-table thead {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+}
+
+.keywords-table th {
+  padding: 1.5rem 1rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 1rem;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.keywords-table td {
+  padding: 1.2rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  vertical-align: top;
+}
+
+.keywords-table tbody tr {
+  transition: all 0.2s ease;
+}
+
+.keywords-table tbody tr:hover {
+  background: rgba(99, 102, 241, 0.05);
+  transform: translateX(2px);
+}
+
+.keywords-table tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.keywords-table tbody tr:nth-child(even):hover {
+  background: rgba(99, 102, 241, 0.08);
+}
+
+.keywords-table td:first-child {
+  font-weight: 600;
+  color: #6366f1;
+  min-width: 200px;
+}
+
+.keywords-table td:nth-child(2) {
+  color: #ffffff;
+  line-height: 1.5;
+  max-width: 400px;
+}
+
+.keywords-table td:nth-child(3) {
+  color: #a0a0a0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+/* Responsive table styles */
+@media (max-width: 768px) {
+  .keywords-table-container {
+    padding: 2rem 1rem;
+  }
+
+  .keywords-table {
+    font-size: 0.85rem;
+  }
+
+  .keywords-table th,
+  .keywords-table td {
+    padding: 0.8rem 0.5rem;
+  }
+
+  .keywords-table td:first-child {
+    min-width: 150px;
+  }
+
+  .keywords-table td:nth-child(2) {
+    max-width: 300px;
+  }
+}

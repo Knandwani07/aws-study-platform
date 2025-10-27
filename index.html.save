@@ -1,0 +1,400 @@
+open the updated code in vs code<!DOCTYPE html> <html lang="en"> <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Mastery Hub - Your Cloud Career Accelerator</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <span class="brand-icon">☁️</span>
+                <span class="brand-text">AWS Mastery</span>
+            </div>
+            <div class="nav-menu">
+                <a href="#home" class="nav-link active">Home</a>
+                <a href="#services" class="nav-link">Services</a>
+                <a href="#quiz" class="nav-link">Practice</a>
+                <a href="#progress" class="nav-link">Progress</a>
+            </div>
+            <button class="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="badge-icon">🚀</span>
+                    <span>Accelerate Your Cloud Journey</span>
+                </div>
+                <h1 class="hero-title">
+                    Master AWS.<br>
+                    <span class="gradient-text">Build Your Future.</span>
+                </h1>
+                <p class="hero-description">
+                    Transform your career with comprehensive AWS training. From Cloud Practitioner to Solutions Architect - we've got your path mapped out.
+                </p>
+                <div class="hero-actions">
+                    <button class="btn-primary" onclick="startQuiz()">
+                        Start Learning
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </button>
+                    <button class="btn-secondary" onclick="scrollToServices()">
+                        Explore Services
+                    </button>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-number">200+</div>
+                        <div class="stat-label">AWS Services</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">15K+</div>
+                        <div class="stat-label">Questions</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">98%</div>
+                        <div class="stat-label">Success Rate</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="cloud-diagram">
+                    <div class="cloud-layer">
+                        <div class="service-node" data-service="compute">
+                            <div class="node-icon">💻</div>
+                            <div class="node-label">Compute</div>
+                        </div>
+                        <div class="service-node" data-service="storage">
+                            <div class="node-icon">💾</div>
+                            <div class="node-label">Storage</div>
+                        </div>
+                        <div class="service-node" data-service="database">
+                            <div class="node-icon">🗄️</div>
+                            <div class="node-label">Database</div>
+                        </div>
+                        <div class="service-node" data-service="security">
+                            <div class="node-icon">🔒</div>
+                            <div class="node-label">Security</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Certification Paths -->
+    <section class="certifications">
+        <div class="container">
+            <div class="section-header">
+                <h2>Choose Your Certification Path</h2>
+                <p>Structured learning paths designed for success</p>
+            </div>
+            <div class="cert-grid">
+                <div class="cert-card" data-cert="CCP">
+                    <div class="cert-icon">☁️</div>
+                    <h3>Cloud Practitioner</h3>
+                    <p>Perfect starting point for cloud beginners</p>
+                    <div class="cert-features">
+                        <span class="feature">Foundational</span>
+                        <span class="feature">4 weeks</span>
+                    </div>
+                    <button class="cert-btn">Start Path</button>
+                </div>
+                <div class="cert-card featured" data-cert="SAA">
+                    <div class="cert-badge">Most Popular</div>
+                    <div class="cert-icon">🏗️</div>
+                    <h3>Solutions Architect</h3>
+                    <p>Design and deploy scalable AWS solutions</p>
+                    <div class="cert-features">
+                        <span class="feature">Associate</span>
+                        <span class="feature">8 weeks</span>
+                    </div>
+                    <button class="cert-btn">Start Path</button>
+                </div>
+                <div class="cert-card" data-cert="DVA">
+                    <div class="cert-icon">👨‍💻</div>
+                    <h3>Developer</h3>
+                    <p>Build and maintain AWS applications</p>
+                    <div class="cert-features">
+                        <span class="feature">Associate</span>
+                        <span class="feature">6 weeks</span>
+                    </div>
+                    <button class="cert-btn">Start Path</button>
+                </div>
+                <div class="cert-card" data-cert="SOA">
+                    <div class="cert-icon">⚙️</div>
+                    <h3>SysOps Admin</h3>
+                    <p>Deploy, manage, and operate AWS systems</p>
+                    <div class="cert-features">
+                        <span class="feature">Associate</span>
+                        <span class="feature">7 weeks</span>
+                    </div>
+                    <button class="cert-btn">Start Path</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AWS Services Categories -->
+    <section id="categories" class="categories">
+        <div class="container">
+            <div class="section-header">
+                <h2>AWS Service Categories</h2>
+                <p>Explore comprehensive AWS services organized by category</p>
+                <div class="exam-selector-container">
+                    <label for="exam-selector">Filter by Certification:</label>
+                    <select id="exam-selector" class="exam-selector">
+                        <option value="CCP">☁️ Cloud Practitioner</option>
+                        <option value="AI">🤖 AI Practitioner</option>
+                        <option value="SAA">🏗️ Solutions Architect</option>
+                        <option value="SOA">⚙️ SysOps Administrator</option>
+                        <option value="DVA">👨‍💻 Developer Associate</option>
+                        <option value="SAP">🎯 Solutions Architect Pro</option>
+                    </select>
+                </div>
+            </div>
+            <div class="categories-grid">
+                <div class="category-card" data-category="Compute" onclick="openCategory('compute')">
+                    <div class="category-icon">💻</div>
+                    <h3>Compute</h3>
+                    <p>EC2, Lambda, ECS, EKS, Batch</p>
+                    <div class="category-count">25+ Services</div>
+                    <div class="category-arrow">→</div>
+                </div>
+                <div class="category-card" data-category="Storage" onclick="openCategory('storage')">
+                    <div class="category-icon">💾</div>
+                    <h3>Storage</h3>
+                    <p>S3, EBS, EFS, Glacier, FSx</p>
+                    <div class="category-count">15+ Services</div>
+                    <div class="category-arrow">→</div>
+                </div>
+                <div class="category-card" data-category="Database" onclick="openCategory('databases')">
+                    <div class="category-icon">🗄️</div>
+                    <h3>Database</h3>
+                    <p>RDS, DynamoDB, Aurora, Redshift</p>
+                    <div class="category-count">12+ Services</div>
+                    <div class="category-arrow">→</div>
+                </div>
+                <div class="category-card" data-category="Networking and Content Delivery" onclick="openCategory('networking-content-delivery')">
+                    <div class="category-icon">🌐</div>
+                    <h3>Networking & CDN</h3>
+                    <p>VPC, CloudFront, Route 53, API Gateway</p>
+                    <div class="category-count">20+ Services</div>
+                    <div class="category-arrow">→</div>
+                </div>
+                <div class="category-card" data-category="Security, Identity, and Compliance" onclick="openCategory('security-identity-compliance')">
+                    <div class="category-icon">🔒</div>
+                    <h3>Security & Identity</h3>
+                    <p>IAM, KMS, WAF, Shield, Cognito</p>
+                    <div class="category-count">18+ Services</div>
+                    <div class="category-arrow">→</div>
+                </div>
+                <div class="category-card" data-category="Machine Learning (ML) and Artificial Intelligence (AI)" onclick="openCategory('ml-ai')">
+                    <div class="category-icon">🤖</div>
+                    <h3>AI & Machine Learning</h3>
+                    <p>SageMaker, Rekognition, Lex, Comprehend</p>
+                    <div class="category-count">22+ Services</div>
+                    <div class="category-arrow">→</div>
+                </div>
+                <div class="category-card" data-category="Analytics" onclick="openCategory('analytics')">
+                    <div class="category-icon">📊</div>
+                    <h3>Analytics</h3>
+                    <p>Athena, EMR, Kinesis, QuickSight</p>
+                    <div class="category-count">16+ Services</div>
+                    <div class="category-arrow">→</div>
+                </div>
+                <div class="category-card" data-category="Developer Tools" onclick="openCategory('developer-tools')">
+                    <div class="category-icon">🛠️</div>
+                    <h3>Developer Tools</h3>
+                    <p>CodeCommit, CodeBuild, CodeDeploy, CodePipeline</p>
+                    <div class="category-count">14+ Services</div>
+                    <div class="category-arrow">→</div>
+                </div>
+                <div class="category-card" data-category="Management and Governance" onclick="openCategory('management-governance')">
+                    <div class="category-icon">⚙️</div>
+                    <h3>Management & Governance</h3>
+                    <p>CloudWatch, CloudTrail, Config, Systems Manager</p>
+                    <div class="category-count">19+ Services</div>
+                    <div class="category-arrow">→</div>
+                </div>
+                <div class="category-card" data-category="Migration and Transfer" onclick="openCategory('migration-transfer')">
+                    <div class="category-icon">🔄</div>
+                    <h3>Migration & Transfer</h3>
+                    <p>DMS, DataSync, Snow Family, Migration Hub</p>
+                    <div class="category-count">11+ Services</div>
+                    <div class="category-arrow">→</div>
+                </div>
+                <div class="category-card" data-category="Containers" onclick="openCategory('containers')">
+                    <div class="category-icon">📦</div>
+                    <h3>Containers</h3>
+                    <p>ECS, EKS, Fargate, ECR</p>
+                    <div class="category-count">8+ Services</div>
+                    <div class="category-arrow">→</div>
+                </div>
+                <div class="category-card" data-category="Application Integration" onclick="openCategory('application-integration')">
+                    <div class="category-icon">🔗</div>
+                    <h3>Application Integration</h3>
+                    <p>SQS, SNS, EventBridge, Step Functions</p>
+                    <div class="category-count">10+ Services</div>
+                    <div class="category-arrow">→</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Practice Quiz -->
+    <section id="quiz" class="quiz-section">
+        <div class="container">
+            <div class="quiz-content">
+                <div class="quiz-info">
+                    <h2>Test Your Knowledge</h2>
+                    <p>Practice with real exam-style questions and get instant feedback</p>
+                    <div class="quiz-features">
+                        <div class="feature-item">
+                            <div class="feature-icon">📊</div>
+                            <div class="feature-text">
+                                <h4>Detailed Analytics</h4>
+                                <p>Track your progress and identify weak areas</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">🎯</div>
+                            <div class="feature-text">
+                                <h4>Targeted Practice</h4>
+                                <p>Focus on specific services or topics</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">⏱️</div>
+                            <div class="feature-text">
+                                <h4>Timed Exams</h4>
+                                <p>Simulate real exam conditions</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn-primary" onclick="startQuiz()">Start Practice Quiz</button>
+                </div>
+                <div class="quiz-visual">
+                    <div class="quiz-card">
+                        <div class="question-header">
+                            <span class="question-number">Question 1 of 65</span>
+                            <span class="question-timer">⏱️ 2:30</span>
+                        </div>
+                        <div class="question-text">
+                            Which AWS service provides a fully managed NoSQL database?
+                        </div>
+                        <div class="question-options">
+                            <div class="option">A) Amazon RDS</div>
+                            <div class="option selected">B) Amazon DynamoDB</div>
+                            <div class="option">C) Amazon Redshift</div>
+                            <div class="option">D) Amazon Aurora</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Progress Tracking -->
+    <section id="progress" class="progress-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Track Your Progress</h2>
+                <p>Monitor your learning journey and celebrate achievements</p>
+            </div>
+            <div class="progress-dashboard">
+                <div class="progress-card">
+                    <div class="progress-header">
+                        <h3>Overall Progress</h3>
+                        <span class="progress-percentage">68%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 68%"></div>
+                    </div>
+                    <div class="progress-stats">
+                        <div class="stat">
+                            <span class="stat-value">142</span>
+                            <span class="stat-label">Questions Completed</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">89%</span>
+                            <span class="stat-label">Accuracy Rate</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="achievements">
+                    <h3>Recent Achievements</h3>
+                    <div class="achievement-list">
+                        <div class="achievement">
+                            <div class="achievement-icon">🏆</div>
+                            <div class="achievement-text">
+                                <h4>Compute Master</h4>
+                                <p>Completed all EC2 questions</p>
+                            </div>
+                        </div>
+                        <div class="achievement">
+                            <div class="achievement-icon">⭐</div>
+                            <div class="achievement-text">
+                                <h4>Storage Expert</h4>
+                                <p>95% accuracy in S3 topics</p>
+                            </div>
+                        </div>
+                        <div class="achievement">
+                            <div class="achievement-icon">🎯</div>
+                            <div class="achievement-text">
+                                <h4>Streak Master</h4>
+                                <p>7 days learning streak</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="brand">
+                        <span class="brand-icon">☁️</span>
+                        <span class="brand-text">AWS Mastery</span>
+                    </div>
+                    <p>Your trusted partner for AWS certification success</p>
+                </div>
+                <div class="footer-links">
+                    <div class="link-group">
+                        <h4>Learning</h4>
+                        <a href="#certifications">Certifications</a>
+                        <a href="#services">AWS Services</a>
+                        <a href="#quiz">Practice Quiz</a>
+                    </div>
+                    <div class="link-group">
+                        <h4>Resources</h4>
+                        <a href="#progress">Progress</a>
+                        <a href="#analytics">Analytics</a>
+                        <a href="#help">Help Center</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 AWS Mastery Hub. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

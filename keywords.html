@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AWS Keywords - Study Hub</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="quiz-styles.css">
+<link rel="stylesheet" href="keywords.css">
+<style>
+  .categories-header {
+    margin-bottom: -2rem;
+  }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <div class="particles"></div>
+
+  <!-- Header -->
+
+  <!-- Main App Container -->
+  <main class="app-main">
+    <div class="categories-page">
+      <header class="categories-header">
+        <button class="back-btn" onclick="window.location.href='index.html'">← Back to Home</button>
+        <h1>AWS Keywords</h1>
+        <p>Explore AWS Keywords & Concepts</p>
+      </header>
+
+      <div class="keywords-table-container">
+        <div class="search-container">
+          <input type="text" id="searchInput" placeholder="Search by service, summary, or keywords..." aria-label="Search AWS keywords">
+          <div class="search-icon">🔍</div>
+        </div>
+        <div class="table-wrapper">
+          <table class="keywords-table">
+            <thead>
+              <tr>
+                <th>Service</th>
+                <th>Summary</th>
+                <th>Keywords</th>
+              </tr>
+            </thead>
+            <tbody id="keywordsTableBody">
+              <!-- Keywords will be dynamically inserted here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+
+  </main>
+
+  <script src="realtime-dashboard.js"></script>
+  <script src="keywords.js"></script>
+
+  <script>
+    // Enhanced particle system with interactivity
+    function createParticles() {
+      const particles = document.querySelector('.particles');
+      const particleCount = 25;
+
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        const colors = ['#6366f1', '#8b5cf6', '#3b82f6', '#10b981', '#f59e0b'];
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        particle.style.cssText = `
+          position: absolute;
+          width: ${Math.random() * 6 + 2}px;
+          height: ${Math.random() * 6 + 2}px;
+          background: ${color};
+          border-radius: 50%;
+          left: ${Math.random() * 100}%;
+          top: ${Math.random() * 100}%;
+          opacity: ${Math.random() * 0.6 + 0.2};
+          animation: float ${Math.random() * 30 + 20}s infinite linear;
+          animation-delay: ${Math.random() * 30}s;
+          box-shadow: 0 0 ${Math.random() * 10 + 5}px ${color};
+        `;
+        particles.appendChild(particle);
+      }
+    }
+
+    // Initialize particles on DOM load
+    document.addEventListener('DOMContentLoaded', () => {
+      createParticles();
+    });
+  </script>
+</body>
+</html>

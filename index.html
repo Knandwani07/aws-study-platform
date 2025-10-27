@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Exam Flashcards</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <div class="particles"></div>
+    
+    <!-- Header -->
+
+    <!-- Main Dashboard -->
+    <main class="dashboard">
+        
+        <!-- Welcome Section -->
+        <section class="welcome-section">
+            <div class="hero-section">
+                <div class="hero-content">
+                    <h1 class="hero-title">Master AWS Certifications</h1>
+                    <p class="hero-subtitle">Your ultimate platform for AWS certification success. Prepare, practice, and achieve your cloud computing goals with comprehensive study materials and interactive learning tools.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Four Main Pillars -->
+        <section class="main-pillars">
+            <h2>Study Pillars</h2>
+            <div class="pillars-grid">
+
+                <!-- Service Cards by Category -->
+                <div class="pillar-card" id="serviceCardsCard">
+                    <div class="pillar-icon">🗂️</div>
+                    <h3>Service Cards</h3>
+                    <p>Browse AWS services organized by categories like Compute, Storage, Database, and more</p>
+                    <button class="pillar-btn" onclick="window.location.href='categories.html'">Browse Categories</button>
+                </div>
+
+                <!-- Quizzes -->
+                <div class="pillar-card" id="quizzesCard">
+                    <div class="pillar-icon">🧠</div>
+                    <h3>Quizzes</h3>
+                    <p>Test your knowledge with interactive quizzes and practice exams</p>
+                    <button class="pillar-btn" onclick="window.location.href='quizzes.html'">Start Quiz</button>
+                </div>
+
+                <!-- Keywords -->
+                <div class="pillar-card" id="keywordsCard">
+                    <div class="pillar-icon">🔑</div>
+                    <h3>Keywords</h3>
+                    <p>Learn essential AWS terminology and key concepts</p>
+                    <button class="pillar-btn" id="browseKeywordsBtn"  onclick="window.location.href='keywords.html'">Browse Keywords</button>
+                </div>
+
+                <!-- Architectural Diagrams -->
+                <div class="pillar-card" id="diagramsCard">
+                    <div class="pillar-icon">🏗️</div>
+                    <h3>Architecture Diagrams</h3>
+                    <p>Study AWS architecture patterns and best practices</p>
+                    <button class="pillar-btn" id="viewDiagramsBtn" onclick="window.location.href='architectural-diagrams.html'">View Diagrams</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- AWS Certifications -->
+        <section class="main-pillars">
+            <h2>AWS Certifications</h2>
+            <div class="pillars-grid">
+                <!-- Foundational -->
+                <div class="pillar-card" data-cert="ccp">
+                    <div class="cert-level-badge foundational">Foundational</div>
+                    <img src="images/ccp.png" alt="AWS Certified Cloud Practitioner Badge" class="pillar-icon cert-image">
+                    <h3>AWS Certified Cloud Practitioner</h3>
+                    <p>No prior experience needed. Knowledge-based certification for foundational understanding of AWS Cloud.</p>
+                    <a href="https://d1.awsstatic.com/onedam/marketing-channels/website/aws/en_US/certification/approved/pdfs/docs-cloud-practitioner/AWS-Certified-Cloud-Practitioner_Exam-Guide.pdf" target="_blank" class="pillar-btn cert-btn">Learn More</a>
+                </div>
+
+                <div class="pillar-card" data-cert="ai">
+                    <div class="cert-level-badge foundational">Foundational</div>
+                    <img src="images/ai.png" alt="AWS Certified AI Practitioner Badge" class="pillar-icon cert-image">
+                    <h3>AWS Certified AI Practitioner</h3>
+                    <p>No prior experience needed. Knowledge-based certification for foundational understanding of AWS AI/ML services.</p>
+                    <a href="https://d1.awsstatic.com/onedam/marketing-channels/website/aws/en_US/certification/approved/pdfs/docs-ai-practitioner/AWS-Certified-AI-Practitioner_Exam-Guide.pdf" target="_blank" class="pillar-btn cert-btn">Learn More</a>
+                </div>
+
+                <!-- Associate -->
+                <div class="pillar-card" data-cert="saa">
+                    <div class="cert-level-badge associate">Associate</div>
+                    <img src="images/saa.png" alt="AWS Certified Solutions Architect – Associate Badge" class="pillar-icon cert-image">
+                    <h3>AWS Certified Solutions Architect – Associate</h3>
+                    <p>Prior cloud experience recommended. Role-based certification for designing secure, optimized applications on AWS.</p>
+                    <a href="https://d1.awsstatic.com/onedam/marketing-channels/website/aws/en_US/certification/approved/pdfs/docs-sa-assoc/AWS-Certified-Solutions-Architect-Associate_Exam-Guide.pdf" target="_blank" class="pillar-btn cert-btn">Learn More</a>
+                </div>
+
+                <div class="pillar-card" data-cert="dva">
+                    <div class="cert-level-badge associate">Associate</div>
+                    <img src="images/dva.png" alt="AWS Certified Developer – Associate Badge" class="pillar-icon cert-image">
+                    <h3>AWS Certified Developer – Associate</h3>
+                    <p>Prior cloud experience recommended. Role-based certification for developing applications on AWS.</p>
+                    <a href="https://d1.awsstatic.com/onedam/marketing-channels/website/aws/en_US/certification/approved/pdfs/docs-dev-associate/AWS-Certified-Developer-Associate_Exam-Guide.pdf" target="_blank" class="pillar-btn cert-btn">Learn More</a>
+                </div>
+
+                <div class="pillar-card" data-cert="cloudops">
+                    <div class="cert-level-badge associate">Associate</div>
+                    <img src="images/cloudops.png" alt="AWS Certified CloudOps Engineer – Associate Badge" class="pillar-icon cert-image">
+                    <h3>AWS Certified CloudOps Engineer – Associate</h3>
+                    <p>Prior cloud experience recommended. Role-based certification for cloud operations and administration.</p>
+                    <a href="https://d1.awsstatic.com/onedam/marketing-channels/website/aws/en_US/certification/approved/pdfs/docs-cloudops-associate/AWS-Certified-CloudOps-Engineer-Associate_Exam-Guide.pdf" target="_blank" class="pillar-btn cert-btn">Learn More</a>
+                </div>
+
+                <div class="pillar-card" data-cert="dea">
+                    <div class="cert-level-badge associate">Associate</div>
+                    <img src="images/dea.png" alt="AWS Certified Data Engineer – Associate Badge" class="pillar-icon cert-image">
+                    <h3>AWS Certified Data Engineer – Associate</h3>
+                    <p>Prior cloud experience recommended. Role-based certification for data engineering on AWS.</p>
+                    <a href="https://d1.awsstatic.com/onedam/marketing-channels/website/aws/en_US/certification/approved/pdfs/docs-data-engineer-associate/AWS-Certified-Data-Engineer-Associate_Exam-Guide.pdf" target="_blank" class="pillar-btn cert-btn">Learn More</a>
+                </div>
+
+                <div class="pillar-card" data-cert="mla">
+                    <div class="cert-level-badge associate">Associate</div>
+                    <img src="images/mla.png" alt="AWS Certified Machine Learning Engineer – Associate Badge" class="pillar-icon cert-image">
+                    <h3>AWS Certified Machine Learning Engineer – Associate</h3>
+                    <p>Prior cloud experience recommended. Role-based certification for ML engineering on AWS.</p>
+                    <a href="https://d1.awsstatic.com/onedam/marketing-channels/website/aws/en_US/certification/approved/pdfs/docs-machine-learning-engineer-associate/AWS-Certified-Machine-Learning-Engineer-Associate_Exam-Guide.pdf" target="_blank" class="pillar-btn cert-btn">Learn More</a>
+                </div>
+
+                <!-- Professional -->
+                <div class="pillar-card" data-cert="sap">
+                    <div class="cert-level-badge professional">Professional</div>
+                    <img src="images/sap.png" alt="AWS Certified Solutions Architect – Professional Badge" class="pillar-icon cert-image">
+                    <h3>AWS Certified Solutions Architect – Professional</h3>
+                    <p>2 years of AWS experience recommended. Advanced certification for designing complex, enterprise-level solutions.</p>
+                    <a href="https://d1.awsstatic.com/onedam/marketing-channels/website/aws/en_US/certification/approved/pdfs/docs-sa-pro/AWS-Certified-Solutions-Architect-Professional_Exam-Guide.pdf" target="_blank" class="pillar-btn cert-btn">Learn More</a>
+                </div>
+
+                <div class="pillar-card" data-cert="dop">
+                    <div class="cert-level-badge professional">Professional</div>
+                    <img src="images/dop.png" alt="AWS Certified DevOps Engineer – Professional Badge" class="pillar-icon cert-image">
+                    <h3>AWS Certified DevOps Engineer – Professional</h3>
+                    <p>2 years of AWS experience recommended. Advanced certification for DevOps practices and automation.</p>
+                    <a href="https://d1.awsstatic.com/onedam/marketing-channels/website/aws/en_US/certification/approved/pdfs/docs-devops-pro/AWS-Certified-DevOps-Engineer-Professional_Exam-Guide.pdf" target="_blank" class="pillar-btn cert-btn">Learn More</a>
+                </div>
+
+                <!-- Specialty -->
+                <div class="pillar-card" data-cert="scs">
+                    <div class="cert-level-badge specialty">Specialty</div>
+                    <img src="images/scs.png" alt="AWS Certified Security – Specialty Badge" class="pillar-icon cert-image">
+                    <h3>AWS Certified Security – Specialty</h3>
+                    <p>Advanced experience recommended. Specialty certification for security expertise on AWS.</p>
+                    <a href="https://d1.awsstatic.com/onedam/marketing-channels/website/aws/en_US/certification/approved/pdfs/docs-security-spec/AWS-Certified-Security-Specialty_Exam-Guide.pdf" target="_blank" class="pillar-btn cert-btn">Learn More</a>
+                </div>
+
+                <div class="pillar-card" data-cert="ans">
+                    <div class="cert-level-badge specialty">Specialty</div>
+                    <img src="images/ans.png" alt="AWS Certified Advanced Networking – Specialty Badge" class="pillar-icon cert-image">
+                    <h3>AWS Certified Advanced Networking – Specialty</h3>
+                    <p>Advanced experience recommended. Specialty certification for advanced networking on AWS.</p>
+                    <a href="https://d1.awsstatic.com/onedam/marketing-channels/website/aws/en_US/certification/approved/pdfs/docs-advnetworking-spec/AWS-Certified-Advanced-Networking-Specialty_Exam-Guide.pdf" target="_blank" class="pillar-btn cert-btn">Learn More</a>
+                </div>
+
+                <div class="pillar-card" data-cert="mls">
+                    <div class="cert-level-badge specialty">Specialty</div>
+                    <img src="images/mls.png" alt="AWS Certified Machine Learning – Specialty Badge" class="pillar-icon cert-image">
+                    <h3>AWS Certified Machine Learning – Specialty</h3>
+                    <p>Advanced experience recommended. Specialty certification for machine learning expertise on AWS.</p>
+                    <a href="https://d1.awsstatic.com/onedam/marketing-channels/website/aws/en_US/certification/approved/pdfs/docs-ml/AWS-Certified-Machine-Learning-Specialty_Exam-Guide.pdf" target="_blank" class="pillar-btn cert-btn">Learn More</a>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Study Tips -->
+        <section class="study-tips">
+            <h2>Study Tips & Best Practices</h2>
+            <div class="tips-grid">
+                <div class="tip-card" data-tip="practice">
+                    <div class="tip-number">1</div>
+                    <h3>Hands-On Practice</h3>
+                    <p>Create a free AWS account and experiment with services in a personal sandbox environment. Theory is important, but practice cements knowledge.</p>
+                </div>
+                <div class="tip-card" data-tip="core-services">
+                    <div class="tip-number">2</div>
+                    <h3>Focus on Core Services</h3>
+                    <p>Start with fundamental services like EC2, S3, and IAM. Once comfortable, branch out to specialized services based on your interests.</p>
+                </div>
+                <div class="tip-card" data-tip="documentation">
+                    <div class="tip-number">3</div>
+                    <h3>Use Official Documentation</h3>
+                    <p>AWS documentation is comprehensive and free. Use it as your primary reference alongside practical experimentation.</p>
+                </div>
+                <div class="tip-card" data-tip="communities">
+                    <div class="tip-number">4</div>
+                    <h3>Join Communities</h3>
+                    <p>Participate in AWS forums, Reddit communities, and local meetups. Learning from others' experiences accelerates your progress significantly.</p>
+                </div>
+                <div class="tip-card" data-tip="certifications">
+                    <div class="tip-number">5</div>
+                    <h3>Take Certifications</h3>
+                    <p>AWS certifications validate your skills and open doors. Start with Cloud Practitioner, then specialize based on your career goals.</p>
+                </div>
+                <div class="tip-card" data-tip="stay-updated">
+                    <div class="tip-number">6</div>
+                    <h3>Stay Updated</h3>
+                    <p>AWS evolves rapidly. Follow the AWS blog, newsletters, and re:Invent announcements to stay current with new features and updates.</p>
+                </div>
+            </div>
+        </section>
+
+
+    <!-- Interesting Facts -->
+        <section class="interesting-facts">
+            <h2>Interesting AWS Facts</h2>
+            <div class="facts-grid">
+                <div class="fact-card" data-fact="launch">
+                    <div class="fact-icon">🚀</div>
+                    <h3>AWS Launch</h3>
+                    <p>AWS was launched in 2006 with just one service: Simple Storage Service (S3). Today, it offers over 200 services!</p>
+                </div>
+                <div class="fact-card" data-fact="global">
+                    <div class="fact-icon">🌍</div>
+                    <h3>Global Reach</h3>
+                    <p>AWS operates in 31 geographic regions and 99 availability zones, making it the most extensive cloud infrastructure globally.</p>
+                </div>
+                <div class="fact-card" data-fact="speed">
+                    <div class="fact-icon">⚡</div>
+                    <h3>Speed Record</h3>
+                    <p>AWS can provision new EC2 instances in under 2 minutes, compared to weeks or months for traditional data centers.</p>
+                </div>
+                <div class="fact-card" data-fact="security">
+                    <div class="fact-icon">🔒</div>
+                    <h3>Security First</h3>
+                    <p>AWS invests over $1 billion annually in security, with 143 security standards and compliance certifications.</p>
+                </div>
+            </div>
+        </section>
+
+        
+
+    <script src="realtime-dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Networking and Content Delivery Services</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --card-gradient: linear-gradient(145deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            --accent-gradient: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
+            --glow-color: rgba(139, 92, 246, 0.4);
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        body {
+            font-family: 'Poppins', 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(51, 65, 85, 0.8) 100%);
+            padding: 80px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: #cbd5e1;
+            margin-bottom: 2rem;
+            font-weight: 400;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            background: var(--glass-bg);
+            color: white;
+            border: 1px solid var(--glass-border);
+            padding: 14px 24px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 3;
+            letter-spacing: 0.5px;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(139, 92, 246, 0.3);
+        }
+
+        .services-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .service-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 0;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(20px);
+            overflow: hidden;
+            perspective: 1000px;
+            min-height: 500px;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--accent-gradient);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .service-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .service-card:hover::before {
+            opacity: 0.1;
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(139, 92, 246, 0.2), 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .service-card:hover::after {
+            opacity: 1;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            min-height: 500px;
+        }
+
+        .service-card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            overflow-x: hidden;
+            box-sizing: border-box;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .card-front::-webkit-scrollbar,
+        .card-back::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .card-front::-webkit-scrollbar-track,
+        .card-back::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+
+        .card-front::-webkit-scrollbar-thumb,
+        .card-back::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            border-radius: 3px;
+        }
+
+        .card-front::-webkit-scrollbar-thumb:hover,
+        .card-back::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #7c3aed, #2563eb);
+        }
+
+        .service-header {
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .service-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: var(--accent-gradient);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            position: relative;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);
+            font-family: 'Font Awesome 6 Free', monospace;
+            -webkit-font-feature-settings: "liga" off;
+            font-feature-settings: "liga" off;
+        }
+
+        .service-icon::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: var(--accent-gradient);
+            border-radius: 22px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .floating-icon {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        .service-card:hover .service-icon::before {
+            opacity: 0.6;
+        }
+
+        .service-card:hover .service-icon {
+            transform: scale(1.05) rotate(5deg);
+            box-shadow: 0 12px 40px var(--glow-color);
+        }
+
+        .service-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 15px;
+            line-height: 1.3;
+            margin-bottom: 15px;
+        }
+
+        .fact-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: auto;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .fact-label {
+            font-size: 0.9rem;
+            color: #27106b;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+
+        .fact-label::before {
+            content: '✨';
+            margin-right: 8px;
+            font-size: 1rem;
+        }
+        }
+
+        .fact-text {
+            color: #e2e8f0;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        .service-description {
+            color: #cbd5e1;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            flex-grow: 1;
+        }
+
+        .service-details {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #27106b;
+            font-weight: 500;
+            font-size: 0.9rem;
+            gap: 8px;
+        }
+
+        .detail-label i {
+            width: 16px;
+            text-align: center;
+            color: #27106b;
+        }
+
+        .detail-value {
+            color: #e2e8f0;
+            font-weight: 500;
+            text-align: right;
+            font-size: 0.9rem;
+            max-width: 60%;
+        }
+
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #6366f1;
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float 20s infinite linear;
+        }
+
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: none;
+        }
+
+        .scroll-to-top.visible {
+            display: block;
+        }
+
+        .scroll-to-top:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .service-card {
+                min-height: 450px;
+            }
+
+            .card-front, .card-back {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-particles"></div>
+
+    <div class="hero-section">
+        <button class="back-btn" onclick="window.location.href='categories.html'">
+            <i class="fas fa-arrow-left"></i> Back to Categories
+        </button>
+        
+        <div class="hero-content">
+            <h1 class="hero-title">Networking & Content Delivery</h1>
+            <p class="hero-subtitle">Highest level of reliability, security, and performance in the cloud with comprehensive networking services</p>
+        </div>
+    </div>
+
+    <div class="services-container">
+        <div class="services-grid" id="servicesGrid">
+            <!-- Services will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <button id="scroll-to-top" class="scroll-to-top" aria-label="Scroll to top">↑</button>
+
+    <script>
+        const services = [
+            {
+                name: "Amazon API Gateway",
+                icon: "fas fa-door-open",
+                floatingIcon: "fas fa-code",
+                fact: "Fully managed service to create, publish, maintain, monitor, and secure APIs at any scale with few clicks!",
+                description: "Amazon API Gateway is a fully managed service that makes it easy for developers to create, publish, maintain, monitor, and secure APIs at any scale. It acts as a 'front door' for applications to access data, business logic, or functionality from back-end services, handling up to hundreds of thousands of concurrent API calls.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Fully Managed API Service" },
+                    { label: "Scale", icon: "fas fa-expand-arrows-alt", value: "Hundreds of thousands of concurrent calls" },
+                    { label: "Features", icon: "fas fa-star", value: "Traffic management, authorization, monitoring" },
+                    { label: "Integration", icon: "fas fa-plug", value: "EC2, Lambda, web applications" }
+                ]
+            },
+            {
+                name: "AWS App Mesh",
+                icon: "fas fa-project-diagram",
+                floatingIcon: "fas fa-eye",
+                fact: "Makes it easy to monitor and control microservices with end-to-end visibility and high availability!",
+                description: "AWS App Mesh makes it easy to monitor and control microservices running on AWS. It standardizes how microservices communicate, giving you end-to-end visibility and helping to ensure high-availability for your applications by providing consistent visibility and network traffic controls.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Microservices Management" },
+                    { label: "Visibility", icon: "fas fa-eye", value: "End-to-end microservices visibility" },
+                    { label: "Proxy", icon: "fas fa-server", value: "Open source Envoy proxy" },
+                    { label: "Integration", icon: "fas fa-plug", value: "ECS, EKS containerized services" }
+                ]
+            },
+            {
+                name: "Amazon CloudFront",
+                icon: "fas fa-globe",
+                floatingIcon: "fas fa-tachometer-alt",
+                fact: "Fast CDN service delivering data, videos, applications, and APIs globally with low latency and high speeds!",
+                description: "Amazon CloudFront is a fast content delivery network (CDN) service that securely delivers data, videos, applications, and APIs to customers globally with low latency, high transfer speeds, all within a developer-friendly environment. Integrated with AWS Shield for DDoS mitigation.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Content Delivery Network (CDN)" },
+                    { label: "Performance", icon: "fas fa-tachometer-alt", value: "Low latency, high transfer speeds" },
+                    { label: "Security", icon: "fas fa-shield-alt", value: "AWS Shield DDoS mitigation" },
+                    { label: "Pricing", icon: "fas fa-dollar-sign", value: "Pay-as-you-go, no upfront fees" }
+                ]
+            },
+            {
+                name: "AWS Cloud Map",
+                icon: "fas fa-map",
+                floatingIcon: "fas fa-search",
+                fact: "Cloud resource discovery service with custom names and updated locations of dynamically changing resources!",
+                description: "AWS Cloud Map is a cloud resource discovery service. You can define custom names for your application resources, and it maintains the updated location of these dynamically changing resources, increasing application availability by discovering the most up-to-date locations.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Resource Discovery Service" },
+                    { label: "Resources", icon: "fas fa-database", value: "Databases, queues, microservices" },
+                    { label: "Health Checks", icon: "fas fa-heartbeat", value: "Constantly checks resource health" },
+                    { label: "Benefits", icon: "fas fa-star", value: "Up-to-date resource locations" }
+                ]
+            },
+            {
+                name: "AWS Direct Connect",
+                icon: "fas fa-ethernet",
+                floatingIcon: "fas fa-building",
+                fact: "Establish dedicated network connection from premises to AWS with reduced costs and consistent experience!",
+                description: "AWS Direct Connect makes it easy to establish a dedicated network connection from your premises to AWS. It provides private connectivity between AWS and your data center, office, or co-location environment, which can reduce network costs, increase bandwidth throughput, and provide more consistent network experience.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Dedicated Network Connection" },
+                    { label: "Benefits", icon: "fas fa-star", value: "Reduced costs, increased bandwidth" },
+                    { label: "VLANs", icon: "fas fa-network-wired", value: "802.1Q virtual LANs support" },
+                    { label: "Access", icon: "fas fa-key", value: "Public and private resources" }
+                ]
+            },
+            {
+                name: "Elastic Load Balancing",
+                icon: "fas fa-balance-scale",
+                floatingIcon: "fas fa-server",
+                fact: "Automatically distributes incoming traffic across multiple targets with high availability and automatic scaling!",
+                description: "Elastic Load Balancing (ELB) automatically distributes incoming application traffic across multiple targets, such as EC2 instances, containers, and IP addresses. It offers four types of load balancers: Application, Network, Gateway, and Classic Load Balancers with high availability and automatic scaling.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Load Balancing Service" },
+                    { label: "Load Balancers", icon: "fas fa-layer-group", value: "Application, Network, Gateway, Classic" },
+                    { label: "Targets", icon: "fas fa-bullseye", value: "EC2, containers, IP addresses" },
+                    { label: "Features", icon: "fas fa-star", value: "High availability, auto scaling, security" }
+                ]
+            },
+            {
+                name: "AWS Global Accelerator",
+                icon: "fas fa-rocket",
+                floatingIcon: "fas fa-globe",
+                fact: "Improves availability and performance of applications for global users using AWS global network!",
+                description: "AWS Global Accelerator is a networking service that improves the availability and performance of applications for global users. It uses the highly available and congestion-free AWS global network to direct internet traffic from users to applications on AWS, making user experience more consistent.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Global Network Acceleration" },
+                    { label: "Network", icon: "fas fa-network-wired", value: "AWS global network routing" },
+                    { label: "IP Addresses", icon: "fas fa-hashtag", value: "Static IP addresses as entry points" },
+                    { label: "Health Monitoring", icon: "fas fa-heartbeat", value: "Continuous endpoint health monitoring" }
+                ]
+            },
+            {
+                name: "Integrated Private Wireless on AWS",
+                icon: "fas fa-wifi",
+                floatingIcon: "fas fa-building",
+                fact: "Managed and validated private wireless offerings from CSPs integrating 5G/4G with AWS services!",
+                description: "The Integrated Private Wireless on AWS program provides enterprises with managed and validated private wireless offerings from leading Communications Service Providers (CSPs). The offerings integrate CSPs' private 5G and 4G LTE wireless networks with AWS services across Regions, Local Zones, Outposts, and Snow Family.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Private Wireless Network Program" },
+                    { label: "Networks", icon: "fas fa-signal", value: "Private 5G and 4G LTE" },
+                    { label: "Integration", icon: "fas fa-plug", value: "AWS Regions, Local Zones, Outposts" },
+                    { label: "Workloads", icon: "fas fa-cogs", value: "AI/ML and IoT at edge and scale" }
+                ]
+            },
+            {
+                name: "AWS PrivateLink",
+                icon: "fas fa-link",
+                floatingIcon: "fas fa-shield-alt",
+                fact: "Simplifies security by eliminating data exposure to public Internet with private connectivity!",
+                description: "AWS PrivateLink simplifies the security of data shared with cloud-based applications by eliminating the exposure of data to the public Internet. It provides private connectivity between VPCs, AWS services, and on-premises applications, securely on the Amazon network.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Private Connectivity Service" },
+                    { label: "Security", icon: "fas fa-shield-alt", value: "No public Internet exposure" },
+                    { label: "Connectivity", icon: "fas fa-network-wired", value: "VPCs, AWS services, on-premises" },
+                    { label: "Architecture", icon: "fas fa-project-diagram", value: "Simplified network architecture" }
+                ]
+            },
+            {
+                name: "AWS Private 5G",
+                icon: "fas fa-signal",
+                floatingIcon: "fas fa-mobile-alt",
+                fact: "Easy way to use cellular technology with all hardware and software for private cellular network deployment!",
+                description: "AWS Private 5G offers an easy way to use cellular technology to augment your current network. It helps increase reliability, extend coverage, or allow new workloads like factory automation, autonomous robotics, and AR/VR. You receive all hardware (including SIM cards) and software needed.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Private Cellular Network" },
+                    { label: "Components", icon: "fas fa-puzzle-piece", value: "Hardware, software, SIM cards included" },
+                    { label: "Use Cases", icon: "fas fa-lightbulb", value: "Factory automation, robotics, AR/VR" },
+                    { label: "Management", icon: "fas fa-cogs", value: "AWS manages all components" }
+                ]
+            },
+            {
+                name: "Amazon Route 53",
+                icon: "fas fa-route",
+                floatingIcon: "fas fa-globe",
+                fact: "Highly available and scalable cloud DNS service with health checks and traffic routing!",
+                description: "Amazon Route 53 is a highly available and scalable cloud Domain Name System (DNS) web service. It provides reliable and cost-effective way to route users to internet applications by translating human-readable names into IP addresses, with full IPv6 compliance and health checks.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Cloud DNS Web Service" },
+                    { label: "Routing", icon: "fas fa-route", value: "Latency-based, Geo DNS, weighted" },
+                    { label: "Health Checks", icon: "fas fa-heartbeat", value: "DNS health checks and monitoring" },
+                    { label: "Domain Registration", icon: "fas fa-globe", value: "Purchase and manage domains" }
+                ]
+            },
+            {
+                name: "AWS Transit Gateway",
+                icon: "fas fa-hub-alt",
+                floatingIcon: "fas fa-network-wired",
+                fact: "Connect VPCs and on-premises networks to single gateway with hub and spoke model!",
+                description: "AWS Transit Gateway enables customers to connect their Amazon VPCs and on-premises networks to a single gateway. It acts as a hub that controls how traffic is routed among all connected networks, significantly simplifying management and reducing operational costs with hub and spoke model.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Network Transit Hub" },
+                    { label: "Model", icon: "fas fa-project-diagram", value: "Hub and spoke architecture" },
+                    { label: "Connectivity", icon: "fas fa-plug", value: "VPCs, on-premises, remote offices" },
+                    { label: "Management", icon: "fas fa-cogs", value: "Centralized connectivity policies" }
+                ]
+            },
+            {
+                name: "AWS Verified Access",
+                icon: "fas fa-user-shield",
+                floatingIcon: "fas fa-check-circle",
+                fact: "Provides secure access to applications without VPN based on Zero Trust principles!",
+                description: "AWS Verified Access provides corporate users secure access to your applications without using a virtual private network (VPN). Based on AWS Zero Trust principles, it evaluates each application request in real time to ensure users can only access applications after meeting specified security requirements.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Zero Trust Access Service" },
+                    { label: "Principles", icon: "fas fa-shield-alt", value: "AWS Zero Trust security model" },
+                    { label: "Evaluation", icon: "fas fa-search", value: "Real-time application request evaluation" },
+                    { label: "Policies", icon: "fas fa-gavel", value: "User identity and device posture conditions" }
+                ]
+            },
+            {
+                name: "Amazon VPC",
+                icon: "fas fa-cloud",
+                floatingIcon: "fas fa-network-wired",
+                fact: "Provision logically isolated section of AWS Cloud with complete control over virtual networking environment!",
+                description: "Amazon Virtual Private Cloud (Amazon VPC) lets you provision a logically isolated section of the AWS Cloud where you can launch AWS resources in a virtual network that you define. You have complete control over your virtual networking environment, including IP address range, subnets, and route tables.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Virtual Private Cloud" },
+                    { label: "Control", icon: "fas fa-sliders-h", value: "Complete networking environment control" },
+                    { label: "Protocols", icon: "fas fa-network-wired", value: "IPv4 and IPv6 support" },
+                    { label: "Security", icon: "fas fa-shield-alt", value: "Security groups, network ACLs" }
+                ]
+            },
+            {
+                name: "Amazon VPC Lattice",
+                icon: "fas fa-th",
+                floatingIcon: "fas fa-cogs",
+                fact: "Fully managed service-to-service connectivity with policies for traffic management and monitoring!",
+                description: "Amazon VPC Lattice provides fully managed support for service-to-service connectivity and communication. With VPC Lattice, you can use policies to define network traffic management, access, and monitoring to connect compute services in a simplified and secure way across instances, containers, and serverless applications.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Service-to-Service Connectivity" },
+                    { label: "Management", icon: "fas fa-cogs", value: "Fully managed connectivity" },
+                    { label: "Policies", icon: "fas fa-gavel", value: "Traffic management, access, monitoring" },
+                    { label: "Services", icon: "fas fa-server", value: "Instances, containers, serverless" }
+                ]
+            },
+            {
+                name: "AWS VPN",
+                icon: "fas fa-shield-alt",
+                floatingIcon: "fas fa-lock",
+                fact: "Establish secure connections between on-premises networks and AWS with Site-to-Site and Client VPN!",
+                description: "AWS Virtual Private Network (AWS VPN) solutions establish secure connections between your on-premises networks, remote offices, client devices, and the AWS global network. Comprised of AWS Site-to-Site VPN and AWS Client VPN, providing highly-available, managed, and elastic cloud VPN solutions.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Virtual Private Network Solutions" },
+                    { label: "Services", icon: "fas fa-layer-group", value: "Site-to-Site VPN, Client VPN" },
+                    { label: "Connections", icon: "fas fa-link", value: "Encrypted tunnels to VPCs/Transit Gateways" },
+                    { label: "Features", icon: "fas fa-star", value: "Highly-available, managed, elastic" }
+                ]
+            }
+        ];
+
+        function createServiceCard(service) {
+            return `
+                <div class="service-card" onclick="flipCard(this)">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="service-header">
+                                <div class="service-icon">
+                                    <i class="${service.icon}"></i>
+                                </div>
+                    <h3 class="service-title">${service.name}</h3>
+                </div>
+                            <div class="fact-section">
+                                <div class="fact-label">Quick Fact</div>
+                                <div class="fact-text">${service.fact}</div>
+                            </div>
+                        </div>
+                        <div class="card-back">
+                            <div class="service-header">
+                                <div class="service-icon">
+                                    <i class="${service.icon}"></i>
+                                </div>
+                                <h3 class="service-title">${service.name}</h3>
+                            </div>
+                            <p class="service-description">${service.description}</p>
+                            <div class="service-details">
+                                ${service.details.map(detail => `
+                                    <div class="detail-row">
+                                        <div class="detail-label">
+                                            <i class="${detail.icon}"></i>
+                                            ${detail.label}
+                                        </div>
+                                        <div class="detail-value">${detail.value}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function flipCard(card) {
+            card.classList.toggle('flipped');
+        }
+
+        function renderServices() {
+            const servicesGrid = document.getElementById('servicesGrid');
+            servicesGrid.innerHTML = services.map(service => createServiceCard(service)).join('');
+        }
+
+        function createParticles() {
+            const particles = document.querySelector('.floating-particles');
+            const particleCount = 25;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                const colors = ['#6366f1', '#8b5cf6', '#3b82f6', '#10b981', '#f59e0b'];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.cssText = `
+                    position: absolute;
+                    width: ${Math.random() * 6 + 2}px;
+                    height: ${Math.random() * 6 + 2}px;
+                    background: ${color};
+                    border-radius: 50%;
+                    left: ${Math.random() * 100}%;
+                    top: ${Math.random() * 100}%;
+                    opacity: ${Math.random() * 0.6 + 0.2};
+                    animation: float ${Math.random() * 30 + 20}s infinite linear;
+                    animation-delay: ${Math.random() * 30}s;
+                    box-shadow: 0 0 ${Math.random() * 10 + 5}px ${color};
+                `;
+                particles.appendChild(particle);
+            }
+        }
+
+        function initializeScrollToTop() {
+            const scrollButton = document.getElementById('scroll-to-top');
+
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    scrollButton.classList.add('visible');
+                } else {
+                    scrollButton.classList.remove('visible');
+                }
+            });
+
+            scrollButton.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            renderServices();
+            createParticles();
+            initializeScrollToTop();
+        });
+    </script>
+</body>
+</html>

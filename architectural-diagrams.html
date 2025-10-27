@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Architectural Diagrams - AWS Study Hub</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .content-wrapper {
+            width: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .diagram-image {
+            width: 100%;
+        }
+        .diagram-description {
+            width: 100%;
+        }
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 90%;
+            max-height: 90%;
+        }
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="particles"></div>
+
+    <div class="categories-page">
+        <header class="categories-header">
+            <button class="back-btn" onclick="window.location.href='index.html'">← Back to Home</button>
+            <h1>Architectural Diagrams</h1>
+            <p>Study AWS architecture patterns and best practices</p>
+        </header>
+
+
+            <div class="diagram-section">
+                <h2>AWS EKS Cloud Infrastructure Overview</h2>
+                <p>This diagram shows how a secure and scalable cloud infrastructure is built using <strong>Amazon EKS (Elastic Kubernetes Service)</strong> to deploy and manage containerized applications.</p>
+
+                <div class="diagram-layout">
+                    <div class="content-wrapper">
+                        <div class="diagram-image">
+                            <img src="images/a2.gif" alt="AWS EKS Cloud Infrastructure Overview Diagram" style="width: 100%; height: auto; cursor: pointer;">
+                        </div>
+
+                        <div class="diagram-description">
+                        <h3>Infrastructure as Code (IaC):</h3>
+                        <p>The setup begins with <strong>Terraform</strong>, which automates the creation and management of all AWS resources. <strong>GitHub Actions</strong> is used for continuous integration and deployment, ensuring that every infrastructure update happens smoothly and consistently.</p>
+
+                        <h3>AWS Cloud Environment:</h3>
+                        <p>The environment is divided into two <strong>Availability Zones</strong> to ensure high availability and fault tolerance. Each zone contains a <strong>Virtual Private Cloud (VPC)</strong> with public and private subnets.</p>
+
+                        <h3>Public Subnets:</h3>
+                        <p>These subnets host resources that need internet access, such as the <strong>EKS Public Load Balancer</strong> and <strong>NAT Gateway</strong>, which route external and internal traffic securely.</p>
+
+                        <h3>Private Subnets:</h3>
+                        <p>These subnets host <strong>worker nodes</strong>, where actual applications run.</p>
+                        <ul>
+                            <li><strong>External apps</strong> handle requests from the internet.</li>
+                            <li><strong>Internal apps</strong> serve communication within the organization or other private services.</li>
+                            <li>The <strong>EKS Private Load Balancer</strong> distributes incoming traffic among these applications for better performance and reliability.</li>
+                        </ul>
+
+                        <h3>Networking and Connectivity:</h3>
+                        <p>The <strong>Internet Gateway</strong> enables secure public access, while the <strong>VPN Gateway</strong> and <strong>AWS Direct Connect</strong> link the AWS environment to the <strong>corporate data center</strong>, allowing hybrid cloud communication.</p>
+
+                        <h3>App and Data Management:</h3>
+                        <p>Supporting services like <strong>Amazon Route 53</strong>, <strong>Secrets Manager</strong>, <strong>KMS</strong>, <strong>ECR</strong>, <strong>RDS</strong>, <strong>EFS</strong>, and <strong>S3</strong> help with DNS management, security, image storage, databases, file systems, and data storage.</p>
+
+                        <h3>Security and Access:</h3>
+                        <p>The infrastructure includes separate inbound and outbound paths for internal and external communication to maintain strong network isolation and protect applications.</p>
+
+                        <p>Overall, this architecture ensures a <strong>secure, automated, and highly available cloud environment</strong> for running applications at scale using Kubernetes on AWS.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin: 2rem 0;"></div>
+
+            <div class="diagram-section">
+                <h2>Amazon EKS Architecture: Fargate and EC2 Managed Node Groups</h2>
+                <p>This diagram illustrates how Amazon Elastic Kubernetes Service (EKS) can run containerized applications using two different compute options, <strong>AWS Fargate</strong> and <strong>Amazon EC2 Managed Node Groups</strong>.</p>
+
+                <div class="diagram-layout">
+                    <div class="content-wrapper">
+                        <div class="diagram-image">
+                            <img src="images/a3.gif" alt="Amazon EKS Architecture: Fargate and EC2 Managed Node Groups Diagram" style="width: 100%; height: auto; cursor: pointer;">
+                        </div>
+
+                        <div class="diagram-description">
+                        <h3>Amazon EKS (Control Plane):</h3>
+                        <p>At the center, EKS acts as the control plane that manages and orchestrates containerized workloads (pods). It decides where and how these workloads should run across the available compute resources.</p>
+
+                        <h3>Serverless Container Data Plane (AWS Fargate):</h3>
+                        <p>On the left, Fargate provides a serverless way to run containers. It automatically provisions and scales the compute resources required to run your Kubernetes pods. This means you do not need to manage servers or infrastructure — AWS handles it for you.</p>
+
+                        <h3>Managed Node Group EC2 Data Plane:</h3>
+                        <p>On the right, the setup uses Amazon EC2 instances grouped into <strong>Managed Node Groups</strong>. These instances run your pods within your own virtual private cloud (VPC). EC2 Auto Scaling ensures that capacity adjusts automatically based on workload demand.</p>
+                        <p>The diagram also shows multiple <strong>Availability Zones</strong> to provide high availability and fault tolerance.</p>
+
+                        <h3>Networking and Scaling:</h3>
+                        <p>Both Fargate and EC2 environments operate within their respective VPCs, ensuring isolation and security. Fargate scales automatically, while EC2 nodes use Auto Scaling groups to adjust capacity dynamically.</p>
+
+                        <p>In summary, this architecture demonstrates a flexible and scalable way to run Kubernetes workloads on AWS, either through the fully managed, serverless Fargate platform or with customizable EC2-managed node groups.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin: 2rem 0;"></div>
+
+            <div class="diagram-section">
+                <h2>CI/CD Pipeline for Game App</h2>
+                <p>An automated pipeline that takes code from a developer, builds and scans a container image, deploys it to a managed Kubernetes service (EKS Fargate), and delivers the game to users through an AWS load balancer.</p>
+
+                <div class="diagram-layout">
+                    <div class="content-wrapper">
+                        <div class="diagram-image">
+                            <img src="images/a4.gif" alt="CI/CD Pipeline for Game App Diagram" style="width: 100%; height: auto; cursor: pointer;">
+                        </div>
+
+                        <div class="diagram-description">
+                        <h3>How it works (step-by-step):</h3>
+                        <ol>
+                            <li><strong>Developer checks in code:</strong> A developer writes code and pushes it to a GitHub repository.</li>
+                            <li><strong>Automated build and test:</strong> GitHub Actions automatically runs the build and test workflows when code is pushed.</li>
+                            <li><strong>Create a Docker image:</strong> The application is packaged into a Docker image that contains everything needed to run it.</li>
+                            <li><strong>Security scan:</strong> The image is scanned with a tool (Trivy) to detect known vulnerabilities.</li>
+                            <li><strong>Store the image:</strong> After passing the scan, the image is pushed to Docker Hub (a central image registry).</li>
+                            <li><strong>Deploy to cloud:</strong> The verified image is deployed to Amazon EKS running on AWS Fargate, which runs containers without you managing servers.</li>
+                            <li><strong>Serve users:</strong> An AWS Load Balancer distributes incoming traffic to the application so end users can access the game reliably and at scale.</li>
+                        </ol>
+
+                        <h3>Why this setup matters:</h3>
+                        <ul>
+                            <li><strong>Automation:</strong> Code moves from commit to production automatically, reducing manual steps.</li>
+                            <li><strong>Security:</strong> Images are scanned before deployment to catch vulnerabilities early.</li>
+                            <li><strong>Scalability:</strong> EKS with Fargate and the load balancer let the application handle varying user loads.</li>
+                            <li><strong>Speed:</strong> Faster, repeatable releases make it easier to deliver updates and fixes.</li>
+                        </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for image zoom -->
+    <div id="image-modal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modal-image">
+    </div>
+
+    <script>
+        // Enhanced particle system with interactivity
+        function createParticles() {
+            const particles = document.querySelector('.particles');
+            const particleCount = 25;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                const colors = ['#6366f1', '#8b5cf6', '#3b82f6', '#10b981', '#f59e0b'];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.cssText = `
+                    position: absolute;
+                    width: ${Math.random() * 6 + 2}px;
+                    height: ${Math.random() * 6 + 2}px;
+                    background: ${color};
+                    border-radius: 50%;
+                    left: ${Math.random() * 100}%;
+                    top: ${Math.random() * 100}%;
+                    opacity: ${Math.random() * 0.6 + 0.2};
+                    animation: float ${Math.random() * 30 + 20}s infinite linear;
+                    animation-delay: ${Math.random() * 30}s;
+                    box-shadow: 0 0 ${Math.random() * 10 + 5}px ${color};
+                `;
+                particles.appendChild(particle);
+            }
+        }
+
+        // Initialize particles on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+
+            // Image zoom modal functionality
+            const modal = document.getElementById('image-modal');
+            const modalImg = document.getElementById('modal-image');
+            const closeBtn = document.getElementsByClassName('close')[0];
+            const images = document.querySelectorAll('.diagram-image img');
+
+            images.forEach(img => {
+                img.onclick = function() {
+                    modal.style.display = 'block';
+                    modalImg.src = this.src;
+                };
+            });
+
+            closeBtn.onclick = function() {
+                modal.style.display = 'none';
+            };
+
+            modal.onclick = function(event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            };
+        });
+    </script>
+</body>
+</html>

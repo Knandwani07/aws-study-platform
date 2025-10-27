@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Categories - Flashcards</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="particles"></div>
+    
+    <div class="categories-page">
+        <header class="categories-header">
+            <button class="back-btn" onclick="window.location.href='index.html'">← Back to Home</button>
+            <h1>AWS Service Categories</h1>
+            <p>Select a category to focus your study session</p>
+        </header>
+
+        <div class="search-container">
+            <input type="text" id="category-search" placeholder="Search categories..." aria-label="Search AWS service categories">
+            <div class="search-icon">🔍</div>
+        </div>
+
+        <div class="categories-container">
+            <div class="categories-grid" id="categories-grid">
+            <div class="category-card" data-category="analytics" data-category-name="Analytics" data-category-desc="Data processing & insights" onclick="handleCardClick('analytics.html')">
+                <div class="category-icon">📊</div>
+                <h3>Analytics</h3>
+                <p>Data processing & insights</p>
+            </div>
+            
+            <div class="category-card" data-category="integration" data-category-name="Application Integration" data-category-desc="Connect applications & services" onclick="handleCardClick('application-integration.html')">
+                <div class="category-icon">🔗</div>
+                <h3>Application Integration</h3>
+                <p>Connect applications & services</p>
+            </div>
+            
+            <div class="category-card" data-category="blockchain" data-category-name="Blockchain" data-category-desc="Distributed ledger technology" onclick="handleCardClick('blockchain.html')">
+                <div class="category-icon">⛓️</div>
+                <h3>Blockchain</h3>
+                <p>Distributed ledger technology</p>
+            </div>
+            
+            <div class="category-card" data-category="business" data-category-name="Business Applications" data-category-desc="Enterprise productivity tools" onclick="handleCardClick('business-applications.html')">
+                <div class="category-icon">💼</div>
+                <h3>Business Applications</h3>
+                <p>Enterprise productivity tools</p>
+            </div>
+            
+            <div class="category-card" data-category="financial" data-category-name="Cloud Financial Management" data-category-desc="Cost optimization & billing" onclick="handleCardClick('cloud-financial-management.html')">
+                <div class="category-icon">💰</div>
+                <h3>Cloud Financial Management</h3>
+                <p>Cost optimization & billing</p>
+            </div>
+            
+            <div class="category-card" data-category="compute" data-category-name="Compute" data-category-desc="EC2, Lambda, containers" onclick="handleCardClick('compute.html')">
+                <div class="category-icon">⚡</div>
+                <h3>Compute</h3>
+                <p>EC2, Lambda, containers</p>
+            </div>
+            
+            <div class="category-card" data-category="enablement" data-category-name="Customer Enablement" data-category-desc="Support & training services" onclick="handleCardClick('customer-enablement.html')">
+                <div class="category-icon">🎓</div>
+                <h3>Customer Enablement</h3>
+                <p>Support & training services</p>
+            </div>
+            
+            <div class="category-card" data-category="containers" data-category-name="Containers" data-category-desc="ECS, EKS, Fargate" onclick="handleCardClick('containers.html')">
+                <div class="category-icon">📦</div>
+                <h3>Containers</h3>
+                <p>ECS, EKS, Fargate</p>
+            </div>
+            
+            <div class="category-card" data-category="database" data-category-name="Databases" data-category-desc="RDS, DynamoDB, more" onclick="handleCardClick('databases.html')">
+                <div class="category-icon">🗄️</div>
+                <h3>Databases</h3>
+                <p>RDS, DynamoDB, more</p>
+            </div>
+            
+            <div class="category-card" data-category="developer" data-category-name="Developer Tools" data-category-desc="CodeCommit, CodeBuild, CI/CD" onclick="handleCardClick('developer-tools.html')">
+                <div class="category-icon">🛠️</div>
+                <h3>Developer Tools</h3>
+                <p>CodeCommit, CodeBuild, CI/CD</p>
+            </div>
+            
+            <div class="category-card" data-category="enduser" data-category-name="End User Computing" data-category-desc="WorkSpaces, AppStream" onclick="handleCardClick('end-user-computing.html')">
+                <div class="category-icon">🖥️</div>
+                <h3>End User Computing</h3>
+                <p>WorkSpaces, AppStream</p>
+            </div>
+            
+            <div class="category-card" data-category="frontend" data-category-name="Front-end Web & Mobile" data-category-desc="Amplify, mobile development" onclick="handleCardClick('frontend-web-mobile.html')">
+                <div class="category-icon">📱</div>
+                <h3>Front-end Web & Mobile</h3>
+                <p>Amplify, mobile development</p>
+            </div>
+            
+            <div class="category-card" data-category="gametech" data-category-name="Game Tech" data-category-desc="GameLift, game development" onclick="handleCardClick('gametech.html')">
+                <div class="category-icon">🎮</div>
+                <h3>Game Tech</h3>
+                <p>GameLift, game development</p>
+            </div>
+            
+            <div class="category-card" data-category="iot" data-category-name="Internet of Things (IoT)" data-category-desc="IoT Core, device management" onclick="handleCardClick('iot.html')">
+                <div class="category-icon">🌐</div>
+                <h3>Internet of Things (IoT)</h3>
+                <p>IoT Core, device management</p>
+            </div>
+            
+            <div class="category-card" data-category="ml" data-category-name="Machine Learning (ML) and Artificial Intelligence (AI)" data-category-desc="SageMaker, recognition services" onclick="handleCardClick('ml-ai.html')">
+                <div class="category-icon">🤖</div>
+                <h3>Machine Learning (ML) and Artificial Intelligence (AI)</h3>
+                <p>SageMaker, recognition services</p>
+            </div>
+            
+            <div class="category-card" data-category="management" data-category-name="Management and Governance" data-category-desc="CloudWatch, Config, Systems Manager" onclick="handleCardClick('management-governance.html')">
+                <div class="category-icon">⚙️</div>
+                <h3>Management and Governance</h3>
+                <p>CloudWatch, Config, Systems Manager</p>
+            </div>
+            
+            <div class="category-card" data-category="media" data-category-name="Media" data-category-desc="Video processing & streaming" onclick="handleCardClick('media.html')">
+                <div class="category-icon">🎬</div>
+                <h3>Media</h3>
+                <p>Video processing & streaming</p>
+            </div>
+            
+            <div class="category-card" data-category="migration" data-category-name="Migration and Transfer" data-category-desc="Database & application migration" onclick="handleCardClick('migration-transfer.html')">
+                <div class="category-icon">📤</div>
+                <h3>Migration and Transfer</h3>
+                <p>Database & application migration</p>
+            </div>
+            
+            <div class="category-card" data-category="networking" data-category-name="Networking and Content Delivery" data-category-desc="VPC, CloudFront, Route 53" onclick="handleCardClick('networking-content-delivery.html')">
+                <div class="category-icon">🌍</div>
+                <h3>Networking and Content Delivery</h3>
+                <p>VPC, CloudFront, Route 53</p>
+            </div>
+            
+            <div class="category-card" data-category="quantum" data-category-name="Quantum Technologies" data-category-desc="Quantum computing services" onclick="handleCardClick('quantum-technologies.html')">
+                <div class="category-icon">⚛️</div>
+                <h3>Quantum Technologies</h3>
+                <p>Quantum computing services</p>
+            </div>
+            
+            <div class="category-card" data-category="satellite" data-category-name="Satellite" data-category-desc="Ground Station services" onclick="handleCardClick('satellite.html')">
+                <div class="category-icon">🛰️</div>
+                <h3>Satellite</h3>
+                <p>Ground Station services</p>
+            </div>
+            
+            <div class="category-card" data-category="security" data-category-name="Security, Identity, and Compliance" data-category-desc="IAM, encryption, compliance" onclick="handleCardClick('security-identity-compliance.html')">
+                <div class="category-icon">🔒</div>
+                <h3>Security, Identity, and Compliance</h3>
+                <p>IAM, encryption, compliance</p>
+            </div>
+            
+            <div class="category-card" data-category="storage" data-category-name="Storage" data-category-desc="S3, EBS, backup solutions" onclick="handleCardClick('storage.html')">
+                <div class="category-icon">💾</div>
+                <h3>Storage</h3>
+                <p>S3, EBS, backup solutions</p>
+            </div>
+        </div>
+    </div>
+
+    <button id="scroll-to-top" class="scroll-to-top" aria-label="Scroll to top">↑</button>
+
+    <script>
+        // Enhanced particle system with interactivity
+        function createParticles() {
+            const particles = document.querySelector('.particles');
+            const particleCount = 25;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                const colors = ['#6366f1', '#8b5cf6', '#3b82f6', '#10b981', '#f59e0b'];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.cssText = `
+                    position: absolute;
+                    width: ${Math.random() * 6 + 2}px;
+                    height: ${Math.random() * 6 + 2}px;
+                    background: ${color};
+                    border-radius: 50%;
+                    left: ${Math.random() * 100}%;
+                    top: ${Math.random() * 100}%;
+                    opacity: ${Math.random() * 0.6 + 0.2};
+                    animation: float ${Math.random() * 30 + 20}s infinite linear;
+                    animation-delay: ${Math.random() * 30}s;
+                    box-shadow: 0 0 ${Math.random() * 10 + 5}px ${color};
+                `;
+                particles.appendChild(particle);
+            }
+        }
+
+        // Search functionality
+        function initializeSearch() {
+            const searchInput = document.getElementById('category-search');
+            const categoryCards = document.querySelectorAll('.category-card');
+
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase().trim();
+
+                categoryCards.forEach(card => {
+                    const name = card.dataset.categoryName.toLowerCase();
+                    const desc = card.dataset.categoryDesc.toLowerCase();
+                    const isVisible = name.includes(searchTerm) || desc.includes(searchTerm);
+
+                    card.style.display = isVisible ? 'block' : 'none';
+                    card.style.animation = isVisible ? 'fadeIn 0.3s ease' : 'none';
+                });
+            });
+        }
+
+        // Card click handler
+        function handleCardClick(url) {
+            window.location.href = url;
+        }
+
+        // Keyboard navigation
+        function initializeKeyboardNavigation() {
+            const categoryCards = document.querySelectorAll('.category-card');
+            let currentIndex = -1;
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    currentIndex = (currentIndex + 1) % categoryCards.length;
+                    focusCard(categoryCards[currentIndex]);
+                } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    currentIndex = currentIndex <= 0 ? categoryCards.length - 1 : currentIndex - 1;
+                    focusCard(categoryCards[currentIndex]);
+                } else if (e.key === 'Enter' && currentIndex >= 0) {
+                    categoryCards[currentIndex].click();
+                }
+            });
+
+            function focusCard(card) {
+                card.focus();
+                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        // Scroll to top functionality
+        function initializeScrollToTop() {
+            const scrollButton = document.getElementById('scroll-to-top');
+
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    scrollButton.classList.add('visible');
+                } else {
+                    scrollButton.classList.remove('visible');
+                }
+            });
+
+            scrollButton.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        }
+
+        // Accessibility improvements
+        function initializeAccessibility() {
+            const categoryCards = document.querySelectorAll('.category-card');
+
+            categoryCards.forEach((card, index) => {
+                card.setAttribute('tabindex', '0');
+                card.setAttribute('role', 'button');
+                card.setAttribute('aria-label', `Navigate to ${card.dataset.categoryName} category`);
+            });
+        }
+
+        // Initialize all functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            initializeSearch();
+            initializeKeyboardNavigation();
+            initializeScrollToTop();
+            initializeAccessibility();
+        });
+    </script>
+</body>
+</html>
