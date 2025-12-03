@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Analytics Services</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --card-gradient: linear-gradient(145deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            --accent-gradient: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
+            --glow-color: rgba(139, 92, 246, 0.4);
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        body {
+            font-family: 'Poppins', 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(51, 65, 85, 0.8) 100%);
+            padding: 80px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 20%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(59, 130, 246, 0.15) 0%, transparent 50%);
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            background: var(--glass-bg);
+            color: white;
+            border: 1px solid var(--glass-border);
+            padding: 14px 24px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 3;
+            letter-spacing: 0.5px;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(139, 92, 246, 0.3);
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 24px;
+            letter-spacing: -0.02em;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-subtitle {
+            font-size: 1.4rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 40px;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 80px 20px;
+            position: relative;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+            gap: 32px;
+            margin-top: 20px;
+        }
+
+        .service-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 1.5rem;
+            padding: 0;
+            backdrop-filter: blur(20px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            height: auto;
+            min-height: 500px;
+            display: block;
+            cursor: pointer;
+            perspective: 1000px;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--accent-gradient);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 1.5rem;
+            z-index: -1;
+        }
+
+        .service-card::after {
+            content: '';
+            position: absolute;
+            top: 1px;
+            left: 1px;
+            right: 1px;
+            bottom: 1px;
+            background: var(--glass-bg);
+            border-radius: calc(1.5rem - 1px);
+            backdrop-filter: blur(20px);
+            z-index: -1;
+        }
+
+        .service-card:hover::before {
+            opacity: 0.1;
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(139, 92, 246, 0.2), 0 8px 32px rgba(0, 0, 0, 0.1);
+            border-color: rgba(139, 92, 246, 0.3);
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            min-height: 500px;
+            text-align: left;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+
+        .service-card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            min-height: 500px;
+            backface-visibility: hidden;
+            border-radius: 1.5rem;
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            overflow-x: hidden;
+            box-sizing: border-box;
+        }
+
+        .card-front::-webkit-scrollbar,
+        .card-back::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .card-front::-webkit-scrollbar-track,
+        .card-back::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+
+        .card-front::-webkit-scrollbar-thumb,
+        .card-back::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            border-radius: 3px;
+        }
+
+        .card-front::-webkit-scrollbar-thumb:hover,
+        .card-back::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #7c3aed, #2563eb);
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            background: linear-gradient(145deg, rgba(248, 250, 252, 0.1) 0%, rgba(241, 245, 249, 0.05) 100%);
+        }
+
+        .service-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .service-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--accent-gradient);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+            margin-right: 20px;
+            box-shadow: 0 8px 32px var(--glow-color), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            transition: all 0.4s ease;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .service-icon::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: var(--accent-gradient);
+            border-radius: 22px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            filter: blur(8px);
+        }
+
+        .service-card:hover .service-icon::before {
+            opacity: 0.6;
+        }
+
+        .service-card:hover .service-icon {
+            transform: scale(1.05) rotate(5deg);
+            box-shadow: 0 12px 40px var(--glow-color);
+        }
+
+        .service-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+
+        .floating-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            color: rgba(139, 92, 246, 0.4);
+            animation: float-gentle 3s ease-in-out infinite;
+        }
+
+        @keyframes float-gentle {
+            0%, 100% { transform: translateY(-50%) translateX(0px); }
+            50% { transform: translateY(-50%) translateX(3px); }
+        }
+
+        .service-description {
+            color: #cbd5e1;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            
+            flex-grow: 1;
+        }
+
+        .fact-section {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 16px;
+            padding: 24px;
+            margin: auto;
+            flex-shrink: 0;
+            position: relative;
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+
+        .fact-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--accent-gradient);
+            border-radius: 16px 16px 0 0;
+        }
+
+        .fact-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #27106b;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .fact-label::before {
+            content: '✨';
+            margin-right: 8px;
+            font-size: 1rem;
+        }
+
+        .fact-text {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #e2e8f0;
+            line-height: 1.5;
+        }
+
+        .service-details {
+            background: linear-gradient(135deg, rgba(248, 250, 252, 0.1) 0%, rgba(241, 245, 249, 0.05) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 24px;
+            margin-top: auto;
+            flex-shrink: 0;
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+
+        .service-details::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            border-radius: 16px 16px 0 0;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .detail-row:hover {
+            background: rgba(139, 92, 246, 0.05);
+            padding-left: 16px;
+            padding-right: 16px;
+            margin: 0 -16px;
+            border-radius: 12px;
+            transform: translateX(4px);
+        }
+
+        .detail-label {
+            font-weight: 500;
+            color: #27106b;
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+            gap: 8px;
+        }
+
+        .detail-label i {
+            margin-right: 10px;
+            color: #27106b;
+            font-size: 1.1rem;
+            width: 18px;
+            text-align: center;
+        }
+
+        .detail-value {
+            color: #e2e8f0;
+            font-weight: 500;
+            text-align: right;
+            max-width: 60%;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 768px) {
+            .services-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+            
+            .hero-title {
+                font-size: 2.8rem;
+            }
+            
+            .service-card {
+                min-height: 450px;
+            }
+            
+            .card-front, .card-back {
+                min-height: 450px;
+                padding: 24px;
+            }
+        }
+
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #6366f1;
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float 20s infinite linear;
+        }
+
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: none;
+        }
+
+        .scroll-to-top.visible {
+            display: block;
+        }
+
+        .scroll-to-top:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-particles"></div>
+    
+    <div class="hero-section">
+        <button class="back-btn" onclick="window.location.href='categories.html'">
+            <i class="fas fa-arrow-left"></i> Back to Categories
+        </button>
+        
+        <div class="hero-content">
+            <h1 class="hero-title">AWS Analytics Services</h1>
+            <p class="hero-subtitle">Comprehensive analytics and data processing solutions</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="services-grid" id="servicesGrid">
+            <!-- Services will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <button id="scroll-to-top" class="scroll-to-top" aria-label="Scroll to top">↑</button>
+
+    <script>
+        const analyticsServices = [
+            {
+                name: "Amazon Athena",
+                icon: "fas fa-search",
+                floatingIcon: "fas fa-database",
+                fact: "Query data in S3 using standard SQL - no infrastructure to manage, pay only for queries executed!",
+                description: "Interactive query service that makes it easy to analyze data in Amazon S3 using standard SQL with serverless architecture.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Serverless Query Service" },
+                    { label: "Data Source", icon: "fas fa-database", value: "Amazon S3, data lakes" },
+                    { label: "Query Language", icon: "fas fa-code", value: "Standard SQL" },
+                    { label: "Pricing", icon: "fas fa-dollar-sign", value: "Pay per query, no infrastructure cost" }
+                ]
+            },
+            {
+                name: "Amazon CloudSearch",
+                icon: "fas fa-search-plus",
+                floatingIcon: "fas fa-cloud",
+                fact: "Managed search service for websites and applications - automatic scaling and high availability!",
+                description: "Fully managed search service that makes it simple and cost-effective to set up, manage, and scale a search solution.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Managed Search Service" },
+                    { label: "Features", icon: "fas fa-star", value: "Auto scaling, high availability" },
+                    { label: "Integration", icon: "fas fa-plug", value: "Websites, applications" },
+                    { label: "Management", icon: "fas fa-tools", value: "Fully managed by AWS" }
+                ]
+            },
+            {
+                name: "Amazon DataZone",
+                icon: "fas fa-network-wired",
+                floatingIcon: "fas fa-share-alt",
+                fact: "Discover, access, and share data at scale - unified data catalog for analytics and ML!",
+                description: "Data management service that enables you to catalog, discover, share, and govern data stored across AWS.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Data Catalog Service" },
+                    { label: "Features", icon: "fas fa-star", value: "Data discovery, sharing, governance" },
+                    { label: "Scale", icon: "fas fa-expand-arrows-alt", value: "Enterprise-scale data management" },
+                    { label: "Integration", icon: "fas fa-plug", value: "AWS analytics and ML services" }
+                ]
+            },
+            {
+                name: "Amazon EMR",
+                icon: "fas fa-cogs",
+                floatingIcon: "fas fa-chart-bar",
+                fact: "Process vast amounts of data using open-source tools - cost-effective big data processing!",
+                description: "Big data platform for processing large amounts of data using open-source tools like Apache Spark, Hadoop, and more.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Big Data Processing" },
+                    { label: "Tools", icon: "fas fa-tools", value: "Spark, Hadoop, Hive, Presto" },
+                    { label: "Scale", icon: "fas fa-expand-arrows-alt", value: "Petabyte-scale data processing" },
+                    { label: "Pricing", icon: "fas fa-dollar-sign", value: "Pay for EC2 instances used" }
+                ]
+            },
+            {
+                name: "Amazon FinSpace",
+                icon: "fas fa-chart-line",
+                floatingIcon: "fas fa-money-bill-wave",
+                fact: "Analyze financial data with purpose-built tools - accelerate time to insights for financial services!",
+                description: "Data management and analytics service built specifically for the financial services industry.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Financial Data Analytics" },
+                    { label: "Industry", icon: "fas fa-building", value: "Financial services" },
+                    { label: "Features", icon: "fas fa-star", value: "Time-series analysis, data catalog" },
+                    { label: "Integration", icon: "fas fa-plug", value: "AWS data services" }
+                ]
+            },
+            {
+                name: "Amazon Kinesis",
+                icon: "fas fa-stream",
+                floatingIcon: "fas fa-wave-square",
+                fact: "Collect, process, and analyze real-time streaming data at any scale!",
+                description: "Platform for streaming data on AWS, making it easy to load and analyze streaming data.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Real-time Streaming" },
+                    { label: "Data Types", icon: "fas fa-layer-group", value: "Video, audio, application logs" },
+                    { label: "Scale", icon: "fas fa-expand-arrows-alt", value: "Any scale streaming data" },
+                    { label: "Processing", icon: "fas fa-cogs", value: "Real-time analytics" }
+                ]
+            },
+            {
+                name: "Amazon Data Firehose",
+                icon: "fas fa-fire",
+                floatingIcon: "fas fa-stream",
+                fact: "Load streaming data into data lakes, warehouses, and analytics services automatically!",
+                description: "Extract, transform, and load (ETL) service that reliably captures, transforms, and delivers streaming data.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "ETL Streaming Service" },
+                    { label: "Destinations", icon: "fas fa-arrow-right", value: "S3, Redshift, Elasticsearch" },
+                    { label: "Processing", icon: "fas fa-cogs", value: "Near real-time delivery" },
+                    { label: "Management", icon: "fas fa-tools", value: "Fully managed" }
+                ]
+            },
+            {
+                name: "Amazon Managed Service for Apache Flink",
+                icon: "fas fa-code-branch",
+                floatingIcon: "fas fa-stream",
+                fact: "Process streaming data with Apache Flink - fully managed, scalable stream processing!",
+                description: "Fully managed service for Apache Flink that simplifies building and managing real-time streaming applications.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Stream Processing" },
+                    { label: "Framework", icon: "fas fa-code", value: "Apache Flink" },
+                    { label: "Management", icon: "fas fa-tools", value: "Fully managed by AWS" },
+                    { label: "Use Cases", icon: "fas fa-lightbulb", value: "Real-time analytics, ETL" }
+                ]
+            },
+            {
+                name: "Amazon Kinesis Data Streams",
+                icon: "fas fa-stream",
+                floatingIcon: "fas fa-wave-square",
+                fact: "Capture and process large streams of data records in real time!",
+                description: "Massively scalable and durable real-time data streaming service for ingesting and processing data streams.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Data Streaming Service" },
+                    { label: "Scale", icon: "fas fa-expand-arrows-alt", value: "Massively scalable" },
+                    { label: "Durability", icon: "fas fa-shield-alt", value: "Highly durable" },
+                    { label: "Processing", icon: "fas fa-cogs", value: "Real-time processing" }
+                ]
+            },
+            {
+                name: "Amazon Kinesis Video Streams",
+                icon: "fas fa-video",
+                floatingIcon: "fas fa-camera",
+                fact: "Stream video from connected devices to AWS for analytics, ML, and processing!",
+                description: "Fully managed AWS service that makes it easy to securely stream video from connected devices to AWS.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Video Streaming Service" },
+                    { label: "Data Type", icon: "fas fa-video", value: "Video streams" },
+                    { label: "Integration", icon: "fas fa-plug", value: "ML, analytics services" },
+                    { label: "Security", icon: "fas fa-lock", value: "Secure streaming" }
+                ]
+            },
+            {
+                name: "Amazon OpenSearch Service",
+                icon: "fas fa-search",
+                floatingIcon: "fas fa-database",
+                fact: "Search, analyze, and visualize data with Elasticsearch and Kibana - fully managed!",
+                description: "Fully managed service that makes it easy to deploy, secure, and operate OpenSearch at scale.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Search and Analytics" },
+                    { label: "Tools", icon: "fas fa-tools", value: "OpenSearch, Kibana" },
+                    { label: "Management", icon: "fas fa-tools", value: "Fully managed" },
+                    { label: "Scale", icon: "fas fa-expand-arrows-alt", value: "Petabyte-scale" }
+                ]
+            },
+            {
+                name: "Amazon OpenSearch Serverless",
+                icon: "fas fa-search",
+                floatingIcon: "fas fa-server",
+                fact: "Run OpenSearch without managing infrastructure - automatic scaling and provisioning!",
+                description: "Serverless option for Amazon OpenSearch Service that automatically provisions and scales resources.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Serverless Search" },
+                    { label: "Provisioning", icon: "fas fa-magic", value: "Automatic scaling" },
+                    { label: "Management", icon: "fas fa-tools", value: "No infrastructure management" },
+                    { label: "Cost", icon: "fas fa-dollar-sign", value: "Pay for resources used" }
+                ]
+            },
+            {
+                name: "Amazon Redshift",
+                icon: "fas fa-database",
+                floatingIcon: "fas fa-chart-bar",
+                fact: "Fast, simple, cost-effective data warehousing - analyze all your data with SQL!",
+                description: "Fast, fully managed, petabyte-scale data warehouse service that makes it simple and cost-effective to analyze data.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Data Warehouse" },
+                    { label: "Scale", icon: "fas fa-expand-arrows-alt", value: "Petabyte-scale" },
+                    { label: "Query", icon: "fas fa-code", value: "SQL queries" },
+                    { label: "Performance", icon: "fas fa-tachometer-alt", value: "Fast analytics" }
+                ]
+            },
+            {
+                name: "Amazon Redshift Serverless",
+                icon: "fas fa-database",
+                floatingIcon: "fas fa-server",
+                fact: "Run data warehouse workloads without managing infrastructure - automatic scaling!",
+                description: "Serverless option for Amazon Redshift that automatically provisions and scales data warehouse capacity.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Serverless Data Warehouse" },
+                    { label: "Scaling", icon: "fas fa-expand-arrows-alt", value: "Automatic scaling" },
+                    { label: "Management", icon: "fas fa-tools", value: "No infrastructure management" },
+                    { label: "Cost", icon: "fas fa-dollar-sign", value: "Pay for compute used" }
+                ]
+            },
+            {
+                name: "Quick Suite",
+                icon: "fas fa-rocket",
+                floatingIcon: "fas fa-bolt",
+                fact: "Accelerate analytics workflows with pre-built templates and automated processes!",
+                description: "Suite of tools designed to accelerate analytics workflows with pre-built templates and automation.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Analytics Acceleration" },
+                    { label: "Features", icon: "fas fa-star", value: "Pre-built templates, automation" },
+                    { label: "Workflows", icon: "fas fa-tasks", value: "Accelerated analytics workflows" },
+                    { label: "Ease", icon: "fas fa-magic", value: "Simplified setup and use" }
+                ]
+            },
+            {
+                name: "AWS Clean Rooms",
+                icon: "fas fa-shield-alt",
+                floatingIcon: "fas fa-lock",
+                fact: "Collaborate on sensitive data without sharing it - privacy-preserving analytics!",
+                description: "Secure collaboration service that helps customers and their partners more easily and securely collaborate and analyze their collective datasets.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Privacy-Preserving Collaboration" },
+                    { label: "Security", icon: "fas fa-lock", value: "Data remains private" },
+                    { label: "Collaboration", icon: "fas fa-users", value: "Multi-party data analysis" },
+                    { label: "Privacy", icon: "fas fa-eye-slash", value: "Differential privacy techniques" }
+                ]
+            },
+            {
+                name: "AWS Data Exchange",
+                icon: "fas fa-exchange-alt",
+                floatingIcon: "fas fa-share",
+                fact: "Find, subscribe to, and use third-party data in the cloud - data marketplace!",
+                description: "Service that makes it easy for AWS customers to securely exchange data in the cloud with governed subscriptions.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Data Marketplace" },
+                    { label: "Data Sources", icon: "fas fa-database", value: "Third-party data providers" },
+                    { label: "Access", icon: "fas fa-key", value: "Governed subscriptions" },
+                    { label: "Integration", icon: "fas fa-plug", value: "AWS analytics services" }
+                ]
+            },
+            {
+                name: "AWS Data Pipeline",
+                icon: "fas fa-pipeline",
+                floatingIcon: "fas fa-cogs",
+                fact: "Move and process data between AWS services - reliable data transfer and processing!",
+                description: "Web service for processing and moving data between different AWS compute and storage services.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Data Movement Service" },
+                    { label: "Operations", icon: "fas fa-tasks", value: "Move, process, transform data" },
+                    { label: "Services", icon: "fas fa-plug", value: "AWS compute and storage" },
+                    { label: "Reliability", icon: "fas fa-shield-alt", value: "Reliable data pipelines" }
+                ]
+            },
+            {
+                name: "AWS Entity Resolution",
+                icon: "fas fa-link",
+                floatingIcon: "fas fa-users",
+                fact: "Match and link related records across datasets - improve data quality and insights!",
+                description: "ML-powered service that helps you match and link related records across multiple datasets.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Entity Resolution" },
+                    { label: "Technology", icon: "fas fa-brain", value: "Machine learning powered" },
+                    { label: "Quality", icon: "fas fa-check-circle", value: "Improve data quality" },
+                    { label: "Insights", icon: "fas fa-lightbulb", value: "Better analytics insights" }
+                ]
+            },
+            {
+                name: "AWS Glue",
+                icon: "fas fa-puzzle-piece",
+                floatingIcon: "fas fa-database",
+                fact: "Discover, prepare, and integrate all your data - serverless ETL service!",
+                description: "Serverless data integration service that makes it easy to discover, prepare, and combine data for analytics and ML.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "ETL Service" },
+                    { label: "Serverless", icon: "fas fa-server", value: "No infrastructure management" },
+                    { label: "Features", icon: "fas fa-star", value: "Data catalog, ETL jobs" },
+                    { label: "Integration", icon: "fas fa-plug", value: "AWS data lake, analytics" }
+                ]
+            },
+            {
+                name: "AWS Lake Formation",
+                icon: "fas fa-water",
+                floatingIcon: "fas fa-database",
+                fact: "Build, secure, and manage data lakes - simplified data lake creation and governance!",
+                description: "Service that makes it easy to set up a secure data lake in days with fine-grained access controls.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Data Lake Service" },
+                    { label: "Setup", icon: "fas fa-tools", value: "Quick data lake setup" },
+                    { label: "Security", icon: "fas fa-lock", value: "Fine-grained access controls" },
+                    { label: "Governance", icon: "fas fa-shield-alt", value: "Data governance" }
+                ]
+            },
+            {
+                name: "Amazon Managed Streaming for Apache Kafka (Amazon MSK)",
+                icon: "fas fa-stream",
+                floatingIcon: "fas fa-server",
+                fact: "Fully managed Apache Kafka service - high-performance streaming data processing!",
+                description: "Fully managed service for Apache Kafka that makes it easy to build and run applications that use Apache Kafka.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Managed Kafka Service" },
+                    { label: "Framework", icon: "fas fa-code", value: "Apache Kafka" },
+                    { label: "Management", icon: "fas fa-tools", value: "Fully managed" },
+                    { label: "Performance", icon: "fas fa-tachometer-alt", value: "High-performance streaming" }
+                ]
+            }
+        ];
+
+        function createServiceCard(service) {
+            return `
+                <div class="service-card" onclick="flipCard(this)">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="service-header">
+                                <div class="service-icon">
+                                    <i class="${service.icon}"></i>
+                                </div>
+                                <h3 class="service-title">${service.name}</h3>
+                            </div>
+                            <div class="fact-section">
+                                <div class="fact-label">Quick Fact</div>
+                                <div class="fact-text">${service.fact}</div>
+                            </div>
+                        </div>
+                        <div class="card-back">
+                            <div class="service-header">
+                                <div class="service-icon">
+                                    <i class="${service.icon}"></i>
+                                </div>
+                                <h3 class="service-title">${service.name}</h3>
+                            </div>
+                            <p class="service-description">${service.description}</p>
+                            <div class="service-details">
+                                ${service.details.map(detail => `
+                                    <div class="detail-row">
+                                        <div class="detail-label">
+                                            <i class="${detail.icon}"></i>
+                                            ${detail.label}
+                                        </div>
+                                        <div class="detail-value">${detail.value}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function flipCard(card) {
+            card.classList.toggle('flipped');
+        }
+
+        function createParticles() {
+            const particles = document.querySelector('.floating-particles');
+            const particleCount = 25;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                const colors = ['#6366f1', '#8b5cf6', '#3b82f6', '#10b981', '#f59e0b'];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.cssText = `
+                    position: absolute;
+                    width: ${Math.random() * 6 + 2}px;
+                    height: ${Math.random() * 6 + 2}px;
+                    background: ${color};
+                    border-radius: 50%;
+                    left: ${Math.random() * 100}%;
+                    top: ${Math.random() * 100}%;
+                    opacity: ${Math.random() * 0.6 + 0.2};
+                    animation: float ${Math.random() * 30 + 20}s infinite linear;
+                    animation-delay: ${Math.random() * 30}s;
+                    box-shadow: 0 0 ${Math.random() * 10 + 5}px ${color};
+                `;
+                particles.appendChild(particle);
+            }
+        }
+
+        function initializeScrollToTop() {
+            const scrollButton = document.getElementById('scroll-to-top');
+
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    scrollButton.classList.add('visible');
+                } else {
+                    scrollButton.classList.remove('visible');
+                }
+            });
+
+            scrollButton.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const grid = document.getElementById('servicesGrid');
+            grid.innerHTML = analyticsServices.map(createServiceCard).join('');
+            createParticles();
+            initializeScrollToTop();
+        });
+    </script>
+</body>
+</html>

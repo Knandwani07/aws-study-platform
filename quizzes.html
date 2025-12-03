@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AWS Quizzes - Study Hub</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="quiz-styles.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <div class="particles"></div>
+
+  <!-- Header -->
+
+  <!-- Main App Container -->
+  <main class="app-main">
+    <div class="categories-page">
+      <header class="categories-header">
+        <button class="back-btn" onclick="window.location.href='index.html'">← Back to Home</button>
+        <h1>AWS Quizzes</h1>
+        <p>Master AWS with Interactive Quizzes</p>
+      </header>
+
+      <div class="difficulty-selection" style="background: transparent;">
+        <h2 class="section-title">Choose Your Challenge Level</h2>
+        <div class="difficulty-cards">
+          <div class="difficulty-card-modern" data-difficulty="beginner">
+            <div class="card-header">
+              <div class="difficulty-icon">🌱</div>
+              <div class="difficulty-name">Beginner</div>
+            </div>
+            <div class="card-content">
+              <div class="difficulty-desc">Perfect for AWS newcomers</div>
+              <ul class="difficulty-features">
+                <li>10 carefully crafted questions</li>
+                <li>Fundamental AWS services and basics</li>
+              </ul>
+            </div>
+            <div class="card-footer">
+              <button class="select-difficulty-btn" data-difficulty="beginner">Start Journey</button>
+              <div class="card-navigation">
+                <a href="index.html" class="nav-link">← Back to Dashboard</a>
+              </div>
+            </div>
+          </div>
+          <div class="difficulty-card-modern" data-difficulty="intermediate">
+            <div class="card-header">
+              <div class="difficulty-icon">⚡</div>
+              <div class="difficulty-name">Intermediate</div>
+            </div>
+            <div class="card-content">
+              <div class="difficulty-desc">For those with some experience</div>
+              <ul class="difficulty-features">
+                <li>10 challenging questions</li>
+                <li>Real-world scenarios and best practices</li>
+              </ul>
+            </div>
+            <div class="card-footer">
+              <button class="select-difficulty-btn" data-difficulty="intermediate">Take Challenge</button>
+              <div class="card-navigation">
+                <a href="index.html" class="nav-link">← Back to Dashboard</a>
+              </div>
+            </div>
+          </div>
+          <div class="difficulty-card-modern" data-difficulty="advanced">
+            <div class="card-header">
+              <div class="difficulty-icon">👑</div>
+              <div class="difficulty-name">Advanced</div>
+            </div>
+            <div class="card-content">
+              <div class="difficulty-desc">For AWS professionals</div>
+              <ul class="difficulty-features">
+                <li>10 expert-level questions</li>
+                <li>Enterprise-level challenges and architecture</li>
+              </ul>
+            </div>
+            <div class="card-footer">
+              <button class="select-difficulty-btn" data-difficulty="advanced">Prove Mastery</button>
+              <div class="card-navigation">
+                <a href="index.html" class="nav-link">← Back to Dashboard</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quiz Screen -->
+    <div id="quizScreen" class="screen">
+      <div class="quiz-progress-header">
+        <div class="progress-info">
+          <div class="question-counter">
+            <span id="currentQuestionNum">1</span> of <span id="totalQuestionNum">3</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+        </div>
+        <div class="quiz-timer">
+          <div class="timer-icon">⏱️</div>
+          <div class="timer-text" id="timerText">05:00</div>
+        </div>
+      </div>
+
+      <div class="quiz-content">
+        <div class="question-display">
+          <div class="question-card">
+            <div class="question-header">
+              <div class="question-category" id="questionCategory">AWS Fundamentals</div>
+              <div class="question-difficulty" id="questionDifficulty">Beginner</div>
+            </div>
+            <h2 class="question-text" id="questionText"></h2>
+          </div>
+        </div>
+
+        <div class="options-display">
+          <div class="options-grid-modern" id="optionsGrid"></div>
+        </div>
+
+        <div class="quiz-actions">
+          <button id="submitAnswerBtn" class="btn-primary-large" disabled>
+            <span class="btn-icon">✓</span>
+            Submit Answer
+          </button>
+          <button id="nextQuestionBtn" class="btn-secondary-large hidden">
+            <span class="btn-icon">→</span>
+            Next Question
+          </button>
+        </div>
+
+        <div class="quiz-navigation">
+          <button class="btn-secondary-large" onclick="window.location.href='index.html'">
+            <span class="btn-icon">🏠</span>
+            Back to Dashboard
+          </button>
+          <button class="btn-outline-large" onclick="window.location.href='quizzes.html'">
+            <span class="btn-icon">📝</span>
+            Back to Quiz Selection
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results Screen -->
+    <div id="resultsScreen" class="screen">
+      <div class="results-container">
+        <div class="results-header">
+          <div class="results-celebration">
+            <div class="celebration-icon" id="celebrationIcon">🎉</div>
+            <h1 class="results-title" id="resultsTitle">Quiz Complete!</h1>
+          </div>
+        </div>
+
+        <div class="score-display">
+          <div class="score-circle-large">
+            <div class="score-number" id="finalScore">0</div>
+            <div class="score-label">Score</div>
+          </div>
+          <div class="score-breakdown">
+            <div class="score-item">
+              <span class="score-value" id="correctAnswers">0</span>
+              <span class="score-desc">Correct</span>
+            </div>
+            <div class="score-item">
+              <span class="score-value" id="totalQuestionsResult">3</span>
+              <span class="score-desc">Total</span>
+            </div>
+            <div class="score-item">
+              <span class="score-value" id="accuracyPercent">0%</span>
+              <span class="score-desc">Accuracy</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="results-message">
+          <p id="resultsMessage">Great job! Keep practicing to master AWS.</p>
+        </div>
+
+        <div class="results-actions-modern">
+          <button id="retakeQuizBtn" class="btn-primary-large">
+            <span class="btn-icon">🔄</span>
+            Retake Quiz
+          </button>
+          <button id="viewDashboardBtn" class="btn-secondary-large">
+            <span class="btn-icon">🏠</span>
+            Back to Dashboard
+          </button>
+          <button id="shareResultsBtn" class="btn-outline-large">
+            <span class="btn-icon">📤</span>
+            Share Results
+          </button>
+        </div>
+
+        <div class="performance-insights">
+          <h3>Performance Insights</h3>
+          <div class="insights-grid" id="insightsGrid">
+            <!-- Dynamic insights will be inserted here -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="realtime-dashboard.js"></script>
+  <script src="quizzes.js"></script>
+  <script>
+    // Enhanced particle system with interactivity
+    function createParticles() {
+      const particles = document.querySelector('.particles');
+      const particleCount = 25;
+
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        const colors = ['#6366f1', '#8b5cf6', '#3b82f6', '#10b981', '#f59e0b'];
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        particle.style.cssText = `
+          position: absolute;
+          width: ${Math.random() * 6 + 2}px;
+          height: ${Math.random() * 6 + 2}px;
+          background: ${color};
+          border-radius: 50%;
+          left: ${Math.random() * 100}%;
+          top: ${Math.random() * 100}%;
+          opacity: ${Math.random() * 0.6 + 0.2};
+          animation: float ${Math.random() * 30 + 20}s infinite linear;
+          animation-delay: ${Math.random() * 30}s;
+          box-shadow: 0 0 ${Math.random() * 10 + 5}px ${color};
+        `;
+        particles.appendChild(particle);
+      }
+    }
+
+    // Initialize particles on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      createParticles();
+    });
+  </script>
+</body>
+</html>

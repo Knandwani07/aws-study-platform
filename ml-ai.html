@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS ML and AI Services</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --card-gradient: linear-gradient(145deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            --accent-gradient: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
+            --glow-color: rgba(139, 92, 246, 0.4);
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        body {
+            font-family: 'Poppins', 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(51, 65, 85, 0.8) 100%);
+            padding: 80px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: #cbd5e1;
+            margin-bottom: 2rem;
+            font-weight: 400;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            background: var(--glass-bg);
+            color: white;
+            border: 1px solid var(--glass-border);
+            padding: 14px 24px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 3;
+            letter-spacing: 0.5px;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(139, 92, 246, 0.3);
+        }
+
+        .services-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .service-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 0;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(20px);
+            overflow: hidden;
+            perspective: 1000px;
+            min-height: 500px;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--accent-gradient);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .service-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .service-card:hover::before {
+            opacity: 0.1;
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(139, 92, 246, 0.2), 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .service-card:hover::after {
+            opacity: 1;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            min-height: 500px;
+        }
+
+        .service-card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            overflow-x: hidden;
+            box-sizing: border-box;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .card-front::-webkit-scrollbar,
+        .card-back::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .card-front::-webkit-scrollbar-track,
+        .card-back::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+
+        .card-front::-webkit-scrollbar-thumb,
+        .card-back::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            border-radius: 3px;
+        }
+
+        .card-front::-webkit-scrollbar-thumb:hover,
+        .card-back::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #7c3aed, #2563eb);
+        }
+
+        .service-header {
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .service-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: var(--accent-gradient);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            position: relative;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);
+            font-family: 'Font Awesome 6 Free', monospace;
+            -webkit-font-feature-settings: "liga" off;
+            font-feature-settings: "liga" off;
+        }
+
+        .service-icon::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: var(--accent-gradient);
+            border-radius: 22px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .floating-icon {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #6366f1;
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float 20s infinite linear;
+        }
+
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: none;
+        }
+
+        .scroll-to-top.visible {
+            display: block;
+        }
+
+        .scroll-to-top:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .service-card:hover .service-icon::before {
+            opacity: 0.6;
+        }
+
+        .service-card:hover .service-icon {
+            transform: scale(1.05) rotate(5deg);
+            box-shadow: 0 12px 40px var(--glow-color);
+        }
+
+        .service-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+
+        .fact-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: auto;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .fact-label {
+            font-size: 0.9rem;
+            color: #27106b;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+
+        .fact-label::before {
+            content: '✨';
+            margin-right: 8px;
+            font-size: 1rem;
+        }
+        }
+
+        .fact-text {
+            color: #e2e8f0;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        .service-description {
+            color: #cbd5e1;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            flex-grow: 1;
+        }
+
+        .service-details {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #27106b;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .detail-label i {
+            width: 16px;
+            text-align: center;
+            color: #27106b;
+        }
+
+        .detail-value {
+            color: #e2e8f0;
+            font-weight: 500;
+            text-align: right;
+            font-size: 0.9rem;
+            max-width: 60%;
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .services-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .service-card {
+                min-height: 450px;
+            }
+            
+            .card-front, .card-back {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles"></div>
+    <div class="hero-section">
+        <button class="back-btn" onclick="window.location.href='categories.html'">
+            <i class="fas fa-arrow-left"></i> Back to Categories
+        </button>
+        
+        <div class="hero-content">
+            <h1 class="hero-title">ML and AI Services</h1>
+            <p class="hero-subtitle">Build intelligent applications with machine learning and artificial intelligence</p>
+        </div>
+    </div>
+
+    <div class="services-container">
+        <div class="services-grid" id="servicesGrid">
+            <!-- Services will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <button id="scroll-to-top" class="scroll-to-top" aria-label="Scroll to top">↑</button>
+
+    <script>
+        const services = [
+            {
+                name: "Amazon Augmented AI",
+                icon: "fas fa-users",
+                floatingIcon: "fas fa-eye",
+                fact: "ML service that makes it easy to build workflows for human review with no heavy lifting!",
+                description: "Amazon Augmented AI (Amazon A2I) is a ML service which makes it easy to build the workflows required for human review. Amazon A2I brings human review to all developers, removing the undifferentiated heavy lifting associated with building human review systems or managing large numbers of human reviewers.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Human Review ML Service" },
+                    { label: "Purpose", icon: "fas fa-bullseye", value: "Build human review workflows" },
+                    { label: "Benefit", icon: "fas fa-star", value: "No heavy lifting for human review systems" },
+                    { label: "Compatibility", icon: "fas fa-check", value: "Works on AWS or external systems" }
+                ]
+            },
+            {
+                name: "Amazon Bedrock",
+                icon: "fas fa-layer-group",
+                floatingIcon: "fas fa-robot",
+                fact: "Fully managed service providing foundational models from Amazon and leading AI companies through API!",
+                description: "Amazon Bedrock is a fully managed service that makes foundational models (FMs) from Amazon and leading AI companies available through an API. With the serverless experience, you can quickly get started, experiment with FMs, privately customize them with your own data, and seamlessly integrate and deploy FMs into your AWS applications.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Foundational Models Service" },
+                    { label: "Partners", icon: "fas fa-handshake", value: "AI21 Labs, Anthropic, Cohere, Meta, Mistral" },
+                    { label: "Models", icon: "fas fa-brain", value: "Amazon Nova foundation models" },
+                    { label: "Experience", icon: "fas fa-server", value: "Serverless, API-based access" }
+                ]
+            },
+            {
+                name: "Amazon CodeGuru",
+                icon: "fas fa-code",
+                floatingIcon: "fas fa-search",
+                fact: "Developer tool providing intelligent recommendations to improve code quality and identify expensive code lines!",
+                description: "Amazon CodeGuru is a developer tool that provides intelligent recommendations to improve code quality and identify an application's most expensive lines of code. CodeGuru Reviewer uses ML to identify critical issues, security vulnerabilities, and bugs. CodeGuru Profiler helps find expensive code lines and improve performance.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Code Analysis Tool" },
+                    { label: "Reviewer", icon: "fas fa-bug", value: "ML-powered code review, security analysis" },
+                    { label: "Profiler", icon: "fas fa-tachometer-alt", value: "Performance analysis, cost reduction" },
+                    { label: "Integration", icon: "fas fa-plug", value: "Existing development workflow" }
+                ]
+            },
+            {
+                name: "Amazon Comprehend",
+                icon: "fas fa-language",
+                floatingIcon: "fas fa-comments",
+                fact: "Uses ML and NLP to uncover insights and relationships in unstructured data with sentiment analysis!",
+                description: "Amazon Comprehend uses ML and natural language processing (NLP) to help you uncover the insights and relationships in your unstructured data. The service identifies language, extracts key phrases, people, places, brands, events, understands sentiment, analyzes text using tokenization, and organizes text files by topic.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Natural Language Processing" },
+                    { label: "Features", icon: "fas fa-star", value: "Language ID, sentiment, key phrases" },
+                    { label: "AutoML", icon: "fas fa-brain", value: "Custom entities, text classification" },
+                    { label: "Medical", icon: "fas fa-heartbeat", value: "Comprehend Medical for healthcare" }
+                ]
+            },
+            {
+                name: "Amazon DevOps Guru",
+                icon: "fas fa-chart-line",
+                floatingIcon: "fas fa-exclamation-triangle",
+                fact: "ML-powered service that detects abnormal application behavior to identify operational issues early!",
+                description: "Amazon DevOps Guru is an ML-powered service that makes it easy to improve an application's operational performance and availability. It detects behaviors that deviate from normal operating patterns using ML models informed by years of Amazon.com and AWS operational excellence.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "ML-Powered Operations Service" },
+                    { label: "Detection", icon: "fas fa-search", value: "Anomalous behavior, operational issues" },
+                    { label: "Alerts", icon: "fas fa-bell", value: "Critical issues with root cause analysis" },
+                    { label: "Setup", icon: "fas fa-cog", value: "No manual setup or ML expertise required" }
+                ]
+            },
+            {
+                name: "Amazon Forecast",
+                icon: "fas fa-chart-area",
+                floatingIcon: "fas fa-crystal-ball",
+                fact: "Fully managed service using ML to deliver highly accurate forecasts up to 50% more accurate than time series alone!",
+                description: "Amazon Forecast is a fully managed service that uses ML to deliver highly accurate forecasts. Based on the same technology used at Amazon.com, it combines time series data with additional variables to build forecasts that are up to 50% more accurate than looking at time series data alone.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "ML Forecasting Service" },
+                    { label: "Accuracy", icon: "fas fa-bullseye", value: "Up to 50% more accurate forecasts" },
+                    { label: "Data", icon: "fas fa-database", value: "Time series + additional variables" },
+                    { label: "Experience", icon: "fas fa-user", value: "No ML experience required" }
+                ]
+            },
+            {
+                name: "Amazon Fraud Detector",
+                icon: "fas fa-shield-alt",
+                floatingIcon: "fas fa-exclamation-circle",
+                fact: "Fully managed service using ML and 20+ years of Amazon fraud detection expertise to catch online fraud faster!",
+                description: "Amazon Fraud Detector is a fully managed service that uses ML and more than 20 years of fraud detection expertise from Amazon, to identify potentially fraudulent activity. It automates the time consuming steps to build, train, and deploy ML models for fraud detection, customizing each model to customer datasets.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Fraud Detection Service" },
+                    { label: "Expertise", icon: "fas fa-award", value: "20+ years Amazon fraud detection" },
+                    { label: "Customization", icon: "fas fa-cog", value: "Models tailored to customer data" },
+                    { label: "Pricing", icon: "fas fa-dollar-sign", value: "Pay only for what you use" }
+                ]
+            },
+            {
+                name: "Amazon Comprehend Medical",
+                icon: "fas fa-heartbeat",
+                floatingIcon: "fas fa-user-md",
+                fact: "HIPAA-eligible NLP service pre-trained to extract health data from medical text with medical ontologies!",
+                description: "Amazon Comprehend Medical is a HIPAA-eligible natural language processing (NLP) service that uses machine learning pre-trained to understand and extract health data from medical text, such as prescriptions, procedures, or diagnoses. It supports medical ontologies like ICD-10-CM, RxNorm, and SNOMED CT.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Medical NLP Service" },
+                    { label: "Compliance", icon: "fas fa-shield-alt", value: "HIPAA-eligible service" },
+                    { label: "Ontologies", icon: "fas fa-book-medical", value: "ICD-10-CM, RxNorm, SNOMED CT" },
+                    { label: "Use Cases", icon: "fas fa-lightbulb", value: "Claims processing, population health" }
+                ]
+            },
+            {
+                name: "Amazon Kendra",
+                icon: "fas fa-search",
+                floatingIcon: "fas fa-brain",
+                fact: "Intelligent search service powered by ML that reimagines enterprise search for easy content discovery!",
+                description: "Amazon Kendra is an intelligent search service powered by ML. It reimagines enterprise search for your websites and applications so employees and customers can easily find content, even when scattered across multiple locations and repositories within your organization.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Intelligent Search Service" },
+                    { label: "Scope", icon: "fas fa-building", value: "Enterprise websites and applications" },
+                    { label: "Capability", icon: "fas fa-magic", value: "Finds content across multiple repositories" },
+                    { label: "Management", icon: "fas fa-server", value: "Fully managed, no servers to provision" }
+                ]
+            },
+            {
+                name: "Amazon Lex",
+                icon: "fas fa-comments",
+                floatingIcon: "fas fa-microphone",
+                fact: "Fully managed AI service to build conversational interfaces using voice and text with Alexa technology!",
+                description: "Amazon Lex is a fully managed artificial intelligence (AI) service to design, build, test, and deploy conversational interfaces into any application using voice and text. It provides advanced deep learning functionalities of automatic speech recognition (ASR) and natural language understanding (NLU) with the same technology that powers Amazon Alexa.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Conversational AI Service" },
+                    { label: "Technology", icon: "fas fa-robot", value: "Same deep learning as Amazon Alexa" },
+                    { label: "Interfaces", icon: "fas fa-mobile-alt", value: "Voice and text chatbots, IVR systems" },
+                    { label: "Pricing", icon: "fas fa-dollar-sign", value: "Pay-per-request, no upfront costs" }
+                ]
+            },
+            {
+                name: "Amazon Lookout for Equipment",
+                icon: "fas fa-cogs",
+                floatingIcon: "fas fa-exclamation-triangle",
+                fact: "Analyzes sensor data to automatically train ML models for detecting equipment abnormalities with no ML expertise!",
+                description: "Amazon Lookout for Equipment analyzes data from sensors on your equipment to automatically train an ML model based on just your data, for your equipment – with no ML expertise required. It uses your unique ML model to analyze incoming sensor data in real-time and accurately identify early warning signs of machine failures.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Equipment Monitoring Service" },
+                    { label: "Data Sources", icon: "fas fa-thermometer-half", value: "Pressure, flow rate, RPM sensors" },
+                    { label: "Detection", icon: "fas fa-search", value: "Early warning signs, abnormalities" },
+                    { label: "Benefits", icon: "fas fa-star", value: "Reduce downtime, false alerts" }
+                ]
+            },
+            {
+                name: "Amazon Lookout for Metrics",
+                icon: "fas fa-chart-bar",
+                floatingIcon: "fas fa-exclamation",
+                fact: "Uses ML to automatically detect and diagnose anomalies in business and operational data! (Discontinuing Oct 2025)",
+                description: "Amazon Lookout for Metrics uses ML to automatically detect and diagnose anomalies (outliers from the norm) in business and operational data, such as sudden dips in sales revenue or customer acquisition rates. Note: AWS will discontinue support on October 10, 2025.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Anomaly Detection Service" },
+                    { label: "Data Sources", icon: "fas fa-database", value: "S3, Redshift, RDS, SaaS apps" },
+                    { label: "Features", icon: "fas fa-star", value: "Root cause analysis, severity ranking" },
+                    { label: "Status", icon: "fas fa-exclamation-triangle", value: "Discontinuing October 10, 2025" }
+                ]
+            },
+            {
+                name: "Amazon Lookout for Vision",
+                icon: "fas fa-eye",
+                floatingIcon: "fas fa-search",
+                fact: "ML service that spots defects and anomalies in visual representations using computer vision at scale!",
+                description: "Amazon Lookout for Vision is an ML service that spots defects and anomalies in visual representations using computer vision (CV). Manufacturing companies can increase quality and reduce operational costs by quickly identifying differences in images of objects at scale with higher accuracy than manual inspection.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Computer Vision Service" },
+                    { label: "Use Cases", icon: "fas fa-lightbulb", value: "Missing components, damage, defects" },
+                    { label: "Accuracy", icon: "fas fa-bullseye", value: "Higher than human inspection" },
+                    { label: "Setup", icon: "fas fa-clock", value: "Start in minutes, no ML expertise" }
+                ]
+            }
+        ];
+
+        const moreServices = [
+            {
+                name: "Amazon Monitron",
+                icon: "fas fa-industry",
+                floatingIcon: "fas fa-chart-line",
+                fact: "End-to-end system using ML to detect abnormal behavior in industrial machinery for predictive maintenance!",
+                description: "Amazon Monitron is an end-to-end system that uses ML to detect abnormal behavior in industrial machinery, enabling predictive maintenance and reducing unplanned downtime. It includes sensors, gateway device, ML analysis service, and mobile app with the same technology used in Amazon Fulfillment Centers.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Predictive Maintenance System" },
+                    { label: "Components", icon: "fas fa-puzzle-piece", value: "Sensors, gateway, ML service, mobile app" },
+                    { label: "Data", icon: "fas fa-thermometer-half", value: "Vibration and temperature monitoring" },
+                    { label: "Setup", icon: "fas fa-clock", value: "Start monitoring in minutes" }
+                ]
+            },
+            {
+                name: "Amazon PartyRock",
+                icon: "fas fa-rocket",
+                floatingIcon: "fas fa-code",
+                fact: "Makes learning generative AI easy with hands-on, code-free app builder for experimenting with prompt engineering!",
+                description: "Amazon PartyRock makes learning generative AI easy with a hands-on, code-free app builder. Experiment with prompt engineering techniques, review generated responses, and develop intuition for generative AI while creating and exploring fun apps with access to foundation models through Amazon Bedrock.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Generative AI Learning Platform" },
+                    { label: "Approach", icon: "fas fa-hands", value: "Hands-on, code-free app builder" },
+                    { label: "Learning", icon: "fas fa-graduation-cap", value: "Prompt engineering, generative AI" },
+                    { label: "Models", icon: "fas fa-brain", value: "Foundation models via Bedrock" }
+                ]
+            },
+            {
+                name: "Amazon Personalize",
+                icon: "fas fa-user-cog",
+                floatingIcon: "fas fa-heart",
+                fact: "ML service for individualized recommendations using Amazon.com ML technology with no prior ML experience needed!",
+                description: "Amazon Personalize is an ML service that makes it easy for developers to create individualized recommendations for customers using their applications. It uses ML technology perfected from years of use on Amazon.com, allowing developers with no prior ML experience to build sophisticated personalization capabilities.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "ML Personalization Service" },
+                    { label: "Technology", icon: "fas fa-amazon", value: "Amazon.com ML personalization" },
+                    { label: "Recommenders", icon: "fas fa-star", value: "Optimized for retail, media & entertainment" },
+                    { label: "Segmentation", icon: "fas fa-users", value: "Intelligent user segmentation" }
+                ]
+            },
+            {
+                name: "Amazon Polly",
+                icon: "fas fa-volume-up",
+                floatingIcon: "fas fa-microphone",
+                fact: "Turns text into lifelike speech using advanced deep learning with dozens of languages and voices!",
+                description: "Amazon Polly is a service that turns text into lifelike speech using advanced deep learning technologies to synthesize speech that sounds like a human voice. It includes a wide selection of lifelike voices across dozens of languages and supports Neural Text-to-Speech (NTTS) for advanced speech quality.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Text-to-Speech Service" },
+                    { label: "Voices", icon: "fas fa-globe", value: "Lifelike voices, dozens of languages" },
+                    { label: "Technology", icon: "fas fa-brain", value: "Neural TTS, Newscaster style" },
+                    { label: "Pricing", icon: "fas fa-dollar-sign", value: "Pay per character converted" }
+                ]
+            },
+            {
+                name: "Amazon Q",
+                icon: "fas fa-robot",
+                floatingIcon: "fas fa-code",
+                fact: "Generative AI-powered assistant for accelerating software development and leveraging internal data!",
+                description: "Amazon Q is a generative AI-powered assistant for accelerating software development and leveraging your internal data. Amazon Q Business answers questions and completes tasks based on enterprise data, while Amazon Q Developer assists with software development tasks.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Generative AI Assistant" },
+                    { label: "Q Business", icon: "fas fa-building", value: "Enterprise data, summaries, content" },
+                    { label: "Q Developer", icon: "fas fa-code", value: "Software development acceleration" },
+                    { label: "Benefits", icon: "fas fa-star", value: "Creative, data-driven, efficient" }
+                ]
+            },
+            {
+                name: "Amazon Rekognition",
+                icon: "fas fa-camera",
+                floatingIcon: "fas fa-user",
+                fact: "Adds image and video analysis to applications using proven deep learning technology with no ML expertise required!",
+                description: "Amazon Rekognition makes it easy to add image and video analysis to your applications using proven, highly scalable, deep learning technology. You can identify objects, people, text, scenes, activities, and detect inappropriate content. It also provides facial analysis and search capabilities.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Image & Video Analysis Service" },
+                    { label: "Detection", icon: "fas fa-search", value: "Objects, people, text, scenes, activities" },
+                    { label: "Facial Analysis", icon: "fas fa-user", value: "Detection, analysis, comparison" },
+                    { label: "Custom Labels", icon: "fas fa-cog", value: "Business-specific object identification" }
+                ]
+            },
+            {
+                name: "Amazon SageMaker AI",
+                icon: "fas fa-brain",
+                floatingIcon: "fas fa-cogs",
+                fact: "Build, train, and deploy ML models for any use case with fully managed infrastructure and tools!",
+                description: "Amazon SageMaker AI provides all components for ML in a single toolset to build, train, and deploy ML models for any use case with fully managed infrastructure, tools, and workflows. It removes heavy lifting from each step of the ML process to develop high-quality models faster and at lower cost.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Complete ML Platform" },
+                    { label: "Components", icon: "fas fa-puzzle-piece", value: "Autopilot, Canvas, Studio, Edge, etc." },
+                    { label: "Infrastructure", icon: "fas fa-server", value: "Fully managed, scalable" },
+                    { label: "Benefits", icon: "fas fa-star", value: "Faster to production, lower cost" }
+                ]
+            },
+            {
+                name: "Amazon Textract",
+                icon: "fas fa-file-text",
+                floatingIcon: "fas fa-search",
+                fact: "Automatically extracts text and data from scanned documents beyond simple OCR with ML!",
+                description: "Amazon Textract automatically extracts text and data from scanned documents using ML. It goes beyond simple optical character recognition (OCR) to identify contents of fields in forms and information stored in tables, and provides flexibility to specify data extraction using natural language queries.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Document Analysis Service" },
+                    { label: "Capability", icon: "fas fa-magic", value: "Beyond OCR - forms, tables, queries" },
+                    { label: "Queries", icon: "fas fa-question", value: "Natural language questions" },
+                    { label: "Integration", icon: "fas fa-users", value: "Amazon Augmented AI for human review" }
+                ]
+            },
+            {
+                name: "Amazon Transcribe",
+                icon: "fas fa-microphone",
+                floatingIcon: "fas fa-file-text",
+                fact: "Automatic speech recognition service converting speech to text with timestamps and real-time streaming!",
+                description: "Amazon Transcribe is an automatic speech recognition (ASR) service that converts speech to text. It can transcribe audio files with timestamps for every word and handle live audio streams in real-time. Includes specialized versions for medical transcription and call analytics.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Speech Recognition Service" },
+                    { label: "Formats", icon: "fas fa-file-audio", value: "WAV, MP3, real-time streaming" },
+                    { label: "Medical", icon: "fas fa-heartbeat", value: "Transcribe Medical for healthcare" },
+                    { label: "Call Analytics", icon: "fas fa-phone", value: "Customer care, sales call insights" }
+                ]
+            },
+            {
+                name: "Amazon Translate",
+                icon: "fas fa-language",
+                floatingIcon: "fas fa-globe",
+                fact: "Neural machine translation service delivering fast, high-quality, affordable language translation!",
+                description: "Amazon Translate is a neural machine translation service that delivers fast, high-quality, and affordable language translation. It uses deep learning models to provide more accurate and natural sounding translation than traditional statistical and rule-based translation algorithms.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Neural Machine Translation" },
+                    { label: "Technology", icon: "fas fa-brain", value: "Deep learning models" },
+                    { label: "Use Cases", icon: "fas fa-lightbulb", value: "Localization, analysis, communication" },
+                    { label: "Quality", icon: "fas fa-star", value: "More accurate than traditional methods" }
+                ]
+            }
+        ];
+
+        services.push(...moreServices);
+
+        const finalServices = [
+            {
+                name: "AWS DeepComposer",
+                icon: "fas fa-music",
+                floatingIcon: "fas fa-keyboard",
+                fact: "World's first musical keyboard powered by ML to learn Generative AI while creating original music!",
+                description: "AWS DeepComposer is the world's first musical keyboard powered by ML to enable developers of all skill levels to learn Generative AI while creating original music outputs. It consists of a USB keyboard and the DeepComposer service with tutorials, sample code, and training data.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "ML Musical Keyboard" },
+                    { label: "Purpose", icon: "fas fa-graduation-cap", value: "Learn Generative AI through music" },
+                    { label: "Components", icon: "fas fa-puzzle-piece", value: "USB keyboard + cloud service" },
+                    { label: "Includes", icon: "fas fa-book", value: "Tutorials, sample code, training data" }
+                ]
+            },
+            {
+                name: "AWS DeepRacer",
+                icon: "fas fa-car",
+                floatingIcon: "fas fa-trophy",
+                fact: "1/18th scale race car for learning reinforcement learning through autonomous driving fun!",
+                description: "AWS DeepRacer is a 1/18th scale race car which gives you an interesting and fun way to get started with reinforcement learning (RL). You can experiment with the virtual car in the cloud-based 3D racing simulator, deploy models to the physical car, and participate in the global AWS DeepRacer League.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Reinforcement Learning Race Car" },
+                    { label: "Learning", icon: "fas fa-brain", value: "Advanced ML through autonomous driving" },
+                    { label: "Experience", icon: "fas fa-gamepad", value: "Virtual simulator + real-world racing" },
+                    { label: "Competition", icon: "fas fa-trophy", value: "Global AWS DeepRacer League" }
+                ]
+            },
+            {
+                name: "AWS HealthLake",
+                icon: "fas fa-hospital",
+                floatingIcon: "fas fa-database",
+                fact: "HIPAA-eligible service for healthcare providers to store, transform, query, and analyze large-scale health data!",
+                description: "AWS HealthLake is a HIPAA-eligible service that healthcare providers, health insurance companies, and pharmaceutical companies can use to store, transform, query, and analyze large-scale health data. It includes integrated medical natural language processing (NLP) capabilities for unstructured clinical text.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Healthcare Data Service" },
+                    { label: "Compliance", icon: "fas fa-shield-alt", value: "HIPAA-eligible service" },
+                    { label: "NLP", icon: "fas fa-language", value: "Medical natural language processing" },
+                    { label: "Users", icon: "fas fa-users", value: "Providers, insurers, pharma companies" }
+                ]
+            },
+            {
+                name: "AWS HealthScribe",
+                icon: "fas fa-stethoscope",
+                floatingIcon: "fas fa-microphone",
+                fact: "HIPAA-eligible service automatically generating clinical notes from patient-clinician conversations!",
+                description: "AWS HealthScribe is a HIPAA-eligible service that allows healthcare software vendors to automatically generate clinical notes by analyzing patient-clinician conversations. It combines speech recognition with generative AI to reduce clinical documentation burden with built-in security and privacy.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Clinical Documentation Service" },
+                    { label: "Technology", icon: "fas fa-robot", value: "Speech recognition + generative AI" },
+                    { label: "Features", icon: "fas fa-star", value: "Speaker segmentation, medical terms" },
+                    { label: "Privacy", icon: "fas fa-lock", value: "Audio and text not retained" }
+                ]
+            },
+            {
+                name: "AWS Panorama",
+                icon: "fas fa-video",
+                floatingIcon: "fas fa-eye",
+                fact: "Brings computer vision to on-premises IP cameras for local predictions with high accuracy and low latency!",
+                description: "AWS Panorama is a collection of ML devices and SDK that brings computer vision (CV) to on-premises internet protocol (IP) cameras. It allows organizations to automate visual inspection tasks and make predictions locally with high accuracy and low latency for limited bandwidth or data governance requirements.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Computer Vision Edge Service" },
+                    { label: "Hardware", icon: "fas fa-camera", value: "Panorama Appliance for existing IP cameras" },
+                    { label: "Processing", icon: "fas fa-microchip", value: "Edge predictions in milliseconds" },
+                    { label: "Use Cases", icon: "fas fa-lightbulb", value: "Asset tracking, quality control, traffic" }
+                ]
+            }
+        ];
+
+        services.push(...finalServices);
+
+        function createServiceCard(service) {
+            return `
+                <div class="service-card" onclick="flipCard(this)">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="service-header">
+                                <div class="service-icon">
+                                    <i class="${service.icon}"></i>
+                                </div>
+                    <h3 class="service-title">${service.name}</h3>
+                </div>
+                            <div class="fact-section">
+                                <div class="fact-label">Quick Fact</div>
+                                <div class="fact-text">${service.fact}</div>
+                            </div>
+                        </div>
+                        <div class="card-back">
+                            <div class="service-header">
+                                <div class="service-icon">
+                                    <i class="${service.icon}"></i>
+                                </div>
+                                <h3 class="service-title">${service.name}</h3>
+                            </div>
+                            <p class="service-description">${service.description}</p>
+                            <div class="service-details">
+                                ${service.details.map(detail => `
+                                    <div class="detail-row">
+                                        <div class="detail-label">
+                                            <i class="${detail.icon}"></i>
+                                            ${detail.label}
+                                        </div>
+                                        <div class="detail-value">${detail.value}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function flipCard(card) {
+            card.classList.toggle('flipped');
+        }
+
+        function renderServices() {
+            const servicesGrid = document.getElementById('servicesGrid');
+            servicesGrid.innerHTML = services.map(service => createServiceCard(service)).join('');
+        }
+
+        function createParticles() {
+            const particles = document.querySelector('.particles');
+            const particleCount = 25;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                const colors = ['#6366f1', '#8b5cf6', '#3b82f6', '#10b981', '#f59e0b'];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.cssText = `
+                    position: absolute;
+                    width: ${Math.random() * 6 + 2}px;
+                    height: ${Math.random() * 6 + 2}px;
+                    background: ${color};
+                    border-radius: 50%;
+                    left: ${Math.random() * 100}%;
+                    top: ${Math.random() * 100}%;
+                    opacity: ${Math.random() * 0.6 + 0.2};
+                    animation: float ${Math.random() * 30 + 20}s infinite linear;
+                    animation-delay: ${Math.random() * 30}s;
+                    box-shadow: 0 0 ${Math.random() * 10 + 5}px ${color};
+                `;
+                particles.appendChild(particle);
+            }
+        }
+
+        function initializeScrollToTop() {
+            const scrollButton = document.getElementById('scroll-to-top');
+
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    scrollButton.classList.add('visible');
+                } else {
+                    scrollButton.classList.remove('visible');
+                }
+            });
+
+            scrollButton.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            renderServices();
+            createParticles();
+            initializeScrollToTop();
+        });
+    </script>
+</body>
+</html>

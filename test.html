@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Button Test</title>
+    <style>
+        .hidden { display: none !important; }
+        button { padding: 10px; margin: 5px; }
+        .view { padding: 20px; border: 1px solid #ccc; margin: 10px; }
+    </style>
+</head>
+<body>
+    <div id="homeView" class="view">
+        <h2>Home View</h2>
+        <button id="studyModeBtn">Study Mode</button>
+        <button id="categoriesBtn">Categories</button>
+    </div>
+    
+    <div id="studyView" class="view hidden">
+        <h2>Study View</h2>
+        <button onclick="showView('homeView')">Back to Home</button>
+    </div>
+    
+    <div id="categoriesView" class="view hidden">
+        <h2>Categories View</h2>
+        <button onclick="showView('homeView')">Back to Home</button>
+    </div>
+
+    <script>
+        function showView(viewName) {
+            console.log('Showing view:', viewName);
+            document.querySelectorAll('.view').forEach(view => {
+                view.classList.add('hidden');
+            });
+            document.getElementById(viewName).classList.remove('hidden');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('studyModeBtn').addEventListener('click', () => {
+                console.log('Study button clicked');
+                showView('studyView');
+            });
+            
+            document.getElementById('categoriesBtn').addEventListener('click', () => {
+                console.log('Categories button clicked');
+                showView('categoriesView');
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Management and Governance Services</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --card-gradient: linear-gradient(145deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            --accent-gradient: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
+            --glow-color: rgba(139, 92, 246, 0.4);
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        body {
+            font-family: 'Poppins', 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(51, 65, 85, 0.8) 100%);
+            padding: 80px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: #cbd5e1;
+            margin-bottom: 2rem;
+            font-weight: 400;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            background: var(--glass-bg);
+            color: white;
+            border: 1px solid var(--glass-border);
+            padding: 14px 24px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 3;
+            letter-spacing: 0.5px;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(139, 92, 246, 0.3);
+        }
+
+        .services-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .service-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 0;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(20px);
+            overflow: hidden;
+            perspective: 1000px;
+            min-height: 500px;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--accent-gradient);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .service-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .service-card:hover::before {
+            opacity: 0.1;
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(139, 92, 246, 0.2), 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .service-card:hover::after {
+            opacity: 1;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            min-height: 500px;
+        }
+
+        .service-card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            overflow-x: hidden;
+            box-sizing: border-box;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .card-front::-webkit-scrollbar,
+        .card-back::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .card-front::-webkit-scrollbar-track,
+        .card-back::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+
+        .card-front::-webkit-scrollbar-thumb,
+        .card-back::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            border-radius: 3px;
+        }
+
+        .card-front::-webkit-scrollbar-thumb:hover,
+        .card-back::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #7c3aed, #2563eb);
+        }
+
+        .service-header {
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .service-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: var(--accent-gradient);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            position: relative;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);
+            font-family: 'Font Awesome 6 Free', monospace;
+            -webkit-font-feature-settings: "liga" off;
+            font-feature-settings: "liga" off;
+        }
+
+        .service-icon::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: var(--accent-gradient);
+            border-radius: 22px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .floating-icon {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        .service-card:hover .service-icon::before {
+            opacity: 0.6;
+        }
+
+        .service-card:hover .service-icon {
+            transform: scale(1.05) rotate(5deg);
+            box-shadow: 0 12px 40px var(--glow-color);
+        }
+
+        .service-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 15px;
+            line-height: 1.3;
+            margin-bottom: 15px;
+        }
+
+        .fact-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: auto;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .fact-label {
+            font-size: 0.9rem;
+            color: #27106b;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+
+        .fact-label::before {
+            content: '✨';
+            margin-right: 8px;
+            font-size: 1rem;
+        }
+        }
+
+        .fact-text {
+            color: #27106b;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        .service-description {
+            color: #cbd5e1;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            flex-grow: 1;
+        }
+
+        .service-details {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #27106b;
+            font-weight: 500;
+            font-size: 0.9rem;
+            gap: 8px;
+        }
+
+        .detail-label i {
+            width: 16px;
+            text-align: center;
+            color: #27106b;
+        }
+
+        .detail-value {
+            color: #e2e8f0;
+            font-weight: 500;
+            text-align: right;
+            font-size: 0.9rem;
+            max-width: 60%;
+        }
+
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #6366f1;
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float 20s infinite linear;
+        }
+
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: none;
+        }
+
+        .scroll-to-top.visible {
+            display: block;
+        }
+
+        .scroll-to-top:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .service-card {
+                min-height: 450px;
+            }
+
+            .card-front, .card-back {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-particles"></div>
+
+    <div class="hero-section">
+        <button class="back-btn" onclick="window.location.href='categories.html'">
+            <i class="fas fa-arrow-left"></i> Back to Categories
+        </button>
+        
+        <div class="hero-content">
+            <h1 class="hero-title">Management & Governance</h1>
+            <p class="hero-subtitle">Innovate faster while maintaining control over cost, compliance, and security</p>
+        </div>
+    </div>
+
+    <div class="services-container">
+        <div class="services-grid" id="servicesGrid">
+            <!-- Services will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <button id="scroll-to-top" class="scroll-to-top" aria-label="Scroll to top">↑</button>
+
+    <script>
+        const services = [
+            {
+                name: "AWS Auto Scaling",
+                icon: "fas fa-expand-arrows-alt",
+                floatingIcon: "fas fa-chart-line",
+                fact: "Monitors applications and automatically adjusts capacity for steady performance at lowest cost!",
+                description: "AWS Auto Scaling monitors your applications and automatically adjusts capacity to maintain steady, predictable performance at the lowest possible cost. It provides a simple, powerful user interface to build scaling plans for multiple resources across multiple services in minutes.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Application Scaling Service" },
+                    { label: "Resources", icon: "fas fa-server", value: "EC2, ECS, DynamoDB, Aurora" },
+                    { label: "Optimization", icon: "fas fa-bullseye", value: "Performance, costs, or balance" },
+                    { label: "Integration", icon: "fas fa-plug", value: "Works with EC2 Auto Scaling" }
+                ]
+            },
+            {
+                name: "AWS CloudFormation",
+                icon: "fas fa-layer-group",
+                floatingIcon: "fas fa-code",
+                fact: "Easy way to create and manage AWS resources with templates in orderly and predictable fashion!",
+                description: "AWS CloudFormation gives developers and systems administrators an easy way to create and manage a collection of related AWS resources, provisioning and updating them in an orderly and predictable fashion. You can use sample templates or create your own to describe AWS resources and dependencies.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Infrastructure as Code" },
+                    { label: "Templates", icon: "fas fa-file-code", value: "Sample templates or custom" },
+                    { label: "Version Control", icon: "fas fa-code-branch", value: "Infrastructure version control" },
+                    { label: "Visualization", icon: "fas fa-project-diagram", value: "AWS Infrastructure Composer" }
+                ]
+            },
+            {
+                name: "AWS CloudTrail",
+                icon: "fas fa-route",
+                floatingIcon: "fas fa-shield-alt",
+                fact: "Records AWS API calls for your account and delivers log files for security analysis and compliance!",
+                description: "AWS CloudTrail is a web service that records AWS API calls for your account and delivers log files to you. The recorded information includes API caller identity, time, source IP, request parameters, and response elements for security analysis, resource change tracking, and compliance auditing.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "API Logging Service" },
+                    { label: "Coverage", icon: "fas fa-globe", value: "Console, SDKs, CLI, higher-level services" },
+                    { label: "Analysis", icon: "fas fa-search", value: "Security, resource tracking, compliance" },
+                    { label: "Information", icon: "fas fa-info", value: "Caller, time, IP, parameters, responses" }
+                ]
+            },
+            {
+                name: "Amazon CloudWatch",
+                icon: "fas fa-chart-bar",
+                floatingIcon: "fas fa-bell",
+                fact: "Monitoring and management service providing data and insights for applications and infrastructure!",
+                description: "Amazon CloudWatch is a monitoring and management service for developers, system operators, SREs, and IT managers. It provides data and actionable insights to monitor applications, respond to performance changes, optimize resource utilization, and get unified operational health view.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Monitoring & Management Service" },
+                    { label: "Data Types", icon: "fas fa-database", value: "Logs, metrics, events" },
+                    { label: "Features", icon: "fas fa-star", value: "Alarms, visualization, automation" },
+                    { label: "Scope", icon: "fas fa-globe", value: "AWS resources, applications, on-premises" }
+                ]
+            },
+            {
+                name: "AWS Compute Optimizer",
+                icon: "fas fa-microchip",
+                floatingIcon: "fas fa-chart-line",
+                fact: "Recommends optimal AWS resources using machine learning to reduce costs and improve performance!",
+                description: "AWS Compute Optimizer recommends optimal AWS resources for your workloads to reduce costs and improve performance by using machine learning to analyze historical utilization metrics. It helps choose optimal configurations for EC2 instances, EBS volumes, and Lambda functions.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Resource Optimization Service" },
+                    { label: "Resources", icon: "fas fa-server", value: "EC2, EBS volumes, Lambda functions" },
+                    { label: "Analysis", icon: "fas fa-brain", value: "ML-based workload pattern analysis" },
+                    { label: "Cost", icon: "fas fa-dollar-sign", value: "Available at no additional charge" }
+                ]
+            },
+            {
+                name: "AWS Console Mobile Application",
+                icon: "fas fa-mobile-alt",
+                floatingIcon: "fas fa-bell",
+                fact: "Mobile app for viewing and managing AWS resources to support incident response on-the-go!",
+                description: "The AWS Console Mobile Application lets customers view and manage a select set of resources to support incident response while on-the-go. It provides a dedicated dashboard with real-time data from CloudWatch, Health Dashboard, and Billing and Cost Management.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Mobile Management App" },
+                    { label: "Dashboard", icon: "fas fa-tachometer-alt", value: "Single view of resource status" },
+                    { label: "Data Sources", icon: "fas fa-database", value: "CloudWatch, Health, Billing" },
+                    { label: "Actions", icon: "fas fa-hand-pointer", value: "View details, perform select actions" }
+                ]
+            },
+            {
+                name: "AWS Control Tower",
+                icon: "fas fa-tower-broadcast",
+                floatingIcon: "fas fa-shield-alt",
+                fact: "Automates setup of secure, well-architected multi-account AWS environment based on best practices!",
+                description: "AWS Control Tower automates the set-up of a baseline environment, or landing zone, that is a secure, well-architected multi-account AWS environment. The configuration is based on best practices established by working with thousands of enterprise customers.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Landing Zone Automation" },
+                    { label: "Environment", icon: "fas fa-building", value: "Multi-account AWS environment" },
+                    { label: "Governance", icon: "fas fa-gavel", value: "Security, operations, compliance rules" },
+                    { label: "Services", icon: "fas fa-cogs", value: "Organizations, Service Catalog, Config" }
+                ]
+            },
+            {
+                name: "AWS Config",
+                icon: "fas fa-cog",
+                floatingIcon: "fas fa-history",
+                fact: "Fully managed service providing AWS resource inventory, configuration history, and change notifications!",
+                description: "AWS Config is a fully managed service that provides you with an AWS resource inventory, configuration history, and configuration change notifications to enable security and governance. Config Rules feature enables automatic configuration checking against best practices.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Configuration Management Service" },
+                    { label: "Features", icon: "fas fa-star", value: "Inventory, history, change notifications" },
+                    { label: "Rules", icon: "fas fa-check-circle", value: "Automatic configuration checking" },
+                    { label: "Use Cases", icon: "fas fa-lightbulb", value: "Compliance, security, troubleshooting" }
+                ]
+            },
+            {
+                name: "AWS Health",
+                icon: "fas fa-heartbeat",
+                floatingIcon: "fas fa-exclamation-triangle",
+                fact: "Provides personalized alerts and remediation guidance when AWS events might affect you!",
+                description: "AWS Health provides alerts and remediation guidance when AWS is experiencing events that might affect you. The Health Dashboard gives you a personalized view into performance and availability of AWS services underlying your resources with proactive notifications.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Health Monitoring Service" },
+                    { label: "View", icon: "fas fa-eye", value: "Personalized service health view" },
+                    { label: "Alerts", icon: "fas fa-bell", value: "Automatic health-based alerts" },
+                    { label: "Guidance", icon: "fas fa-compass", value: "Event visibility and resolution guidance" }
+                ]
+            },
+            {
+                name: "AWS Launch Wizard",
+                icon: "fas fa-magic",
+                floatingIcon: "fas fa-server",
+                fact: "Guided way of sizing, configuring, and deploying AWS resources for third-party applications!",
+                description: "AWS Launch Wizard offers a guided way of sizing, configuring, and deploying AWS resources for third party applications, such as Microsoft SQL Server Always On and HANA based SAP systems, without manually identifying and provisioning individual AWS resources.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Guided Deployment Service" },
+                    { label: "Applications", icon: "fas fa-database", value: "SQL Server Always On, SAP HANA" },
+                    { label: "Features", icon: "fas fa-star", value: "Cost estimation, resource modification" },
+                    { label: "Templates", icon: "fas fa-file-code", value: "Creates CloudFormation templates" }
+                ]
+            },
+            {
+                name: "AWS License Manager",
+                icon: "fas fa-certificate",
+                floatingIcon: "fas fa-balance-scale",
+                fact: "Makes it easier to manage licenses in AWS and on-premises from software vendors!",
+                description: "AWS License Manager makes it easier to manage licenses in AWS and on-premises servers from software vendors such as Microsoft, SAP, Oracle, and IBM. It lets administrators create customized licensing rules that emulate licensing agreement terms and enforces them.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "License Management Service" },
+                    { label: "Vendors", icon: "fas fa-handshake", value: "Microsoft, SAP, Oracle, IBM" },
+                    { label: "Rules", icon: "fas fa-gavel", value: "Custom licensing rules enforcement" },
+                    { label: "Integration", icon: "fas fa-plug", value: "Service Catalog, Systems Manager, Organizations" }
+                ]
+            }
+        ];
+
+        const moreServices = [
+            {
+                name: "Amazon Managed Grafana",
+                icon: "fas fa-chart-area",
+                floatingIcon: "fas fa-eye",
+                fact: "Fully managed data visualization service to query, correlate, and visualize operational metrics!",
+                description: "Amazon Managed Grafana is a fully managed and secure data visualization service that you can use to instantly query, correlate, and visualize operational metrics, logs, and traces from multiple sources. It makes it easy to deploy, operate, and scale Grafana with built-in security features.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Data Visualization Service" },
+                    { label: "Security", icon: "fas fa-shield-alt", value: "SSO, data access control, audit reporting" },
+                    { label: "AWS Sources", icon: "fas fa-database", value: "CloudWatch, OpenSearch, X-Ray, SiteWise" },
+                    { label: "Compatibility", icon: "fas fa-plug", value: "Open-source, third-party data sources" }
+                ]
+            },
+            {
+                name: "Amazon Managed Service for Prometheus",
+                icon: "fas fa-chart-line",
+                floatingIcon: "fas fa-container",
+                fact: "Serverless, Prometheus-compatible monitoring service for container metrics at scale!",
+                description: "Amazon Managed Service for Prometheus is a serverless, Prometheus-compatible monitoring service for container metrics that makes it easier to securely monitor container environments at scale with improved scalability, availability, and security without managing infrastructure.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Container Monitoring Service" },
+                    { label: "Compatibility", icon: "fas fa-check", value: "Prometheus data model and query language" },
+                    { label: "Scaling", icon: "fas fa-expand-arrows-alt", value: "Auto-scales ingestion, storage, querying" },
+                    { label: "Availability", icon: "fas fa-shield-alt", value: "Replicated across 3 Availability Zones" }
+                ]
+            },
+            {
+                name: "AWS Organizations",
+                icon: "fas fa-sitemap",
+                floatingIcon: "fas fa-users",
+                fact: "Centrally manage and govern your environment as you grow and scale AWS resources!",
+                description: "AWS Organizations helps you centrally manage and govern your environment as you grow and scale your AWS resources. You can programmatically create new AWS accounts, allocate resources, group accounts, apply policies, and simplify billing using a single payment method.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Account Management Service" },
+                    { label: "Features", icon: "fas fa-star", value: "Create accounts, group, apply policies" },
+                    { label: "Billing", icon: "fas fa-dollar-sign", value: "Single payment method for all accounts" },
+                    { label: "Cost", icon: "fas fa-free-code-camp", value: "Available at no additional charge" }
+                ]
+            },
+            {
+                name: "OpsWorks",
+                icon: "fas fa-tools",
+                floatingIcon: "fas fa-code",
+                fact: "Configuration management service providing managed instances of Chef and Puppet!",
+                description: "OpsWorks is a configuration management service that provides managed instances of Chef and Puppet. These are automation platforms that allow you to use code to automate server configurations, deployments, and management across EC2 instances or on-premises environments.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Configuration Management Service" },
+                    { label: "Platforms", icon: "fas fa-cogs", value: "Chef Automate, Puppet Enterprise" },
+                    { label: "Offerings", icon: "fas fa-layer-group", value: "Chef Automate, Puppet, Stacks" },
+                    { label: "Scope", icon: "fas fa-server", value: "EC2 instances, on-premises compute" }
+                ]
+            },
+            {
+                name: "AWS Proton",
+                icon: "fas fa-atom",
+                floatingIcon: "fas fa-rocket",
+                fact: "First fully managed delivery service for container and serverless applications!",
+                description: "AWS Proton is the first fully managed delivery service for container and serverless applications. Platform engineering teams can use Proton to connect and coordinate all the different tools needed for infrastructure provisioning, code deployments, monitoring, and updates.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Application Delivery Service" },
+                    { label: "Focus", icon: "fas fa-bullseye", value: "Container and serverless applications" },
+                    { label: "Management", icon: "fas fa-cogs", value: "Infrastructure, CI/CD, monitoring" },
+                    { label: "Benefits", icon: "fas fa-star", value: "Consistent standards, developer ease" }
+                ]
+            },
+            {
+                name: "Amazon Q Developer in chat applications",
+                icon: "fas fa-comments",
+                floatingIcon: "fas fa-robot",
+                fact: "Interactive agent to monitor and interact with AWS resources in Slack, Teams, and Chime!",
+                description: "Amazon Q Developer in chat applications (formerly AWS Chatbot) is an interactive agent that makes it easy to monitor and interact with your AWS resources in your Slack, Microsoft Teams, and Amazon Chime chat rooms with alerts, commands, and support case creation.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "ChatOps Integration Service" },
+                    { label: "Platforms", icon: "fas fa-comments", value: "Slack, Microsoft Teams, Amazon Chime" },
+                    { label: "Features", icon: "fas fa-star", value: "Alerts, commands, Lambda, support cases" },
+                    { label: "Benefits", icon: "fas fa-rocket", value: "Fast collaboration, no context switching" }
+                ]
+            },
+            {
+                name: "AWS Service Catalog",
+                icon: "fas fa-book",
+                floatingIcon: "fas fa-check-circle",
+                fact: "Create and manage catalogs of IT services approved for use on AWS with consistent governance!",
+                description: "AWS Service Catalog allows organizations to create and manage catalogs of IT services that are approved for use on AWS. These can include virtual machine images, servers, software, databases, and complete multi-tier application architectures for consistent governance and compliance.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "IT Service Catalog" },
+                    { label: "Services", icon: "fas fa-layer-group", value: "VMs, servers, software, databases, apps" },
+                    { label: "Governance", icon: "fas fa-gavel", value: "Consistent governance, compliance" },
+                    { label: "Deployment", icon: "fas fa-rocket", value: "Quick approved service deployment" }
+                ]
+            },
+            {
+                name: "AWS Systems Manager",
+                icon: "fas fa-desktop",
+                floatingIcon: "fas fa-cogs",
+                fact: "Gives visibility and control of infrastructure with unified interface for operational tasks!",
+                description: "AWS Systems Manager gives you visibility and control of your infrastructure on AWS. It provides a unified user interface to view operational data from multiple AWS services and automate operational tasks across your AWS resources with tools for resource management and application management.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Infrastructure Management Service" },
+                    { label: "Tools", icon: "fas fa-toolbox", value: "Resource groups, Run Command, Patch Manager" },
+                    { label: "Features", icon: "fas fa-star", value: "Inventory, Automation, Parameter Store" },
+                    { label: "Management", icon: "fas fa-shield-alt", value: "Session Manager, State Manager" }
+                ]
+            },
+            {
+                name: "AWS Trusted Advisor",
+                icon: "fas fa-user-tie",
+                floatingIcon: "fas fa-lightbulb",
+                fact: "Online resource to reduce cost, increase performance, and improve security by optimizing AWS environment!",
+                description: "AWS Trusted Advisor is an online resource to help you reduce cost, increase performance, and improve security by optimizing your AWS environment. It provides real-time guidance to help you provision your resources following AWS best practices.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Optimization Advisory Service" },
+                    { label: "Focus Areas", icon: "fas fa-bullseye", value: "Cost, performance, security" },
+                    { label: "Guidance", icon: "fas fa-compass", value: "Real-time AWS best practices" },
+                    { label: "Optimization", icon: "fas fa-chart-line", value: "Resource provisioning optimization" }
+                ]
+            },
+            {
+                name: "AWS User Notifications",
+                icon: "fas fa-bell",
+                floatingIcon: "fas fa-envelope",
+                fact: "Central location for managing AWS notifications with consistent, human-friendly format!",
+                description: "AWS User Notifications provides a central location for managing your AWS notifications. You can receive notifications from AWS services like Health events, CloudWatch alarms, or EC2 state changes in consistent format via Console, email, chat applications, or mobile push notifications.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Notification Management Service" },
+                    { label: "Sources", icon: "fas fa-database", value: "Health, CloudWatch, EC2 state changes" },
+                    { label: "Delivery", icon: "fas fa-paper-plane", value: "Console, email, chat, mobile push" },
+                    { label: "Format", icon: "fas fa-align-left", value: "Consistent, human-friendly format" }
+                ]
+            },
+            {
+                name: "AWS Well-Architected Tool",
+                icon: "fas fa-drafting-compass",
+                floatingIcon: "fas fa-check-double",
+                fact: "Reviews workload state and compares to latest AWS architectural best practices!",
+                description: "The AWS Well-Architected Tool helps you review the state of your workloads and compares them to the latest AWS architectural best practices. Based on the Well-Architected Framework, it provides guidance for operational excellence, security, reliability, performance efficiency, cost optimization, and sustainability.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Architecture Review Tool" },
+                    { label: "Framework", icon: "fas fa-building", value: "AWS Well-Architected Framework" },
+                    { label: "Pillars", icon: "fas fa-columns", value: "6 pillars: operations, security, reliability" },
+                    { label: "Cost", icon: "fas fa-free-code-camp", value: "Available at no charge" }
+                ]
+            }
+        ];
+
+        services.push(...moreServices);
+
+        function createServiceCard(service) {
+            return `
+                <div class="service-card" onclick="flipCard(this)">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="service-header">
+                                <div class="service-icon">
+                                    <i class="${service.icon}"></i>
+                                </div>
+                    <h3 class="service-title">${service.name}</h3>
+                </div>
+                            <div class="fact-section">
+                                <div class="fact-label">Quick Fact</div>
+                                <div class="fact-text">${service.fact}</div>
+                            </div>
+                        </div>
+                        <div class="card-back">
+                            <div class="service-header">
+                                <div class="service-icon">
+                                    <i class="${service.icon}"></i>
+                                </div>
+                                <h3 class="service-title">${service.name}</h3>
+                            </div>
+                            <p class="service-description">${service.description}</p>
+                            <div class="service-details">
+                                ${service.details.map(detail => `
+                                    <div class="detail-row">
+                                        <div class="detail-label">
+                                            <i class="${detail.icon}"></i>
+                                            ${detail.label}
+                                        </div>
+                                        <div class="detail-value">${detail.value}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function flipCard(card) {
+            card.classList.toggle('flipped');
+        }
+
+        function renderServices() {
+            const servicesGrid = document.getElementById('servicesGrid');
+            servicesGrid.innerHTML = services.map(service => createServiceCard(service)).join('');
+        }
+
+        function createParticles() {
+            const particles = document.querySelector('.floating-particles');
+            const particleCount = 25;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                const colors = ['#6366f1', '#8b5cf6', '#3b82f6', '#10b981', '#f59e0b'];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.cssText = `
+                    position: absolute;
+                    width: ${Math.random() * 6 + 2}px;
+                    height: ${Math.random() * 6 + 2}px;
+                    background: ${color};
+                    border-radius: 50%;
+                    left: ${Math.random() * 100}%;
+                    top: ${Math.random() * 100}%;
+                    opacity: ${Math.random() * 0.6 + 0.2};
+                    animation: float ${Math.random() * 30 + 20}s infinite linear;
+                    animation-delay: ${Math.random() * 30}s;
+                    box-shadow: 0 0 ${Math.random() * 10 + 5}px ${color};
+                `;
+                particles.appendChild(particle);
+            }
+        }
+
+        function initializeScrollToTop() {
+            const scrollButton = document.getElementById('scroll-to-top');
+
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    scrollButton.classList.add('visible');
+                } else {
+                    scrollButton.classList.remove('visible');
+                }
+            });
+
+            scrollButton.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            renderServices();
+            createParticles();
+            initializeScrollToTop();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AWS Quiz - Study Hub</title>
+<link rel="stylesheet" href="quiz-styles.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <div class="particles"></div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-container">
+      <div class="logo">
+        <span class="logo-icon">☁️</span>
+        <h1>AWS Study Hub</h1>
+      </div>
+      <div class="online-users">
+        <div class="pulse-dot"></div>
+        <span id="activeUsers">0</span> online
+      </div>
+    </div>
+  </header>
+
+  <!-- Main App Container -->
+  <main class="app-main">
+    <!-- Quiz Screen -->
+    <div id="quizScreen" class="screen active">
+      <div class="quiz-progress-header">
+        <div class="progress-info">
+          <div class="question-counter">
+            <span id="currentQuestionNum">1</span> of <span id="totalQuestionNum">3</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+        </div>
+        <div class="quiz-timer">
+          <div class="timer-icon">⏱️</div>
+          <div class="timer-text" id="timerText">05:00</div>
+        </div>
+      </div>
+
+      <div class="quiz-content">
+        <div class="question-display">
+          <div class="question-card">
+            <div class="question-header">
+              <div class="question-category" id="questionCategory">AWS Fundamentals</div>
+              <div class="question-difficulty" id="questionDifficulty">Beginner</div>
+            </div>
+            <h2 class="question-text" id="questionText"></h2>
+          </div>
+        </div>
+
+        <div class="options-display">
+          <div class="options-grid-modern" id="optionsGrid"></div>
+        </div>
+
+        <div class="quiz-actions">
+          <button id="submitAnswerBtn" class="btn-primary-large" disabled>
+            <span class="btn-icon">✓</span>
+            Submit Answer
+          </button>
+          <button id="nextQuestionBtn" class="btn-secondary-large hidden">
+            <span class="btn-icon">→</span>
+            Next Question
+          </button>
+        </div>
+
+        <div class="quiz-navigation">
+          <button class="btn-secondary-large" onclick="window.location.href='index.html'">
+            <span class="btn-icon">🏠</span>
+            Back to Dashboard
+          </button>
+          <button class="btn-secondary-large" onclick="window.location.href='quizzes.html'">
+            <span class="btn-icon">📝</span>
+            Back to Quiz Selection
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results Screen -->
+    <div id="resultsScreen" class="screen">
+      <div class="results-container">
+        <div class="results-header">
+          <div class="results-celebration">
+            <div class="celebration-icon" id="celebrationIcon">🎉</div>
+            <h1 class="results-title" id="resultsTitle">Quiz Complete!</h1>
+          </div>
+        </div>
+
+        <div class="score-display">
+          <div class="score-chart-container">
+            <canvas id="scoreChart" width="200" height="200"></canvas>
+            <div class="chart-center-text">
+              <div class="score-number" id="finalScore">0</div>
+              <div class="score-label">Score</div>
+            </div>
+          </div>
+          <div class="score-breakdown">
+            <div class="score-item">
+              <span class="score-value" id="correctAnswers">0</span>
+              <span class="score-desc">Correct</span>
+            </div>
+            <div class="score-item">
+              <span class="score-value" id="totalQuestionsResult">3</span>
+              <span class="score-desc">Total</span>
+            </div>
+            <div class="score-item">
+              <span class="score-value" id="accuracyPercent">0%</span>
+              <span class="score-desc">Accuracy</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="results-message">
+          <p id="resultsMessage">Great job! Keep practicing to master AWS.</p>
+        </div>
+
+        <div class="results-actions-modern">
+          <button id="retakeQuizBtn" class="btn-primary-large">
+            <span class="btn-icon">🔄</span>
+            Retake Quiz
+          </button>
+          <button id="viewDashboardBtn" class="btn-secondary-large">
+            <span class="btn-icon">🏠</span>
+            Back to Dashboard
+          </button>
+        </div>
+
+        <div class="performance-insights">
+          <h3>Performance Insights</h3>
+          <div class="insights-grid" id="insightsGrid">
+            <!-- Dynamic insights will be inserted here -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="realtime-dashboard.js"></script>
+  <script src="quiz-page.js"></script>
+</body>
+</html>

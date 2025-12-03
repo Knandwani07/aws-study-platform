@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS IoT Services</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --card-gradient: linear-gradient(145deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            --accent-gradient: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
+            --glow-color: rgba(139, 92, 246, 0.4);
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        body {
+            font-family: 'Poppins', 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(51, 65, 85, 0.8) 100%);
+            padding: 80px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: #cbd5e1;
+            margin-bottom: 2rem;
+            font-weight: 400;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            background: var(--glass-bg);
+            color: white;
+            border: 1px solid var(--glass-border);
+            padding: 14px 24px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 3;
+            letter-spacing: 0.5px;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(139, 92, 246, 0.3);
+        }
+
+        .services-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .service-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 0;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(20px);
+            overflow: hidden;
+            perspective: 1000px;
+            min-height: 500px;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--accent-gradient);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .service-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .service-card:hover::before {
+            opacity: 0.1;
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(139, 92, 246, 0.2), 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .service-card:hover::after {
+            opacity: 1;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            min-height: 500px;
+        }
+
+        .service-card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            overflow-x: hidden;
+            box-sizing: border-box;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .card-front::-webkit-scrollbar,
+        .card-back::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .card-front::-webkit-scrollbar-track,
+        .card-back::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+
+        .card-front::-webkit-scrollbar-thumb,
+        .card-back::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            border-radius: 3px;
+        }
+
+        .card-front::-webkit-scrollbar-thumb:hover,
+        .card-back::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #7c3aed, #2563eb);
+        }
+
+        .service-header {
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .service-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: var(--accent-gradient);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            position: relative;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);
+            font-family: 'Font Awesome 6 Free', monospace;
+            -webkit-font-feature-settings: "liga" off;
+            font-feature-settings: "liga" off;
+        }
+
+        .service-icon::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: var(--accent-gradient);
+            border-radius: 22px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .floating-icon {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #6366f1;
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float 20s infinite linear;
+        }
+
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: none;
+        }
+
+        .scroll-to-top.visible {
+            display: block;
+        }
+
+        .scroll-to-top:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .service-card:hover .service-icon::before {
+            opacity: 0.6;
+        }
+
+        .service-card:hover .service-icon {
+            transform: scale(1.05) rotate(5deg);
+            box-shadow: 0 12px 40px var(--glow-color);
+        }
+
+        .service-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 15px;
+            line-height: 1.3;
+            margin-bottom: 15px;
+        }
+
+        .fact-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: auto;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .fact-label {
+            font-size: 0.9rem;
+            color: #27106b;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+
+        .fact-label::before {
+            content: '✨';
+            margin-right: 8px;
+            font-size: 1rem;
+        }
+        }
+
+        .fact-text {
+            color: #27106b;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        .service-description {
+            color: #cbd5e1;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            flex-grow: 1;
+        }
+
+        .service-details {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #27106b;
+            font-weight: 500;
+            font-size: 0.9rem;
+            gap: 8px;
+        }
+
+        .detail-label i {
+            width: 16px;
+            text-align: center;
+            color: #27106b;
+        }
+
+        .detail-value {
+            color: #e2e8f0;
+            font-weight: 500;
+            text-align: right;
+            font-size: 0.9rem;
+            max-width: 60%;
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .services-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .service-card {
+                min-height: 450px;
+            }
+            
+            .card-front, .card-back {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles"></div>
+    <div class="hero-section">
+        <button class="back-btn" onclick="window.location.href='categories.html'">
+            <i class="fas fa-arrow-left"></i> Back to Categories
+        </button>
+        
+        <div class="hero-content">
+            <h1 class="hero-title">IoT Services</h1>
+            <p class="hero-subtitle">Connect, manage, and analyze IoT devices at scale with AWS IoT services</p>
+        </div>
+    </div>
+
+    <div class="services-container">
+        <div class="services-grid" id="servicesGrid">
+            <!-- Services will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <button id="scroll-to-top" class="scroll-to-top" aria-label="Scroll to top">↑</button>
+
+    <script>
+        const services = [
+            {
+                name: "AWS IoT Analytics",
+                icon: "fas fa-chart-line",
+                floatingIcon: "fas fa-microchip",
+                fact: "Fully managed service for sophisticated analytics on massive volumes of IoT data with pre-built ML models!",
+                description: "AWS IoT Analytics is a fully managed service that makes it easy to run and operationalize sophisticated analytics on massive volumes of IoT data without having to worry about the cost and complexity typically required to build an IoT analytics platform. It automates filtering, transforming, and enriching IoT data before storing it in a time series data store for analysis.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Fully Managed IoT Analytics" },
+                    { label: "Data Processing", icon: "fas fa-cogs", value: "Filter, transform, enrich IoT data" },
+                    { label: "Storage", icon: "fas fa-database", value: "Time series data store" },
+                    { label: "ML Integration", icon: "fas fa-brain", value: "Pre-built models for common use cases" }
+                ]
+            },
+            {
+                name: "AWS IoT Button",
+                icon: "fas fa-hand-pointer",
+                floatingIcon: "fas fa-wifi",
+                fact: "Programmable Wi-Fi button based on Amazon Dash Button hardware for easy AWS service integration!",
+                description: "The AWS IoT Button is a programmable button based on the Amazon Dash Button hardware. This simple Wi-Fi device is easy to configure, and it's designed for developers to get started with AWS IoT Core, AWS Lambda, Amazon DynamoDB, Amazon SNS, and many other Amazon Web Services without writing device-specific code.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Programmable Wi-Fi Button" },
+                    { label: "Hardware", icon: "fas fa-microchip", value: "Amazon Dash Button based" },
+                    { label: "Integration", icon: "fas fa-plug", value: "IoT Core, Lambda, DynamoDB, SNS" },
+                    { label: "Use Cases", icon: "fas fa-lightbulb", value: "Remote control, tracking, alerts" }
+                ]
+            },
+            {
+                name: "AWS IoT Core",
+                icon: "fas fa-network-wired",
+                floatingIcon: "fas fa-cloud",
+                fact: "Managed cloud service supporting billions of devices and trillions of messages with secure communication!",
+                description: "AWS IoT Core is a managed cloud service that lets connected devices easily and securely interact with cloud applications and other devices. AWS IoT Core can support billions of devices and trillions of messages, and can process and route those messages to AWS endpoints and to other devices reliably and securely.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Managed IoT Cloud Service" },
+                    { label: "Scale", icon: "fas fa-expand-arrows-alt", value: "Billions of devices, trillions of messages" },
+                    { label: "Security", icon: "fas fa-shield-alt", value: "Secure device communication" },
+                    { label: "Integration", icon: "fas fa-plug", value: "Lambda, Kinesis, S3, SageMaker" }
+                ]
+            },
+            {
+                name: "AWS IoT Device Defender",
+                icon: "fas fa-shield-alt",
+                floatingIcon: "fas fa-bug",
+                fact: "Fully managed service that continuously audits IoT configurations against security best practices!",
+                description: "AWS IoT Device Defender is a fully managed service that helps you secure your fleet of IoT devices. It continuously audits your IoT configurations to make sure that they aren't deviating from security best practices and monitors security metrics from devices for deviations from appropriate behavior.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "IoT Security Management" },
+                    { label: "Auditing", icon: "fas fa-search", value: "Continuous configuration audits" },
+                    { label: "Monitoring", icon: "fas fa-eye", value: "Security metrics monitoring" },
+                    { label: "Alerts", icon: "fas fa-bell", value: "CloudWatch, SNS integration" }
+                ]
+            },
+            {
+                name: "AWS IoT Device Management",
+                icon: "fas fa-cogs",
+                floatingIcon: "fas fa-mobile-alt",
+                fact: "Securely onboard, organize, monitor, and remotely manage IoT devices at scale with OTA updates!",
+                description: "AWS IoT Device Management makes it easy to securely onboard, organize, monitor, and remotely manage IoT devices at scale. You can register devices individually or in bulk, manage permissions, organize devices, monitor functionality, and send firmware updates over-the-air (OTA).",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "IoT Device Management" },
+                    { label: "Onboarding", icon: "fas fa-plus", value: "Individual or bulk registration" },
+                    { label: "Updates", icon: "fas fa-download", value: "Over-the-air (OTA) firmware" },
+                    { label: "Compatibility", icon: "fas fa-check", value: "Device type and OS agnostic" }
+                ]
+            },
+            {
+                name: "AWS IoT Events",
+                icon: "fas fa-bolt",
+                floatingIcon: "fas fa-exclamation-triangle",
+                fact: "Fully managed service to detect and respond to events from IoT sensors using simple if-then-else logic!",
+                description: "AWS IoT Events is a fully managed IoT service that makes it easy to detect and respond to events from IoT sensors and applications. It continuously monitors data from multiple IoT sensors and applications, and integrates with other services to enable early detection and unique insights into events.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "IoT Event Detection Service" },
+                    { label: "Logic", icon: "fas fa-code", value: "Simple if-then-else statements" },
+                    { label: "Monitoring", icon: "fas fa-eye", value: "Continuous multi-sensor monitoring" },
+                    { label: "Integration", icon: "fas fa-plug", value: "IoT Core, IoT Analytics" }
+                ]
+            },
+            {
+                name: "AWS IoT ExpressLink",
+                icon: "fas fa-link",
+                floatingIcon: "fas fa-certificate",
+                fact: "Hardware modules with pre-provisioned security credentials for faster, secure IoT development!",
+                description: "AWS IoT ExpressLink powers a range of hardware modules developed by AWS Partners. Connectivity modules include software implementing AWS mandated security requirements, making it faster and easier to securely connect devices to the cloud with pre-provisioned security credentials.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Hardware Connectivity Modules" },
+                    { label: "Partners", icon: "fas fa-handshake", value: "Espressif, Infineon, Realtek, u-blox" },
+                    { label: "Security", icon: "fas fa-shield-alt", value: "Pre-provisioned credentials" },
+                    { label: "Updates", icon: "fas fa-download", value: "OTA updates for module & host" }
+                ]
+            },
+            {
+                name: "AWS IoT FleetWise",
+                icon: "fas fa-car",
+                floatingIcon: "fas fa-tachometer-alt",
+                fact: "Collect and organize vehicle data in standardized way with intelligent data collection capabilities!",
+                description: "AWS IoT FleetWise helps you collect and organize vehicle data and store that data in a standardized way for data analysis in the cloud. It efficiently transfers data using intelligent data collection capabilities that reduce data transfer by defining rules based on configurable parameters.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Vehicle Data Collection" },
+                    { label: "Data Transfer", icon: "fas fa-upload", value: "Near real-time intelligent collection" },
+                    { label: "Analysis", icon: "fas fa-chart-bar", value: "Vehicle fleet health analysis" },
+                    { label: "ML Integration", icon: "fas fa-brain", value: "Autonomous driving, ADAS models" }
+                ]
+            },
+            {
+                name: "AWS IoT Greengrass",
+                icon: "fas fa-leaf",
+                floatingIcon: "fas fa-laptop",
+                fact: "Extends AWS to devices for local data processing while using cloud for management and analytics!",
+                description: "AWS IoT Greengrass seamlessly extends AWS to devices so they can act locally on the data they generate, while still using the cloud for management, analytics, and durable storage. Connected devices can run AWS Lambda functions, ML predictions, and communicate securely even when offline.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Edge Computing Platform" },
+                    { label: "Local Processing", icon: "fas fa-microchip", value: "Lambda functions, ML models" },
+                    { label: "Connectivity", icon: "fas fa-wifi", value: "Works offline and online" },
+                    { label: "Integration", icon: "fas fa-plug", value: "Pre-built connectors available" }
+                ]
+            },
+            {
+                name: "AWS IoT SiteWise",
+                icon: "fas fa-industry",
+                floatingIcon: "fas fa-chart-line",
+                fact: "Managed service to collect, store, organize and monitor industrial equipment data at scale!",
+                description: "AWS IoT SiteWise is a managed service that makes it easy to collect, store, organize and monitor data from industrial equipment at scale to help you make better, data-driven decisions. It provides software running on a gateway that automates industrial equipment data collection.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Industrial Data Management" },
+                    { label: "Gateway", icon: "fas fa-server", value: "On-premises data collection" },
+                    { label: "Protocols", icon: "fas fa-exchange-alt", value: "MQTT messages, APIs" },
+                    { label: "Applications", icon: "fas fa-desktop", value: "Fully managed web applications" }
+                ]
+            },
+            {
+                name: "AWS IoT TwinMaker",
+                icon: "fas fa-cube",
+                floatingIcon: "fas fa-building",
+                fact: "Create digital twins of real-world systems like buildings, factories, and production lines!",
+                description: "AWS IoT TwinMaker makes it easier for developers to create digital twins of real-world systems such as buildings, factories, industrial equipment, and production lines. It provides tools to build digital twins to optimize operations, increase production output, and improve equipment performance.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Digital Twin Creation Platform" },
+                    { label: "Data Sources", icon: "fas fa-database", value: "Multiple existing data sources" },
+                    { label: "3D Models", icon: "fas fa-cube", value: "Combine with real-world data" },
+                    { label: "Use Cases", icon: "fas fa-lightbulb", value: "Buildings, factories, equipment" }
+                ]
+            },
+            {
+                name: "AWS Partner Device Catalog",
+                icon: "fas fa-store",
+                floatingIcon: "fas fa-search",
+                fact: "Curated catalog of AWS-enabled hardware from APN partners for immediate IoT project integration!",
+                description: "The AWS Partner Device Catalog helps you find devices and hardware to help you explore, build, and go to market with your IoT solutions. Search for hardware that works with AWS, including development kits, embedded systems, gateways, edge servers, sensors, and cameras.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Hardware Device Catalog" },
+                    { label: "Devices", icon: "fas fa-microchip", value: "Dev kits, gateways, sensors, cameras" },
+                    { label: "Partners", icon: "fas fa-handshake", value: "Curated APN partner devices" },
+                    { label: "Availability", icon: "fas fa-shopping-cart", value: "Direct purchase from partners" }
+                ]
+            },
+            {
+                name: "FreeRTOS",
+                icon: "fas fa-code",
+                floatingIcon: "fas fa-microchip",
+                fact: "Operating system for microcontrollers that makes small, low-power edge devices easy to program and connect!",
+                description: "FreeRTOS is an operating system for microcontrollers that makes small, low-power edge devices easy to program, deploy, secure, connect, and manage. It extends the FreeRTOS kernel with software libraries for secure connection to AWS Cloud services or edge devices running AWS IoT Greengrass.",
+                details: [
+                    { label: "Type", icon: "fas fa-tag", value: "Microcontroller Operating System" },
+                    { label: "Base", icon: "fas fa-code", value: "Open source FreeRTOS kernel" },
+                    { label: "Connectivity", icon: "fas fa-wifi", value: "Cloud and local device connection" },
+                    { label: "Use Cases", icon: "fas fa-lightbulb", value: "Appliances, sensors, fitness trackers" }
+                ]
+            }
+        ];
+
+        function createServiceCard(service) {
+            return `
+                <div class="service-card" onclick="flipCard(this)">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="service-header">
+                                <div class="service-icon">
+                                    <i class="${service.icon}"></i>
+                                </div>
+                    <h3 class="service-title">${service.name}</h3>
+                </div>
+                            <div class="fact-section">
+                                <div class="fact-label">Quick Fact</div>
+                                <div class="fact-text">${service.fact}</div>
+                            </div>
+                        </div>
+                        <div class="card-back">
+                            <div class="service-header">
+                                <div class="service-icon">
+                                    <i class="${service.icon}"></i>
+                                </div>
+                                <h3 class="service-title">${service.name}</h3>
+                            </div>
+                            <p class="service-description">${service.description}</p>
+                            <div class="service-details">
+                                ${service.details.map(detail => `
+                                    <div class="detail-row">
+                                        <div class="detail-label">
+                                            <i class="${detail.icon}"></i>
+                                            ${detail.label}
+                                        </div>
+                                        <div class="detail-value">${detail.value}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function flipCard(card) {
+            card.classList.toggle('flipped');
+        }
+
+        function createParticles() {
+            const particles = document.querySelector('.particles');
+            const particleCount = 25;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                const colors = ['#6366f1', '#8b5cf6', '#3b82f6', '#10b981', '#f59e0b'];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.cssText = `
+                    position: absolute;
+                    width: ${Math.random() * 6 + 2}px;
+                    height: ${Math.random() * 6 + 2}px;
+                    background: ${color};
+                    border-radius: 50%;
+                    left: ${Math.random() * 100}%;
+                    top: ${Math.random() * 100}%;
+                    opacity: ${Math.random() * 0.6 + 0.2};
+                    animation: float ${Math.random() * 30 + 20}s infinite linear;
+                    animation-delay: ${Math.random() * 30}s;
+                    box-shadow: 0 0 ${Math.random() * 10 + 5}px ${color};
+                `;
+                particles.appendChild(particle);
+            }
+        }
+
+        function initializeScrollToTop() {
+            const scrollButton = document.getElementById('scroll-to-top');
+
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    scrollButton.classList.add('visible');
+                } else {
+                    scrollButton.classList.remove('visible');
+                }
+            });
+
+            scrollButton.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        }
+
+        function renderServices() {
+            const servicesGrid = document.getElementById('servicesGrid');
+            servicesGrid.innerHTML = services.map(service => createServiceCard(service)).join('');
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            renderServices();
+            createParticles();
+            initializeScrollToTop();
+        });
+    </script>
+</body>
+</html>
