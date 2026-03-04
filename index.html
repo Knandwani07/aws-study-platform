@@ -1,0 +1,2099 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Certification Hub - Console Home</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0f1b2a;
+            --bg-secondary: #16202e;
+            --bg-tertiary: #1a2433;
+            --bg-header: #232f3e;
+            --border-color: #2a3f5f;
+            --border-light: #3f4e5f;
+            --text-primary: #ffffff;
+            --text-secondary: #aab7c4;
+            --text-muted: #687078;
+            --accent-blue: #0972d3;
+            --accent-blue-hover: #0d5baa;
+            --accent-orange: #ff9900;
+            --accent-orange-hover: #ec7211;
+            --success-color: #1e8e3e;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.5);
+            --sidebar-width: 260px;
+            --sidebar-collapsed-width: 70px;
+            --header-height: 70px;
+        }
+
+        body.light-mode {
+            --bg-primary: #f2f3f3;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #fafafa;
+            --bg-header: #ffffff;
+            --border-color: #d5dbdb;
+            --border-light: #e9ecef;
+            --text-primary: #16191f;
+            --text-secondary: #5f6b7a;
+            --text-muted: #879596;
+            --accent-blue: #0972d3;
+            --accent-blue-hover: #0d5baa;
+            --accent-orange: #ff9900;
+            --accent-orange-hover: #ec7211;
+            --success-color: #1e8e3e;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        body {
+            font-family: 'Amazon Ember', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* =============================
+           HEADER
+        ============================= */
+        .aws-header {
+            background: var(--bg-header);
+            border-bottom: 2px solid var(--border-light);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+            height: var(--header-height);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        body.light-mode .aws-header {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            max-width: 1920px;
+            margin: 0 auto;
+            height: 100%;
+            gap: 16px;
+        }
+
+        /* Console Home Title */
+        .console-title-container {
+            flex: 0 0 auto;
+        }
+
+        .console-home-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0;
+            letter-spacing: -0.5px;
+            white-space: nowrap;
+        }
+
+        .title-icon {
+            font-size: 1.375rem;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        body.light-mode .title-icon {
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+        }
+
+        /* Quick Nav Pills */
+        .quick-nav {
+            display: flex;
+            gap: 8px;
+            flex: 1;
+            justify-content: center;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .quick-nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav-pill {
+            padding: 8px 14px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
+            border: 2px solid var(--border-light);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        body.light-mode .nav-pill {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.03), rgba(0, 0, 0, 0.01));
+        }
+
+        .nav-pill:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.08));
+            border-color: var(--accent-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(9, 114, 211, 0.3);
+        }
+
+        body.light-mode .nav-pill:hover {
+            background: linear-gradient(135deg, rgba(9, 114, 211, 0.08), rgba(9, 114, 211, 0.04));
+            box-shadow: 0 4px 12px rgba(9, 114, 211, 0.2);
+        }
+
+        .nav-pill.active {
+            background: linear-gradient(135deg, var(--accent-orange), #ec7211);
+            border-color: var(--accent-orange);
+            color: #000;
+        }
+
+        /* Right Side Controls */
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .header-divider {
+            width: 2px;
+            height: 36px;
+            background: linear-gradient(180deg, transparent, var(--border-light), transparent);
+            margin: 0 4px;
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle-btn {
+            position: relative;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            border: 2px solid var(--border-light);
+            color: var(--text-primary);
+            padding: 0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.25rem;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        body.light-mode .theme-toggle-btn {
+            background: linear-gradient(135deg, rgba(255, 200, 0, 0.15), rgba(255, 200, 0, 0.08));
+            border-color: rgba(255, 200, 0, 0.3);
+        }
+
+        .theme-toggle-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .theme-toggle-btn:hover::before {
+            left: 100%;
+        }
+
+        .theme-toggle-btn:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.1));
+            border-color: var(--accent-orange);
+            transform: translateY(-2px) rotate(15deg);
+            box-shadow: 0 6px 20px rgba(255, 153, 0, 0.4);
+        }
+
+        body.light-mode .theme-toggle-btn:hover {
+            background: linear-gradient(135deg, rgba(255, 200, 0, 0.25), rgba(255, 200, 0, 0.15));
+            border-color: #ffc800;
+            box-shadow: 0 6px 20px rgba(255, 200, 0, 0.5);
+        }
+
+        .theme-icon {
+            font-size: 1.25rem;
+            transition: transform 0.3s ease;
+            display: block;
+        }
+
+        .theme-toggle-btn:hover .theme-icon {
+            transform: scale(1.1);
+        }
+
+        /* Profile Button */
+        .header-btn-profile {
+            background: linear-gradient(135deg, rgba(255, 153, 0, 0.15), rgba(255, 153, 0, 0.1));
+            border: 2px solid rgba(255, 153, 0, 0.3);
+            color: var(--text-primary);
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .header-btn-profile:hover {
+            background: linear-gradient(135deg, rgba(255, 153, 0, 0.25), rgba(255, 153, 0, 0.15));
+            border-color: var(--accent-orange);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(255, 153, 0, 0.5);
+        }
+
+        #profileAvatar {
+            font-size: 1.1rem;
+        }
+
+        /* Mobile menu toggle */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: 2px solid var(--border-light);
+            color: var(--text-primary);
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: 6px 10px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .menu-toggle:hover {
+            border-color: var(--accent-orange);
+            background: rgba(255, 153, 0, 0.1);
+        }
+
+        /* =============================
+           MAIN CONTAINER
+        ============================= */
+        .console-container {
+            display: flex;
+            min-height: calc(100vh - var(--header-height));
+        }
+
+        /* =============================
+           SIDEBAR
+        ============================= */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+            overflow-x: hidden;
+            transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .sidebar.collapsed {
+            width: var(--sidebar-collapsed-width);
+        }
+
+        .sidebar-toggle {
+            position: sticky;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 48px;
+            background-color: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.2s;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .sidebar-toggle:hover {
+            background-color: var(--bg-tertiary);
+            color: var(--accent-orange);
+        }
+
+        .toggle-icon {
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .sidebar.collapsed .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .sidebar-section {
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .sidebar-title {
+            color: var(--text-muted);
+            font-size: 0.6875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            padding: 0 20px 10px;
+            font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 1;
+        }
+
+        .sidebar.collapsed .sidebar-title {
+            opacity: 0;
+            padding: 0 10px;
+        }
+
+        .sidebar-item {
+            color: var(--text-secondary);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.875rem;
+            border-left: 3px solid transparent;
+            white-space: nowrap;
+            position: relative;
+            margin: 2px 0;
+        }
+
+        .sidebar-item:hover {
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+            border-left-color: var(--accent-blue);
+        }
+
+        .sidebar-item.active {
+            background-color: var(--bg-tertiary);
+            border-left-color: var(--accent-orange);
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .sidebar-item-icon {
+            width: 22px;
+            height: 22px;
+            text-align: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar-item-text {
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 1;
+        }
+
+        .sidebar.collapsed .sidebar-item-text {
+            opacity: 0;
+            width: 0;
+            overflow: hidden;
+        }
+
+        .sidebar.collapsed .sidebar-item {
+            justify-content: center;
+            padding: 12px 0;
+            gap: 0;
+        }
+
+        /* Tooltip */
+        .sidebar.collapsed .sidebar-item::before {
+            content: attr(data-tooltip);
+            position: absolute;
+            left: calc(100% + 12px);
+            top: 50%;
+            transform: translateY(-50%) translateX(-10px);
+            background: linear-gradient(135deg, var(--bg-header), #1a2433);
+            color: var(--text-primary);
+            padding: 8px 14px;
+            border-radius: 6px;
+            white-space: nowrap;
+            font-size: 0.875rem;
+            z-index: 1000;
+            box-shadow: var(--shadow-lg);
+            pointer-events: none;
+            opacity: 0;
+            transition: all 0.2s ease;
+            border: 1px solid var(--border-light);
+        }
+
+        .sidebar.collapsed .sidebar-item:hover::before {
+            opacity: 1;
+            transform: translateY(-50%) translateX(0);
+        }
+
+        /* Sidebar overlay for mobile */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 998;
+            backdrop-filter: blur(2px);
+        }
+
+        .sidebar-overlay.active {
+            display: block;
+        }
+
+        /* =============================
+           MAIN CONTENT
+        ============================= */
+        .main-content {
+            flex: 1;
+            background-color: var(--bg-primary);
+            overflow-y: auto;
+            overflow-x: hidden;
+            min-width: 0;
+        }
+
+        .content-body {
+            padding: 24px;
+            max-width: 1800px;
+        }
+
+        /* =============================
+           HERO BANNER
+        ============================= */
+        .hero-banner {
+            background: linear-gradient(135deg, #232f3e 0%, #16202e 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 36px 32px;
+            margin-bottom: 28px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+
+        body.light-mode .hero-banner {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        }
+
+        .hero-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-orange), #ec7211);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-size: clamp(1.5rem, 4vw, 2.25rem);
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(0.875rem, 2vw, 1.0625rem);
+            color: var(--text-secondary);
+            line-height: 1.6;
+            max-width: 900px;
+        }
+
+        /* =============================
+           CAROUSEL
+        ============================= */
+        .carousel-section {
+            position: relative;
+            padding: 0 54px;
+        }
+
+        .carousel-container {
+            overflow: hidden;
+            position: relative;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            gap: 20px;
+        }
+
+        .dyk-card {
+            flex: 0 0 calc(50% - 10px);
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+        }
+
+        .dyk-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--accent-orange);
+        }
+
+        .dyk-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-orange), #ffad33);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .dyk-card:hover::before {
+            opacity: 1;
+        }
+
+        .dyk-card-image {
+            width: 100%;
+            height: auto;
+            max-height: 280px;
+            object-fit: contain;
+            display: block;
+            border-bottom: 1px solid var(--border-color);
+            background-color: #ffd700;
+        }
+
+        .dyk-card-content {
+            padding: 16px 18px;
+        }
+
+        .dyk-card-number {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent-orange), #ffad33);
+            color: #000;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .dyk-card-title {
+            font-size: 1rem;
+            color: var(--text-primary);
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .dyk-card-description {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Carousel Navigation Buttons */
+        .carousel-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        body.light-mode .carousel-nav-btn {
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .carousel-nav-btn:hover {
+            background: rgba(255, 153, 0, 0.9);
+            border-color: var(--accent-orange);
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 4px 12px rgba(255, 153, 0, 0.5);
+        }
+
+        .carousel-nav-btn.prev {
+            left: 0;
+        }
+
+        .carousel-nav-btn.next {
+            right: 0;
+        }
+
+        .carousel-nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .carousel-nav-btn:disabled:hover {
+            background: rgba(0, 0, 0, 0.3);
+            transform: translateY(-50%);
+            box-shadow: none;
+        }
+
+        /* Carousel Indicators */
+        .carousel-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .carousel-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--border-color);
+            border: 2px solid var(--border-light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-indicator.active {
+            background: var(--accent-orange);
+            border-color: var(--accent-orange);
+            transform: scale(1.3);
+        }
+
+        .carousel-indicator:hover {
+            background: var(--accent-blue);
+        }
+
+        /* =============================
+           SECTION STYLING
+        ============================= */
+        .content-section {
+            margin-bottom: 32px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .section-title {
+            font-size: clamp(1.125rem, 2.5vw, 1.375rem);
+            color: var(--text-primary);
+            font-weight: 600;
+            letter-spacing: -0.3px;
+        }
+
+        .section-link {
+            color: var(--accent-blue);
+            font-size: 0.875rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: color 0.2s;
+            font-weight: 500;
+            white-space: nowrap;
+            margin-left: 12px;
+        }
+
+        .section-link:hover {
+            color: var(--accent-blue-hover);
+            text-decoration: underline;
+        }
+
+        /* =============================
+           STUDY PILLARS CARDS
+        ============================= */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 16px;
+        }
+
+        .console-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 22px;
+            transition: all 0.25s ease;
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .console-card:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .card-icon {
+            font-size: 2.25rem;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .card-title {
+            font-size: 1.0625rem;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+            font-weight: 600;
+            letter-spacing: -0.2px;
+        }
+
+        .card-description {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 14px;
+        }
+
+        .card-link {
+            color: var(--accent-blue);
+            font-size: 0.875rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s;
+            font-weight: 500;
+        }
+
+        .card-link:hover {
+            color: var(--accent-blue-hover);
+            text-decoration: underline;
+        }
+
+        /* =============================
+           CERTIFICATION CARDS
+        ============================= */
+        .cert-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .cert-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 24px 20px;
+            text-align: center;
+            transition: all 0.25s ease;
+            cursor: pointer;
+            position: relative;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .cert-card:hover {
+            border-color: var(--accent-orange);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .cert-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.625rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .cert-badge.foundational {
+            background-color: rgba(30, 142, 62, 0.15);
+            color: #4caf50;
+            border: 1px solid #4caf50;
+        }
+
+        .cert-badge.associate {
+            background-color: rgba(9, 114, 211, 0.15);
+            color: #42a5f5;
+            border: 1px solid #42a5f5;
+        }
+
+        .cert-badge.professional {
+            background-color: rgba(211, 47, 47, 0.15);
+            color: #ef5350;
+            border: 1px solid #ef5350;
+        }
+
+        .cert-badge.specialty {
+            background-color: rgba(142, 36, 170, 0.15);
+            color: #ab47bc;
+            border: 1px solid #ab47bc;
+        }
+
+        .cert-image {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 14px;
+            display: block;
+            object-fit: contain;
+        }
+
+        .cert-title {
+            font-size: 0.9375rem;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .cert-description {
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .cert-link {
+            color: var(--accent-blue);
+            font-size: 0.8125rem;
+            text-decoration: none;
+            transition: color 0.2s;
+            font-weight: 500;
+        }
+
+        .cert-link:hover {
+            color: var(--accent-blue-hover);
+            text-decoration: underline;
+        }
+
+        /* =============================
+           STUDY TIPS
+        ============================= */
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+        }
+
+        .tip-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 18px;
+            display: flex;
+            gap: 14px;
+            transition: all 0.2s;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .tip-card:hover {
+            border-color: var(--accent-orange);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .tip-number {
+            flex-shrink: 0;
+            width: 34px;
+            height: 34px;
+            background: linear-gradient(135deg, var(--accent-orange), #ffad33);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #000000;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .tip-content h4 {
+            font-size: 0.9375rem;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .tip-content p {
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* =============================
+           INFO CARDS
+        ============================= */
+        .info-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 14px;
+        }
+
+        .info-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.25s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .info-card:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .info-card-icon {
+            font-size: 2.25rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .info-card-title {
+            font-size: 1rem;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .info-card-text {
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* =============================
+           SCROLLBAR
+        ============================= */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--border-light);
+        }
+
+        /* =============================
+           RESPONSIVE: LARGE DESKTOP
+        ============================= */
+        @media (max-width: 1400px) {
+            .nav-pill {
+                padding: 7px 12px;
+                font-size: 0.8125rem;
+                gap: 5px;
+            }
+
+            .nav-pill span:first-child {
+                font-size: 0.875rem;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .tips-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .quick-nav {
+                gap: 6px;
+            }
+
+            .nav-pill {
+                padding: 6px 10px;
+                font-size: 0.75rem;
+            }
+        }
+
+        /* =============================
+           RESPONSIVE: TABLET
+        ============================= */
+        @media (max-width: 1024px) {
+            .quick-nav {
+                display: none;
+            }
+
+            .menu-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .sidebar {
+                position: fixed;
+                left: -280px;
+                top: var(--header-height);
+                height: calc(100vh - var(--header-height));
+                z-index: 999;
+                transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+                box-shadow: var(--shadow-lg);
+                width: var(--sidebar-width) !important;
+            }
+
+            .sidebar.open {
+                left: 0;
+            }
+
+            .sidebar.collapsed {
+                width: var(--sidebar-width) !important;
+            }
+
+            .sidebar.collapsed .sidebar-item-text {
+                opacity: 1;
+                width: auto;
+                overflow: visible;
+            }
+
+            .sidebar.collapsed .sidebar-title {
+                opacity: 1;
+                padding: 0 20px 10px;
+            }
+
+            .sidebar.collapsed .sidebar-item {
+                justify-content: flex-start;
+                padding: 12px 20px;
+                gap: 14px;
+            }
+
+            .sidebar-toggle {
+                display: none;
+            }
+
+            .console-home-title {
+                font-size: 1.125rem;
+            }
+
+            .cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .cert-cards-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .info-cards-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* =============================
+           RESPONSIVE: MOBILE
+        ============================= */
+        @media (max-width: 768px) {
+            :root {
+                --header-height: 60px;
+            }
+
+            .header-content {
+                padding: 0 14px;
+                gap: 10px;
+            }
+
+            .console-home-title {
+                font-size: 1rem;
+                gap: 7px;
+            }
+
+            .title-icon {
+                font-size: 1.125rem;
+            }
+
+            .theme-toggle-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1.125rem;
+            }
+
+            .theme-icon {
+                font-size: 1.125rem;
+            }
+
+            .header-btn-profile {
+                padding: 7px 10px;
+                font-size: 0.8125rem;
+            }
+
+            #profileAvatar {
+                font-size: 1rem;
+            }
+
+            #profileName {
+                display: none !important;
+            }
+
+            .header-divider {
+                height: 30px;
+                margin: 0 2px;
+            }
+
+            .content-body {
+                padding: 16px;
+            }
+
+            .hero-banner {
+                padding: 24px 20px;
+                margin-bottom: 20px;
+                border-radius: 10px;
+            }
+
+            /* Carousel full-width on mobile */
+            .carousel-section {
+                padding: 0 44px;
+            }
+
+            .dyk-card {
+                flex: 0 0 100%;
+            }
+
+            .carousel-nav-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+            }
+
+            .carousel-indicators {
+                gap: 6px;
+                margin-top: 14px;
+            }
+
+            .carousel-indicator {
+                width: 7px;
+                height: 7px;
+            }
+
+            /* Section */
+            .content-section {
+                margin-bottom: 24px;
+            }
+
+            /* Study Pillars */
+            .cards-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            /* Certifications */
+            .cert-cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .cert-card {
+                padding: 18px 14px;
+            }
+
+            .cert-badge {
+                font-size: 0.5625rem;
+                padding: 3px 7px;
+                top: 10px;
+                right: 10px;
+            }
+
+            .cert-image {
+                width: 64px;
+                height: 64px;
+            }
+
+            /* Study Tips */
+            .tips-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            /* Info cards */
+            .info-cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+        }
+
+        /* =============================
+           RESPONSIVE: SMALL MOBILE
+        ============================= */
+        @media (max-width: 480px) {
+            .header-content {
+                padding: 0 12px;
+                gap: 8px;
+            }
+
+            .console-home-title span:last-child {
+                display: none;
+            }
+
+            .header-divider {
+                display: none;
+            }
+
+            .carousel-section {
+                padding: 0 40px;
+            }
+
+            .carousel-nav-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 0.875rem;
+            }
+
+            .cert-cards-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .info-cards-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .dyk-card-content {
+                padding: 12px 14px;
+            }
+
+            .dyk-card-title {
+                font-size: 0.9375rem;
+            }
+
+            .dyk-card-description {
+                font-size: 0.8125rem;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .cert-cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .info-cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- AWS Console Header -->
+    <header class="aws-header">
+        <div class="header-content">
+            <!-- Mobile Menu Toggle -->
+            <button class="menu-toggle" onclick="toggleSidebar()" aria-label="Toggle menu">☰</button>
+
+            <!-- Console Home Title -->
+            <div class="console-title-container">
+                <h1 class="console-home-title">
+                    <span class="title-icon">🏠</span>
+                    <span>Console Home</span>
+                </h1>
+            </div>
+
+            <!-- Quick Navigation Pills (hidden on mobile) -->
+            <div class="quick-nav">
+                <div class="nav-pill active" onclick="window.location.href='index.html'">
+                    <span>🏠</span>
+                    <span>Home</span>
+                </div>
+                <div class="nav-pill" onclick="window.location.href='categories.html'">
+                    <span>🗂️</span>
+                    <span>Services</span>
+                </div>
+                <div class="nav-pill" onclick="window.location.href='quizzes.html'">
+                    <span>🧠</span>
+                    <span>Quizzes</span>
+                </div>
+                <div class="nav-pill" onclick="window.location.href='keywords.html'">
+                    <span>🔑</span>
+                    <span>Keywords</span>
+                </div>
+                <div class="nav-pill" onclick="window.location.href='architectural-diagrams.html'">
+                    <span>🏗️</span>
+                    <span>Diagrams</span>
+                </div>
+                <div class="nav-pill" onclick="window.location.href='roadmap.html'">
+                    <span>🗺️</span>
+                    <span>Roadmap</span>
+                </div>
+            </div>
+
+            <!-- Right Side Controls -->
+            <div class="header-right">
+                <!-- Theme Toggle -->
+                <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeToggleBtn" title="Toggle Theme">
+                    <span class="theme-icon" id="themeIcon">🌙</span>
+                </button>
+
+                <div class="header-divider"></div>
+
+                <!-- Profile Button -->
+                <div class="header-btn-profile" onclick="toggleUserMenu()" title="Account" id="profileBtn">
+                    <span id="profileAvatar">👤</span>
+                    <span id="profileName"></span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar Overlay (mobile) -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+    <!-- Main Console Container -->
+    <div class="console-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-toggle" onclick="toggleSidebarCollapse()" title="Toggle sidebar">
+                <span class="toggle-icon">◀</span>
+            </div>
+            
+            <div class="sidebar-content">
+                <div class="sidebar-section">
+                    <div class="sidebar-title">Navigation</div>
+                    <div class="sidebar-item active" onclick="window.location.href='index.html'" data-tooltip="Console Home">
+                        <span class="sidebar-item-icon">🏠</span>
+                        <span class="sidebar-item-text">Console Home</span>
+                    </div>
+                    <div class="sidebar-item" onclick="window.location.href='categories.html'" data-tooltip="Service Cards">
+                        <span class="sidebar-item-icon">🗂️</span>
+                        <span class="sidebar-item-text">Service Cards</span>
+                    </div>
+                    <div class="sidebar-item" onclick="window.location.href='quizzes.html'" data-tooltip="Quizzes">
+                        <span class="sidebar-item-icon">🧠</span>
+                        <span class="sidebar-item-text">Quizzes</span>
+                    </div>
+                    <div class="sidebar-item" onclick="window.location.href='keywords.html'" data-tooltip="Keywords">
+                        <span class="sidebar-item-icon">🔑</span>
+                        <span class="sidebar-item-text">Keywords</span>
+                    </div>
+                    <div class="sidebar-item" onclick="window.location.href='architectural-diagrams.html'" data-tooltip="Diagrams">
+                        <span class="sidebar-item-icon">🏗️</span>
+                        <span class="sidebar-item-text">Diagrams</span>
+                    </div>
+                    <div class="sidebar-item" onclick="window.location.href='roadmap.html'" data-tooltip="Roadmap">
+                        <span class="sidebar-item-icon">🗺️</span>
+                        <span class="sidebar-item-text">Roadmap</span>
+                    </div>
+                </div>
+                <div class="sidebar-section">
+                    <div class="sidebar-title">Resources</div>
+                    <div class="sidebar-item" onclick="window.open('https://docs.aws.amazon.com/', '_blank')" data-tooltip="Documentation">
+                        <span class="sidebar-item-icon">📚</span>
+                        <span class="sidebar-item-text">AWS Documentation</span>
+                    </div>
+    
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <div class="content-body">
+                <!-- Hero Banner -->
+                <div class="hero-banner">
+                    <div class="hero-content">
+                        <h2 class="hero-title">Master AWS Certifications</h2>
+                        <p class="hero-subtitle">Your comprehensive platform for AWS certification success. Prepare, practice, and achieve your cloud computing goals with interactive learning tools, practice exams, and detailed study materials.</p>
+                    </div>
+                </div>
+
+                <!-- Did You Know Carousel Section -->
+                <section class="content-section">
+                    <div class="section-header">
+                        <h2 class="section-title">💡 Did You Know?</h2>
+                    </div>
+                    <div class="carousel-section">
+                        <button class="carousel-nav-btn prev" onclick="moveCarousel(-1)" id="prevBtn" aria-label="Previous">❮</button>
+                        <div class="carousel-container">
+                            <div class="carousel-track" id="carouselTrack">
+                                <!-- Card 1: CloudFront -->
+                                <div class="dyk-card">
+                                    <img src="images/CloudFront.png" alt="CloudFront" class="dyk-card-image">
+                                    <div class="dyk-card-content">
+                                        <span class="dyk-card-number">TIP #1</span>
+                                        <h3 class="dyk-card-title">CloudFront Dynamic Caching</h3>
+                                        <p class="dyk-card-description">Can cache dynamic content, not just static files</p>
+                                    </div>
+                                </div>
+                                <!-- Card 2: DynamoDB -->
+                                <div class="dyk-card">
+                                    <img src="images/Dynamodb.png" alt="DynamoDB" class="dyk-card-image">
+                                    <div class="dyk-card-content">
+                                        <span class="dyk-card-number">TIP #2</span>
+                                        <h3 class="dyk-card-title">DynamoDB Auto Scaling</h3>
+                                        <p class="dyk-card-description">Automatically scales throughput and storage</p>
+                                    </div>
+                                </div>
+                                <!-- Card 3: VPC -->
+                                <div class="dyk-card">
+                                    <img src="images/VPC.png" alt="VPC" class="dyk-card-image">
+                                    <div class="dyk-card-content">
+                                        <span class="dyk-card-number">TIP #3</span>
+                                        <h3 class="dyk-card-title">VPC Private Routing</h3>
+                                        <p class="dyk-card-description">Can route traffic without the public internet</p>
+                                    </div>
+                                </div>
+                                <!-- Card 4: Route 53 -->
+                                <div class="dyk-card">
+                                    <img src="images/Route53.png" alt="Route 53" class="dyk-card-image">
+                                    <div class="dyk-card-content">
+                                        <span class="dyk-card-number">TIP #4</span>
+                                        <h3 class="dyk-card-title">Route 53 Health Checks</h3>
+                                        <p class="dyk-card-description">Performs automatic health checks and failover</p>
+                                    </div>
+                                </div>
+                                <!-- Card 5: App Runner -->
+                                <div class="dyk-card">
+                                    <img src="images/AppRuner.png" alt="App Runner" class="dyk-card-image">
+                                    <div class="dyk-card-content">
+                                        <span class="dyk-card-number">TIP #5</span>
+                                        <h3 class="dyk-card-title">App Runner Auto Deploy</h3>
+                                        <p class="dyk-card-description">Builds and deploys from source code or containers</p>
+                                    </div>
+                                </div>
+                                <!-- Card 6: Aurora -->
+                                <div class="dyk-card">
+                                    <img src="images/Aurora.png" alt="Aurora" class="dyk-card-image">
+                                    <div class="dyk-card-content">
+                                        <span class="dyk-card-number">TIP #6</span>
+                                        <h3 class="dyk-card-title">Aurora Storage Scaling</h3>
+                                        <p class="dyk-card-description">Auto scales storage up to 128 TB without downtime</p>
+                                    </div>
+                                </div>
+                                <!-- Card 7: Batch -->
+                                <div class="dyk-card">
+                                    <img src="images/Batch.png" alt="Batch" class="dyk-card-image">
+                                    <div class="dyk-card-content">
+                                        <span class="dyk-card-number">TIP #7</span>
+                                        <h3 class="dyk-card-title">Batch Resource Optimization</h3>
+                                        <p class="dyk-card-description">Dynamically provisions optimal compute resources</p>
+                                    </div>
+                                </div>
+                                <!-- Card 8: EBS -->
+                                <div class="dyk-card">
+                                    <img src="images/EBS.png" alt="EBS" class="dyk-card-image">
+                                    <div class="dyk-card-content">
+                                        <span class="dyk-card-number">TIP #8</span>
+                                        <h3 class="dyk-card-title">EBS Volume Replication</h3>
+                                        <p class="dyk-card-description">Auto replicated within an Availability Zone</p>
+                                    </div>
+                                </div>
+                                <!-- Card 9: ECS -->
+                                <div class="dyk-card">
+                                    <img src="images/ECS.png" alt="ECS" class="dyk-card-image">
+                                    <div class="dyk-card-content">
+                                        <span class="dyk-card-number">TIP #9</span>
+                                        <h3 class="dyk-card-title">ECS Container Orchestration</h3>
+                                        <p class="dyk-card-description">Manages Docker containers without orchestration setup</p>
+                                    </div>
+                                </div>
+                                <!-- Card 10: EFS -->
+                                <div class="dyk-card">
+                                    <img src="images/EFS.png" alt="EFS" class="dyk-card-image">
+                                    <div class="dyk-card-content">
+                                        <span class="dyk-card-number">TIP #10</span>
+                                        <h3 class="dyk-card-title">EFS Shared File System</h3>
+                                        <p class="dyk-card-description">NFS-compatible, mounted by multiple EC2 instances</p>
+                                    </div>
+                                </div>
+                                <!-- Card 11: EKS -->
+                                <div class="dyk-card">
+                                    <img src="images/EKS.png" alt="EKS" class="dyk-card-image">
+                                    <div class="dyk-card-content">
+                                        <span class="dyk-card-number">TIP #11</span>
+                                        <h3 class="dyk-card-title">EKS Managed Kubernetes</h3>
+                                        <p class="dyk-card-description">Run Kubernetes without managing the control plane</p>
+                                    </div>
+                                </div>
+                                <!-- Card 12: EC2 -->
+                                <div class="dyk-card">
+                                    <img src="images/EC2.png" alt="EC2" class="dyk-card-image">
+                                    <div class="dyk-card-content">
+                                        <span class="dyk-card-number">TIP #12</span>
+                                        <h3 class="dyk-card-title">EC2 Event Notifications</h3>
+                                        <p class="dyk-card-description">Notifies before maintenance or retirement events</p>
+                                    </div>
+                                </div>
+                                <!-- Card 13: Fargate -->
+                                <div class="dyk-card">
+                                    <img src="images/Fargate.png" alt="Fargate" class="dyk-card-image">
+                                    <div class="dyk-card-content">
+                                        <span class="dyk-card-number">TIP #13</span>
+                                        <h3 class="dyk-card-title">Fargate Serverless Containers</h3>
+                                        <p class="dyk-card-description">Run containers without managing servers</p>
+                                    </div>
+                                </div>
+                                <!-- Card 14: IAM -->
+                                <div class="dyk-card">
+                                    <img src="images/IAM.png" alt="IAM" class="dyk-card-image">
+                                    <div class="dyk-card-content">
+                                        <span class="dyk-card-number">TIP #14</span>
+                                        <h3 class="dyk-card-title">IAM Least Privilege</h3>
+                                        <p class="dyk-card-description">Grant fine-grained permissions down to API calls</p>
+                                    </div>
+                                </div>
+                                <!-- Card 15: Lambda -->
+                                <div class="dyk-card">
+                                    <img src="images/Lambda.png" alt="Lambda" class="dyk-card-image">
+                                    <div class="dyk-card-content">
+                                        <span class="dyk-card-number">TIP #15</span>
+                                        <h3 class="dyk-card-title">Lambda Auto Scaling</h3>
+                                        <p class="dyk-card-description">Scales automatically and charges only for compute time</p>
+                                    </div>
+                                </div>
+                                <!-- Card 16: Outposts -->
+                                <div class="dyk-card">
+                                    <img src="images/Outposts.png" alt="Outposts" class="dyk-card-image">
+                                    <div class="dyk-card-content">
+                                        <span class="dyk-card-number">TIP #16</span>
+                                        <h3 class="dyk-card-title">Outposts Hybrid Cloud</h3>
+                                        <p class="dyk-card-description">Extends AWS infrastructure to on-premises locations</p>
+                                    </div>
+                                </div>
+                                <!-- Card 17: RDS -->
+                                <div class="dyk-card">
+                                    <img src="images/RDS.png" alt="RDS" class="dyk-card-image">
+                                    <div class="dyk-card-content">
+                                        <span class="dyk-card-number">TIP #17</span>
+                                        <h3 class="dyk-card-title">RDS Automated Tasks</h3>
+                                        <p class="dyk-card-description">Automates backups, patching, and failover</p>
+                                    </div>
+                                </div>
+                                <!-- Card 18: S3 -->
+                                <div class="dyk-card">
+                                    <img src="images/S3.png" alt="S3" class="dyk-card-image">
+                                    <div class="dyk-card-content">
+                                        <span class="dyk-card-number">TIP #18</span>
+                                        <h3 class="dyk-card-title">S3 Event Notifications</h3>
+                                        <p class="dyk-card-description">Triggers workflows on object creation or modification</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="carousel-nav-btn next" onclick="moveCarousel(1)" id="nextBtn" aria-label="Next">❯</button>
+                    </div>
+                    <div class="carousel-indicators" id="carouselIndicators"></div>
+                </section>
+
+                <!-- Study Pillars Section -->
+                <section class="content-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Study Pillars</h2>
+                        <a class="section-link">View all →</a>
+                    </div>
+                    <div class="cards-grid">
+                        <div class="console-card" onclick="window.location.href='categories.html'">
+                            <span class="card-icon">🗂️</span>
+                            <h3 class="card-title">Service Cards</h3>
+                            <p class="card-description">Browse comprehensive AWS service cards organized by categories including Compute, Storage, Database, Security, and more.</p>
+                            <a href="categories.html" class="card-link">Browse Categories →</a>
+                        </div>
+                        <div class="console-card" onclick="window.location.href='quizzes.html'">
+                            <span class="card-icon">🧠</span>
+                            <h3 class="card-title">Practice Quizzes</h3>
+                            <p class="card-description">Test your knowledge with interactive quizzes and practice exams designed to mirror real certification questions.</p>
+                            <a href="quizzes.html" class="card-link">Start Quiz →</a>
+                        </div>
+                        <div class="console-card" onclick="window.location.href='keywords.html'">
+                            <span class="card-icon">🔑</span>
+                            <h3 class="card-title">Keywords & Concepts</h3>
+                            <p class="card-description">Master essential AWS terminology, concepts, and service-specific keywords crucial for certification success.</p>
+                            <a href="keywords.html" class="card-link">Browse Keywords →</a>
+                        </div>
+                        <div class="console-card" onclick="window.location.href='architectural-diagrams.html'">
+                            <span class="card-icon">🏗️</span>
+                            <h3 class="card-title">Architecture Diagrams</h3>
+                            <p class="card-description">Study AWS architecture patterns, best practices, and reference architectures for real-world scenarios.</p>
+                            <a href="architectural-diagrams.html" class="card-link">View Diagrams →</a>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- AWS Certifications Section -->
+                <section class="content-section">
+                    <div class="section-header">
+                        <h2 class="section-title">AWS Certifications</h2>
+                        <a class="section-link" href="https://aws.amazon.com/certification/" target="_blank">View all →</a>
+                    </div>
+                    <div class="cert-cards-grid">
+                        <!-- Foundational -->
+                        <div class="cert-card">
+                            <div class="cert-badge foundational">Foundational</div>
+                            <img src="images/ccp.png" alt="CCP Badge" class="cert-image" onerror="this.style.display='none'">
+                            <h3 class="cert-title">Cloud Practitioner</h3>
+                            <p class="cert-description">Foundational understanding of AWS Cloud</p>
+                            <a href="https://aws.amazon.com/certification/certified-cloud-practitioner/" target="_blank" class="cert-link">Learn More →</a>
+                        </div>
+                        <div class="cert-card">
+                            <div class="cert-badge foundational">Foundational</div>
+                            <img src="images/ai.png" alt="AI Badge" class="cert-image" onerror="this.style.display='none'">
+                            <h3 class="cert-title">AI Practitioner</h3>
+                            <p class="cert-description">Foundational AWS AI/ML services</p>
+                            <a href="https://aws.amazon.com/certification/certified-ai-practitioner/" target="_blank" class="cert-link">Learn More →</a>
+                        </div>
+                        <!-- Associate -->
+                        <div class="cert-card">
+                            <div class="cert-badge associate">Associate</div>
+                            <img src="images/saa.png" alt="SAA Badge" class="cert-image" onerror="this.style.display='none'">
+                            <h3 class="cert-title">Solutions Architect</h3>
+                            <p class="cert-description">Design secure, optimized applications</p>
+                            <a href="https://aws.amazon.com/certification/certified-solutions-architect-associate/" target="_blank" class="cert-link">Learn More →</a>
+                        </div>
+                        <div class="cert-card">
+                            <div class="cert-badge associate">Associate</div>
+                            <img src="images/dva.png" alt="DVA Badge" class="cert-image" onerror="this.style.display='none'">
+                            <h3 class="cert-title">Developer</h3>
+                            <p class="cert-description">Develop applications on AWS</p>
+                            <a href="https://aws.amazon.com/certification/certified-developer-associate/" target="_blank" class="cert-link">Learn More →</a>
+                        </div>
+                        <div class="cert-card">
+                            <div class="cert-badge associate">Associate</div>
+                            <img src="images/cloudops.png" alt="CloudOps Badge" class="cert-image" onerror="this.style.display='none'">
+                            <h3 class="cert-title">CloudOps Engineer</h3>
+                            <p class="cert-description">Cloud operations and administration</p>
+                            <a href="https://aws.amazon.com/certification/certified-cloudops-engineer-associate/" target="_blank" class="cert-link">Learn More →</a>
+                        </div>
+                        <div class="cert-card">
+                            <div class="cert-badge associate">Associate</div>
+                            <img src="images/dea.png" alt="DEA Badge" class="cert-image" onerror="this.style.display='none'">
+                            <h3 class="cert-title">Data Engineer</h3>
+                            <p class="cert-description">Data engineering on AWS</p>
+                            <a href="https://aws.amazon.com/certification/certified-data-engineer-associate/" target="_blank" class="cert-link">Learn More →</a>
+                        </div>
+                        <div class="cert-card">
+                            <div class="cert-badge associate">Associate</div>
+                            <img src="images/mla.png" alt="MLA Badge" class="cert-image" onerror="this.style.display='none'">
+                            <h3 class="cert-title">ML Engineer</h3>
+                            <p class="cert-description">ML engineering on AWS</p>
+                            <a href="https://aws.amazon.com/certification/certified-machine-learning-engineer-associate/" target="_blank" class="cert-link">Learn More →</a>
+                        </div>
+                        <!-- Professional -->
+                        <div class="cert-card">
+                            <div class="cert-badge professional">Professional</div>
+                            <img src="images/sap.png" alt="SAP Badge" class="cert-image" onerror="this.style.display='none'">
+                            <h3 class="cert-title">Solutions Architect Pro</h3>
+                            <p class="cert-description">Enterprise-level solutions design</p>
+                            <a href="https://aws.amazon.com/certification/certified-solutions-architect-professional/" target="_blank" class="cert-link">Learn More →</a>
+                        </div>
+                        <div class="cert-card">
+                            <div class="cert-badge professional">Professional</div>
+                            <img src="images/dop.png" alt="DOP Badge" class="cert-image" onerror="this.style.display='none'">
+                            <h3 class="cert-title">DevOps Engineer Pro</h3>
+                            <p class="cert-description">DevOps practices and automation</p>
+                            <a href="https://aws.amazon.com/certification/certified-devops-engineer-professional/" target="_blank" class="cert-link">Learn More →</a>
+                        </div>
+                        <div class="cert-card">
+                            <div class="cert-badge professional">Professional</div>
+                            <img src="images/gai.png" alt="GenAI Badge" class="cert-image" onerror="this.style.display='none'">
+                            <h3 class="cert-title">GenAI Developer</h3>
+                            <p class="cert-description">Generative AI development on AWS</p>
+                            <a href="https://aws.amazon.com/certification/certified-generative-ai-developer-professional/" target="_blank" class="cert-link">Learn More →</a>
+                        </div>
+                        <!-- Specialty -->
+                        <div class="cert-card">
+                            <div class="cert-badge specialty">Specialty</div>
+                            <img src="images/scs.png" alt="SCS Badge" class="cert-image" onerror="this.style.display='none'">
+                            <h3 class="cert-title">Security Specialty</h3>
+                            <p class="cert-description">Security expertise on AWS</p>
+                            <a href="https://aws.amazon.com/certification/certified-security-specialty/" target="_blank" class="cert-link">Learn More →</a>
+                        </div>
+                        <div class="cert-card">
+                            <div class="cert-badge specialty">Specialty</div>
+                            <img src="images/ans.png" alt="ANS Badge" class="cert-image" onerror="this.style.display='none'">
+                            <h3 class="cert-title">Advanced Networking</h3>
+                            <p class="cert-description">Advanced networking on AWS</p>
+                            <a href="https://aws.amazon.com/certification/certified-advanced-networking-specialty/" target="_blank" class="cert-link">Learn More →</a>
+                        </div>
+                        <div class="cert-card">
+                            <div class="cert-badge specialty">Specialty</div>
+                            <img src="images/mls.png" alt="MLS Badge" class="cert-image" onerror="this.style.display='none'">
+                            <h3 class="cert-title">Machine Learning</h3>
+                            <p class="cert-description">ML expertise on AWS</p>
+                            <a href="https://aws.amazon.com/certification/certified-machine-learning-specialty/" target="_blank" class="cert-link">Learn More →</a>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Study Tips -->
+                <section class="content-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Study Tips & Best Practices</h2>
+                    </div>
+                    <div class="tips-grid">
+                        <div class="tip-card">
+                            <div class="tip-number">1</div>
+                            <div class="tip-content">
+                                <h4>Hands-On Practice</h4>
+                                <p>Create a free AWS account and experiment with services. Practical experience cements theoretical knowledge.</p>
+                            </div>
+                        </div>
+                        <div class="tip-card">
+                            <div class="tip-number">2</div>
+                            <div class="tip-content">
+                                <h4>Focus on Core Services</h4>
+                                <p>Master EC2, S3, VPC, and IAM first. These form the foundation for most AWS solutions.</p>
+                            </div>
+                        </div>
+                        <div class="tip-card">
+                            <div class="tip-number">3</div>
+                            <div class="tip-content">
+                                <h4>Use Official Documentation</h4>
+                                <p>AWS documentation is comprehensive and always up-to-date. Make it your primary reference.</p>
+                            </div>
+                        </div>
+                        <div class="tip-card">
+                            <div class="tip-number">4</div>
+                            <div class="tip-content">
+                                <h4>Join Study Communities</h4>
+                                <p>Participate in AWS forums, Reddit communities, and local meetups to learn from others.</p>
+                            </div>
+                        </div>
+                        <div class="tip-card">
+                            <div class="tip-number">5</div>
+                            <div class="tip-content">
+                                <h4>Practice Time Management</h4>
+                                <p>AWS exams are timed. Practice answering questions quickly without sacrificing accuracy.</p>
+                            </div>
+                        </div>
+                        <div class="tip-card">
+                            <div class="tip-number">6</div>
+                            <div class="tip-content">
+                                <h4>Stay Current</h4>
+                                <p>Follow AWS blog, What's New, and re:Invent announcements to stay updated on new features.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Interesting Facts -->
+                <section class="content-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Interesting AWS Facts</h2>
+                    </div>
+                    <div class="info-cards-grid">
+                        <div class="info-card">
+                            <span class="info-card-icon">🚀</span>
+                            <h3 class="info-card-title">AWS Launch</h3>
+                            <p class="info-card-text">AWS launched in 2006 with S3 and SQS. Today it offers 200+ fully featured services!</p>
+                        </div>
+                        <div class="info-card">
+                            <span class="info-card-icon">🌍</span>
+                            <h3 class="info-card-title">Global Infrastructure</h3>
+                            <p class="info-card-text">AWS operates in 31 geographic regions with 99 Availability Zones globally.</p>
+                        </div>
+                        <div class="info-card">
+                            <span class="info-card-icon">⚡</span>
+                            <h3 class="info-card-title">Speed & Scale</h3>
+                            <p class="info-card-text">EC2 instances launch in under 2 minutes vs weeks for traditional data centers.</p>
+                        </div>
+                        <div class="info-card">
+                            <span class="info-card-icon">🔒</span>
+                            <h3 class="info-card-title">Security First</h3>
+                            <p class="info-card-text">AWS holds 143+ security standards and compliance certifications globally.</p>
+                        </div>
+                        <div class="info-card">
+                            <span class="info-card-icon">💰</span>
+                            <h3 class="info-card-title">Cost Optimization</h3>
+                            <p class="info-card-text">AWS offers pay-as-you-go pricing with no upfront costs, saving up to 72% with Reserved Instances.</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // =============================
+        // CAROUSEL
+        // =============================
+        let currentPosition = 0;
+        const totalCards = 18;
+        let cardsPerView = 2;
+        let maxPosition = totalCards - cardsPerView;
+        let autoplayInterval;
+
+        function getCardsPerView() {
+            return window.innerWidth <= 768 ? 1 : 2;
+        }
+
+        function initCarousel() {
+            cardsPerView = getCardsPerView();
+            maxPosition = totalCards - cardsPerView;
+
+            // Clamp position
+            if (currentPosition > maxPosition) currentPosition = maxPosition;
+
+            const indicatorsContainer = document.getElementById('carouselIndicators');
+            indicatorsContainer.innerHTML = '';
+            for (let i = 0; i <= maxPosition; i++) {
+                const indicator = document.createElement('div');
+                indicator.className = 'carousel-indicator' + (i === currentPosition ? ' active' : '');
+                indicator.onclick = () => goToSlide(i);
+                indicatorsContainer.appendChild(indicator);
+            }
+            updateCarousel();
+        }
+
+        function updateCarousel() {
+            const track = document.getElementById('carouselTrack');
+            const cards = track.querySelectorAll('.dyk-card');
+            if (cards.length === 0) return;
+
+            const containerWidth = document.querySelector('.carousel-container').offsetWidth;
+            const gap = 20;
+            const cardWidth = cardsPerView === 1
+                ? containerWidth
+                : (containerWidth - gap) / 2;
+
+            const offset = currentPosition * (cardWidth + gap);
+            track.style.transform = `translateX(-${offset}px)`;
+
+            // Update card sizes dynamically
+            cards.forEach(card => {
+                card.style.flex = `0 0 ${cardWidth}px`;
+            });
+
+            // Update indicators
+            document.querySelectorAll('.carousel-indicator').forEach((ind, i) => {
+                ind.classList.toggle('active', i === currentPosition);
+            });
+
+            document.getElementById('prevBtn').disabled = currentPosition === 0;
+            document.getElementById('nextBtn').disabled = currentPosition >= maxPosition;
+        }
+
+        function moveCarousel(direction) {
+            currentPosition = Math.max(0, Math.min(currentPosition + direction, maxPosition));
+            updateCarousel();
+            resetAutoplay();
+        }
+
+        function goToSlide(index) {
+            currentPosition = index;
+            updateCarousel();
+            resetAutoplay();
+        }
+
+        function startAutoplay() {
+            autoplayInterval = setInterval(() => {
+                currentPosition = currentPosition >= maxPosition ? 0 : currentPosition + 1;
+                updateCarousel();
+            }, 5000);
+        }
+
+        function resetAutoplay() {
+            clearInterval(autoplayInterval);
+            startAutoplay();
+        }
+
+        // Touch swipe support for carousel
+        (function() {
+            let touchStartX = 0;
+            let touchEndX = 0;
+            const container = document.querySelector('.carousel-container');
+
+            container.addEventListener('touchstart', e => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+
+            container.addEventListener('touchend', e => {
+                touchEndX = e.changedTouches[0].screenX;
+                const diff = touchStartX - touchEndX;
+                if (Math.abs(diff) > 40) {
+                    moveCarousel(diff > 0 ? 1 : -1);
+                }
+            }, { passive: true });
+        })();
+
+        // =============================
+        // THEME TOGGLE
+        // =============================
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('themeIcon');
+            body.classList.toggle('light-mode');
+            const isLight = body.classList.contains('light-mode');
+            themeIcon.textContent = isLight ? '☀️' : '🌙';
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        }
+
+        // =============================
+        // SIDEBAR
+        // =============================
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        }
+
+        function toggleSidebarCollapse() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('collapsed');
+            localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
+        }
+
+        // =============================
+        // USER MENU
+        // =============================
+        function toggleUserMenu() {
+            const userName = localStorage.getItem('userName');
+            if (!userName) {
+                const name = prompt('Welcome! Please enter your name to personalize your experience:');
+                if (name && name.trim() !== '') {
+                    localStorage.setItem('userName', name.trim());
+                    updateProfileDisplay(name.trim());
+                    alert('Welcome, ' + name.trim() + '! Your profile has been set up.');
+                }
+            } else {
+                const choice = prompt(
+                    'Account Menu - ' + userName + '\n\n' +
+                    '1. View Profile\n2. Settings\n3. Sign Out\n\nEnter your choice (1-3):'
+                );
+                if (choice === '1') viewProfile();
+                else if (choice === '2') manageSettings();
+                else if (choice === '3') signOut();
+            }
+        }
+
+        function viewProfile() {
+            const userName = localStorage.getItem('userName');
+            const joinDate = localStorage.getItem('userJoinDate') || new Date().toISOString();
+            const joinDateFormatted = new Date(joinDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            alert('👤 Profile Information\n\nName: ' + userName + '\nMember Since: ' + joinDateFormatted);
+        }
+
+        function manageSettings() {
+            alert('⚙️ Settings\n\nFeature coming soon!\n\nYou\'ll be able to:\n- Customize dashboard\n- Set study reminders\n- Manage notifications\n- Export progress data');
+        }
+
+        function signOut() {
+            if (confirm('Are you sure you want to sign out?')) {
+                localStorage.removeItem('userName');
+                updateProfileDisplay('');
+                alert('👋 You have been signed out successfully!');
+            }
+        }
+
+        function updateProfileDisplay(name) {
+            const profileName = document.getElementById('profileName');
+            if (name && name.trim() !== '') {
+                profileName.textContent = name;
+                profileName.style.display = 'inline';
+            } else {
+                profileName.textContent = '';
+                profileName.style.display = 'none';
+            }
+        }
+
+        // =============================
+        // INIT
+        // =============================
+        window.addEventListener('DOMContentLoaded', () => {
+            const sidebar = document.getElementById('sidebar');
+            const sidebarCollapsed = localStorage.getItem('sidebarCollapsed');
+            const userName = localStorage.getItem('userName');
+            const savedTheme = localStorage.getItem('theme');
+            const themeIcon = document.getElementById('themeIcon');
+
+            // Only collapse sidebar on desktop
+            if (sidebarCollapsed === 'true' && window.innerWidth > 1024) {
+                sidebar.classList.add('collapsed');
+            }
+
+            if (userName) updateProfileDisplay(userName);
+
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-mode');
+                themeIcon.textContent = '☀️';
+            } else {
+                themeIcon.textContent = '🌙';
+            }
+
+            if (!localStorage.getItem('userJoinDate')) {
+                localStorage.setItem('userJoinDate', new Date().toISOString());
+            }
+
+            initCarousel();
+            startAutoplay();
+
+            // Close sidebar when clicking a nav item on mobile
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    if (window.innerWidth <= 1024) closeSidebar();
+                });
+            });
+
+            // Resize handler
+            let resizeTimer;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(() => {
+                    initCarousel();
+                }, 200);
+            });
+        });
+    </script>
+</body>
+</html>

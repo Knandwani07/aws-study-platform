@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="theme-color" content="#0f1b2a">
+    <title>AWS Categories - Service Cards</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --bg-primary: #0f1b2a;
+            --bg-secondary: #16202e;
+            --bg-tertiary: #1a2433;
+            --bg-header: #232f3e;
+            --border-color: #2a3f5f;
+            --border-light: #3f4e5f;
+            --text-primary: #ffffff;
+            --text-secondary: #aab7c4;
+            --text-muted: #687078;
+            --accent-blue: #0972d3;
+            --accent-blue-hover: #0d5baa;
+            --accent-orange: #ff9900;
+            --accent-orange-hover: #ec7211;
+            --success-color: #1e8e3e;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.5);
+            --sidebar-width: 260px;
+            --sidebar-collapsed-width: 70px;
+            --header-height: 70px;
+        }
+
+        body.light-mode {
+            --bg-primary: #f2f3f3;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #fafafa;
+            --bg-header: #ffffff;
+            --border-color: #d5dbdb;
+            --border-light: #e9ecef;
+            --text-primary: #16191f;
+            --text-secondary: #5f6b7a;
+            --text-muted: #879596;
+            --accent-blue: #0972d3;
+            --accent-blue-hover: #0d5baa;
+            --accent-orange: #ff9900;
+            --accent-orange-hover: #ec7211;
+            --success-color: #1e8e3e;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        body {
+            font-family: 'Amazon Ember', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            overflow-x: hidden;
+        }
+
+        /* AWS Header */
+        .aws-header {
+            background: var(--bg-header);
+            border-bottom: 2px solid var(--border-light);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+            height: var(--header-height);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        body.light-mode .aws-header {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            max-width: 1920px;
+            margin: 0 auto;
+            height: 100%;
+            gap: 24px;
+        }
+
+        /* Console Home Title */
+        .console-title-container {
+            flex: 0 0 auto;
+        }
+
+        .console-home-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 0;
+            letter-spacing: -0.5px;
+        }
+
+        .title-icon {
+            font-size: 1.5rem;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        body.light-mode .title-icon {
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+        }
+
+        /* Quick Nav Pills */
+        .quick-nav {
+            display: flex;
+            gap: 12px;
+            flex: 1;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-pill {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
+            border: 2px solid var(--border-light);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.9375rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        body.light-mode .nav-pill {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.03), rgba(0, 0, 0, 0.01));
+        }
+
+        .nav-pill:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.08));
+            border-color: var(--accent-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(9, 114, 211, 0.3);
+        }
+
+        body.light-mode .nav-pill:hover {
+            background: linear-gradient(135deg, rgba(9, 114, 211, 0.08), rgba(9, 114, 211, 0.04));
+            box-shadow: 0 4px 12px rgba(9, 114, 211, 0.2);
+        }
+
+        .nav-pill.active {
+            background: linear-gradient(135deg, var(--accent-orange), #ec7211);
+            border-color: var(--accent-orange);
+            color: #000;
+        }
+
+        /* Right Side Controls */
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-divider {
+            width: 2px;
+            height: 40px;
+            background: linear-gradient(180deg, transparent, var(--border-light), transparent);
+            margin: 0 8px;
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle-btn {
+            position: relative;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            border: 2px solid var(--border-light);
+            color: var(--text-primary);
+            padding: 0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.5rem;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        body.light-mode .theme-toggle-btn {
+            background: linear-gradient(135deg, rgba(255, 200, 0, 0.15), rgba(255, 200, 0, 0.08));
+            border-color: rgba(255, 200, 0, 0.3);
+        }
+
+        .theme-toggle-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .theme-toggle-btn:hover::before {
+            left: 100%;
+        }
+
+        .theme-toggle-btn:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.1));
+            border-color: var(--accent-orange);
+            transform: translateY(-2px) rotate(15deg);
+            box-shadow: 0 6px 20px rgba(255, 153, 0, 0.4);
+        }
+
+        body.light-mode .theme-toggle-btn:hover {
+            background: linear-gradient(135deg, rgba(255, 200, 0, 0.25), rgba(255, 200, 0, 0.15));
+            border-color: #ffc800;
+            box-shadow: 0 6px 20px rgba(255, 200, 0, 0.5);
+        }
+
+        .theme-icon {
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+            display: block;
+        }
+
+        .theme-toggle-btn:hover .theme-icon {
+            transform: scale(1.1);
+        }
+
+        /* Profile Button */
+        .header-btn-profile {
+            background: linear-gradient(135deg, rgba(255, 153, 0, 0.15), rgba(255, 153, 0, 0.1));
+            border: 2px solid rgba(255, 153, 0, 0.3);
+            color: var(--text-primary);
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            overflow: hidden;
+            font-weight: 600;
+            min-width: 50px;
+        }
+
+        .header-btn-profile:hover {
+            background: linear-gradient(135deg, rgba(255, 153, 0, 0.25), rgba(255, 153, 0, 0.15));
+            border-color: var(--accent-orange);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(255, 153, 0, 0.5);
+        }
+
+        #profileAvatar {
+            font-size: 1.25rem;
+        }
+
+        /* Main Container */
+        .console-container {
+            display: flex;
+            min-height: calc(100vh - var(--header-height));
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+            overflow-x: hidden;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar.collapsed {
+            width: var(--sidebar-collapsed-width);
+        }
+
+        .sidebar-toggle {
+            position: sticky;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 48px;
+            background-color: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.2s;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .sidebar-toggle:hover {
+            background-color: var(--bg-tertiary);
+            color: var(--accent-orange);
+        }
+
+        .toggle-icon {
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .sidebar.collapsed .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .sidebar-section {
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .sidebar-title {
+            color: var(--text-muted);
+            font-size: 0.6875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            padding: 0 20px 10px;
+            font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 1;
+        }
+
+        .sidebar.collapsed .sidebar-title {
+            opacity: 0;
+            padding: 0 10px;
+        }
+
+        .sidebar-item {
+            color: var(--text-secondary);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.875rem;
+            border-left: 3px solid transparent;
+            white-space: nowrap;
+            position: relative;
+            margin: 2px 0;
+        }
+
+        .sidebar-item:hover {
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+            border-left-color: var(--accent-blue);
+        }
+
+        .sidebar-item.active {
+            background-color: var(--bg-tertiary);
+            border-left-color: var(--accent-orange);
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .sidebar-item-icon {
+            width: 22px;
+            height: 22px;
+            text-align: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar-item-text {
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 1;
+        }
+
+        .sidebar.collapsed .sidebar-item-text {
+            opacity: 0;
+            width: 0;
+            overflow: hidden;
+        }
+
+        .sidebar.collapsed .sidebar-item {
+            justify-content: center;
+            padding: 12px 0;
+            gap: 0;
+        }
+
+        /* Tooltip */
+        .sidebar.collapsed .sidebar-item::before {
+            content: attr(data-tooltip);
+            position: absolute;
+            left: calc(100% + 12px);
+            top: 50%;
+            transform: translateY(-50%) translateX(-10px);
+            background: linear-gradient(135deg, var(--bg-header), #1a2433);
+            color: var(--text-primary);
+            padding: 8px 14px;
+            border-radius: 6px;
+            white-space: nowrap;
+            font-size: 0.875rem;
+            z-index: 1000;
+            box-shadow: var(--shadow-lg);
+            pointer-events: none;
+            opacity: 0;
+            transition: all 0.2s ease;
+            border: 1px solid var(--border-light);
+        }
+
+        .sidebar.collapsed .sidebar-item:hover::before {
+            opacity: 1;
+            transform: translateY(-50%) translateX(0);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            background-color: var(--bg-primary);
+            overflow-y: auto;
+            transition: margin-left 0.3s ease;
+            padding: 28px;
+        }
+
+        .page-header {
+            margin-bottom: 24px;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            color: var(--text-primary);
+            font-weight: 600;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .page-subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+
+        /* Category Search */
+        .category-search-container {
+            margin-bottom: 28px;
+            position: relative;
+        }
+
+        .category-search-box {
+            background-color: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 14px 16px 14px 48px;
+            color: var(--text-primary);
+            width: 100%;
+            max-width: 600px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .category-search-box:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(9, 114, 211, 0.2);
+        }
+
+        .category-search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1.25rem;
+            pointer-events: none;
+        }
+
+        /* Categories Grid */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .category-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 28px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .category-card:hover {
+            border-color: var(--accent-blue);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-4px);
+        }
+
+        .category-card:active {
+            transform: translateY(-2px);
+        }
+
+        .category-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .category-card h3 {
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+            font-weight: 600;
+            letter-spacing: -0.2px;
+        }
+
+        .category-card p {
+            font-size: 0.9375rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Mobile menu toggle */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 8px;
+            min-width: 40px;
+            min-height: 40px;
+        }
+
+        /* Mobile Menu Overlay */
+        .mobile-menu-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 998;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .mobile-menu-overlay.active {
+            opacity: 1;
+        }
+
+        /* Scroll to top */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            background: linear-gradient(135deg, var(--accent-orange), #ec7211);
+            color: #000000;
+            border: none;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            font-size: 1.75rem;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-lg);
+            z-index: 899;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .scroll-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-to-top:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(255, 153, 0, 0.5);
+        }
+
+        /* No results message */
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+            display: none;
+            grid-column: 1 / -1;
+        }
+
+        .no-results.visible {
+            display: block;
+        }
+
+        .no-results-icon {
+            font-size: 4rem;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .no-results h3 {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .no-results p {
+            font-size: 1rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .quick-nav {
+                gap: 8px;
+            }
+
+            .nav-pill {
+                padding: 8px 14px;
+                font-size: 0.875rem;
+            }
+
+            .categories-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+        }
+
+        @media (max-width: 992px) {
+            :root {
+                --header-height: 65px;
+            }
+
+            .header-content {
+                padding: 0 20px;
+                gap: 16px;
+            }
+
+            .console-home-title {
+                font-size: 1.25rem;
+            }
+
+            .title-icon {
+                font-size: 1.25rem;
+            }
+
+            .quick-nav .nav-pill span:last-child {
+                display: none;
+            }
+
+            .quick-nav {
+                gap: 6px;
+            }
+
+            .nav-pill {
+                padding: 8px 12px;
+                min-width: 40px;
+                justify-content: center;
+            }
+
+            .categories-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+                gap: 16px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                --header-height: 60px;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .sidebar {
+                position: fixed;
+                left: -280px;
+                top: var(--header-height);
+                height: calc(100vh - var(--header-height));
+                z-index: 999;
+                width: 260px;
+                transition: left 0.3s ease;
+                box-shadow: var(--shadow-lg);
+            }
+
+            .sidebar.open {
+                left: 0;
+            }
+
+            .sidebar.collapsed {
+                left: -280px;
+            }
+
+            .quick-nav {
+                display: none;
+            }
+
+            .console-home-title {
+                font-size: 1rem;
+            }
+
+            .console-home-title span:last-child {
+                display: none;
+            }
+
+            .title-icon {
+                font-size: 1.5rem;
+            }
+
+            .header-content {
+                padding: 0 12px;
+                gap: 8px;
+            }
+
+            .theme-toggle-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 1.25rem;
+            }
+
+            .header-btn-profile {
+                padding: 8px 12px;
+                font-size: 0.875rem;
+                min-width: 45px;
+            }
+
+            #profileName {
+                display: none;
+            }
+
+            #profileAvatar {
+                font-size: 1.25rem;
+            }
+
+            .header-divider {
+                height: 30px;
+                margin: 0 4px;
+            }
+
+            .main-content {
+                padding: 16px;
+            }
+
+            .page-title {
+                font-size: 1.75rem;
+            }
+
+            .page-subtitle {
+                font-size: 0.9375rem;
+            }
+
+            .category-search-container {
+                margin-bottom: 20px;
+            }
+
+            .category-search-box {
+                max-width: 100%;
+                font-size: 0.9375rem;
+                padding: 12px 16px 12px 44px;
+            }
+
+            .category-search-icon {
+                font-size: 1.125rem;
+            }
+
+            .categories-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .category-card {
+                padding: 20px;
+            }
+
+            .category-icon {
+                font-size: 2.5rem;
+                margin-bottom: 12px;
+            }
+
+            .category-card h3 {
+                font-size: 1.125rem;
+            }
+
+            .category-card p {
+                font-size: 0.875rem;
+            }
+
+            .scroll-to-top {
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-content {
+                padding: 0 10px;
+                gap: 6px;
+            }
+
+            .theme-toggle-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1.125rem;
+            }
+
+            .header-btn-profile {
+                padding: 8px;
+                min-width: 40px;
+            }
+
+            #profileAvatar {
+                font-size: 1.125rem;
+            }
+
+            .main-content {
+                padding: 12px;
+            }
+
+            .page-title {
+                font-size: 1.5rem;
+            }
+
+            .page-subtitle {
+                font-size: 0.875rem;
+            }
+
+            .category-search-box {
+                font-size: 0.875rem;
+                padding: 10px 12px 10px 40px;
+            }
+
+            .category-search-icon {
+                left: 12px;
+                font-size: 1rem;
+            }
+
+            .category-card {
+                padding: 16px;
+            }
+
+            .category-icon {
+                font-size: 2.25rem;
+            }
+
+            .category-card h3 {
+                font-size: 1rem;
+            }
+
+            .category-card p {
+                font-size: 0.8125rem;
+            }
+
+            .scroll-to-top {
+                bottom: 16px;
+                right: 16px;
+                width: 45px;
+                height: 45px;
+                font-size: 1.25rem;
+            }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--border-light);
+        }
+
+        /* Better touch targets for mobile */
+        @media (hover: none) and (pointer: coarse) {
+            .sidebar-item,
+            .nav-pill,
+            .theme-toggle-btn,
+            .header-btn-profile,
+            .menu-toggle,
+            .category-card {
+                min-height: 44px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobileOverlay" onclick="closeSidebar()"></div>
+
+    <!-- AWS Console Header -->
+    <header class="aws-header">
+        <div class="header-content">
+            <!-- Mobile Menu Toggle -->
+            <button class="menu-toggle" onclick="toggleSidebar()" aria-label="Toggle menu">☰</button>
+
+            <!-- Console Home Title -->
+            <div class="console-title-container">
+                <h1 class="console-home-title">
+                    <span class="title-icon">🗂️</span>
+                    <span>Service Cards</span>
+                </h1>
+            </div>
+
+            <!-- Quick Navigation Pills -->
+            <div class="quick-nav">
+                <div class="nav-pill" onclick="window.location.href='index.html'" role="button" tabindex="0">
+                    <span>🏠</span>
+                    <span>Home</span>
+                </div>
+                <div class="nav-pill active" onclick="window.location.href='categories.html'" role="button" tabindex="0">
+                    <span>🗂️</span>
+                    <span>Services</span>
+                </div>
+                <div class="nav-pill" onclick="window.location.href='quizzes.html'" role="button" tabindex="0">
+                    <span>🧠</span>
+                    <span>Quizzes</span>
+                </div>
+                <div class="nav-pill" onclick="window.location.href='keywords.html'" role="button" tabindex="0">
+                    <span>🔑</span>
+                    <span>Keywords</span>
+                </div>
+                <div class="nav-pill" onclick="window.location.href='architectural-diagrams.html'" role="button" tabindex="0">
+                    <span>🏗️</span>
+                    <span>Diagrams</span>
+                </div>
+                <div class="nav-pill" onclick="window.location.href='roadmap.html'" role="button" tabindex="0">
+                    <span>🗺️</span>
+                    <span>Roadmap</span>
+                </div>
+            </div>
+
+            <!-- Right Side Controls -->
+            <div class="header-right">
+                <!-- Theme Toggle -->
+                <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeToggleBtn" title="Toggle Theme" aria-label="Toggle theme">
+                    <span class="theme-icon" id="themeIcon">🌙</span>
+                </button>
+
+                <div class="header-divider"></div>
+
+                <!-- Profile Button -->
+                <div class="header-btn-profile" onclick="toggleUserMenu()" title="Account" id="profileBtn" role="button" tabindex="0">
+                    <span id="profileAvatar">👤</span>
+                    <span id="profileName"></span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Console Container -->
+    <div class="console-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-toggle" onclick="toggleSidebarCollapse()" title="Toggle sidebar">
+                <span class="toggle-icon">◀</span>
+            </div>
+            
+            <div class="sidebar-content">
+                <div class="sidebar-section">
+                    <div class="sidebar-title">Navigation</div>
+                    <div class="sidebar-item" onclick="navigateTo('index.html')" data-tooltip="Console Home" role="button" tabindex="0">
+                        <span class="sidebar-item-icon">🏠</span>
+                        <span class="sidebar-item-text">Console Home</span>
+                    </div>
+                    <div class="sidebar-item active" onclick="navigateTo('categories.html')" data-tooltip="Service Cards" role="button" tabindex="0">
+                        <span class="sidebar-item-icon">🗂️</span>
+                        <span class="sidebar-item-text">Service Cards</span>
+                    </div>
+                    <div class="sidebar-item" onclick="navigateTo('quizzes.html')" data-tooltip="Quizzes" role="button" tabindex="0">
+                        <span class="sidebar-item-icon">🧠</span>
+                        <span class="sidebar-item-text">Quizzes</span>
+                    </div>
+                    <div class="sidebar-item" onclick="navigateTo('keywords.html')" data-tooltip="Keywords" role="button" tabindex="0">
+                        <span class="sidebar-item-icon">🔑</span>
+                        <span class="sidebar-item-text">Keywords</span>
+                    </div>
+                    <div class="sidebar-item" onclick="navigateTo('architectural-diagrams.html')" data-tooltip="Diagrams" role="button" tabindex="0">
+                        <span class="sidebar-item-icon">🏗️</span>
+                        <span class="sidebar-item-text">Diagrams</span>
+                    </div>
+                    <div class="sidebar-item" onclick="navigateTo('roadmap.html')" data-tooltip="Roadmap" role="button" tabindex="0">
+                        <span class="sidebar-item-icon">🗺️</span>
+                        <span class="sidebar-item-text">Roadmap</span>
+                    </div>
+                </div>
+                <div class="sidebar-section">
+                    <div class="sidebar-title">Resources</div>
+                    <div class="sidebar-item" onclick="window.open('https://docs.aws.amazon.com/', '_blank')" data-tooltip="Documentation" role="button" tabindex="0">
+                        <span class="sidebar-item-icon">📚</span>
+                        <span class="sidebar-item-text">AWS Documentation</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">AWS Service Categories</h1>
+                <p class="page-subtitle">Select a category to focus your study session</p>
+            </div>
+
+            <!-- Category Search -->
+            <div class="category-search-container">
+                <span class="category-search-icon">🔍</span>
+                <input type="text" id="category-search" class="category-search-box" placeholder="Search categories..." aria-label="Search AWS service categories">
+            </div>
+
+            <!-- Categories Grid -->
+            <div class="categories-grid" id="categories-grid">
+                <div class="category-card" data-category="analytics" data-category-name="Analytics" data-category-desc="Data processing & insights" onclick="handleCardClick('analytics.html')">
+                    <div class="category-icon">📊</div>
+                    <h3>Analytics</h3>
+                    <p>Data processing & insights</p>
+                </div>
+                
+                <div class="category-card" data-category="integration" data-category-name="Application Integration" data-category-desc="Connect applications & services" onclick="handleCardClick('application-integration.html')">
+                    <div class="category-icon">🔗</div>
+                    <h3>Application Integration</h3>
+                    <p>Connect applications & services</p>
+                </div>
+                
+                <div class="category-card" data-category="blockchain" data-category-name="Blockchain" data-category-desc="Distributed ledger technology" onclick="handleCardClick('blockchain.html')">
+                    <div class="category-icon">⛓️</div>
+                    <h3>Blockchain</h3>
+                    <p>Distributed ledger technology</p>
+                </div>
+                
+                <div class="category-card" data-category="business" data-category-name="Business Applications" data-category-desc="Enterprise productivity tools" onclick="handleCardClick('business-applications.html')">
+                    <div class="category-icon">💼</div>
+                    <h3>Business Applications</h3>
+                    <p>Enterprise productivity tools</p>
+                </div>
+                
+                <div class="category-card" data-category="financial" data-category-name="Cloud Financial Management" data-category-desc="Cost optimization & billing" onclick="handleCardClick('cloud-financial-management.html')">
+                    <div class="category-icon">💰</div>
+                    <h3>Cloud Financial Management</h3>
+                    <p>Cost optimization & billing</p>
+                </div>
+                
+                <div class="category-card" data-category="compute" data-category-name="Compute" data-category-desc="EC2, Lambda, containers" onclick="handleCardClick('compute.html')">
+                    <div class="category-icon">⚡</div>
+                    <h3>Compute</h3>
+                    <p>EC2, Lambda, containers</p>
+                </div>
+                
+                <div class="category-card" data-category="enablement" data-category-name="Customer Enablement" data-category-desc="Support & training services" onclick="handleCardClick('customer-enablement.html')">
+                    <div class="category-icon">🎓</div>
+                    <h3>Customer Enablement</h3>
+                    <p>Support & training services</p>
+                </div>
+                
+                <div class="category-card" data-category="containers" data-category-name="Containers" data-category-desc="ECS, EKS, Fargate" onclick="handleCardClick('containers.html')">
+                    <div class="category-icon">📦</div>
+                    <h3>Containers</h3>
+                    <p>ECS, EKS, Fargate</p>
+                </div>
+                
+                <div class="category-card" data-category="database" data-category-name="Databases" data-category-desc="RDS, DynamoDB, more" onclick="handleCardClick('databases.html')">
+                    <div class="category-icon">🗄️</div>
+                    <h3>Databases</h3>
+                    <p>RDS, DynamoDB, more</p>
+                </div>
+                
+                <div class="category-card" data-category="developer" data-category-name="Developer Tools" data-category-desc="CodeCommit, CodeBuild, CI/CD" onclick="handleCardClick('developer-tools.html')">
+                    <div class="category-icon">🛠️</div>
+                    <h3>Developer Tools</h3>
+                    <p>CodeCommit, CodeBuild, CI/CD</p>
+                </div>
+                
+                <div class="category-card" data-category="enduser" data-category-name="End User Computing" data-category-desc="WorkSpaces, AppStream" onclick="handleCardClick('end-user-computing.html')">
+                    <div class="category-icon">🖥️</div>
+                    <h3>End User Computing</h3>
+                    <p>WorkSpaces, AppStream</p>
+                </div>
+                
+                <div class="category-card" data-category="frontend" data-category-name="Front-end Web & Mobile" data-category-desc="Amplify, mobile development" onclick="handleCardClick('frontend-web-mobile.html')">
+                    <div class="category-icon">📱</div>
+                    <h3>Front-end Web & Mobile</h3>
+                    <p>Amplify, mobile development</p>
+                </div>
+                
+                <div class="category-card" data-category="gametech" data-category-name="Game Tech" data-category-desc="GameLift, game development" onclick="handleCardClick('gametech.html')">
+                    <div class="category-icon">🎮</div>
+                    <h3>Game Tech</h3>
+                    <p>GameLift, game development</p>
+                </div>
+                
+                <div class="category-card" data-category="iot" data-category-name="Internet of Things (IoT)" data-category-desc="IoT Core, device management" onclick="handleCardClick('iot.html')">
+                    <div class="category-icon">🌐</div>
+                    <h3>Internet of Things (IoT)</h3>
+                    <p>IoT Core, device management</p>
+                </div>
+                
+                <div class="category-card" data-category="ml" data-category-name="Machine Learning (ML) and Artificial Intelligence (AI)" data-category-desc="SageMaker, recognition services" onclick="handleCardClick('ml-ai.html')">
+                    <div class="category-icon">🤖</div>
+                    <h3>Machine Learning (ML) and Artificial Intelligence (AI)</h3>
+                    <p>SageMaker, recognition services</p>
+                </div>
+                
+                <div class="category-card" data-category="management" data-category-name="Management and Governance" data-category-desc="CloudWatch, Config, Systems Manager" onclick="handleCardClick('management-governance.html')">
+                    <div class="category-icon">⚙️</div>
+                    <h3>Management and Governance</h3>
+                    <p>CloudWatch, Config, Systems Manager</p>
+                </div>
+                
+                <div class="category-card" data-category="media" data-category-name="Media" data-category-desc="Video processing & streaming" onclick="handleCardClick('media.html')">
+                    <div class="category-icon">🎬</div>
+                    <h3>Media</h3>
+                    <p>Video processing & streaming</p>
+                </div>
+                
+                <div class="category-card" data-category="migration" data-category-name="Migration and Transfer" data-category-desc="Database & application migration" onclick="handleCardClick('migration-transfer.html')">
+                    <div class="category-icon">📤</div>
+                    <h3>Migration and Transfer</h3>
+                    <p>Database & application migration</p>
+                </div>
+                
+                <div class="category-card" data-category="networking" data-category-name="Networking and Content Delivery" data-category-desc="VPC, CloudFront, Route 53" onclick="handleCardClick('networking-content-delivery.html')">
+                    <div class="category-icon">🌍</div>
+                    <h3>Networking and Content Delivery</h3>
+                    <p>VPC, CloudFront, Route 53</p>
+                </div>
+                
+                <div class="category-card" data-category="quantum" data-category-name="Quantum Technologies" data-category-desc="Quantum computing services" onclick="handleCardClick('quantum-technologies.html')">
+                    <div class="category-icon">⚛️</div>
+                    <h3>Quantum Technologies</h3>
+                    <p>Quantum computing services</p>
+                </div>
+                
+                <div class="category-card" data-category="satellite" data-category-name="Satellite" data-category-desc="Ground Station services" onclick="handleCardClick('satellite.html')">
+                    <div class="category-icon">🛰️</div>
+                    <h3>Satellite</h3>
+                    <p>Ground Station services</p>
+                </div>
+                
+                <div class="category-card" data-category="security" data-category-name="Security, Identity, and Compliance" data-category-desc="IAM, encryption, compliance" onclick="handleCardClick('security-identity-compliance.html')">
+                    <div class="category-icon">🔒</div>
+                    <h3>Security, Identity, and Compliance</h3>
+                    <p>IAM, encryption, compliance</p>
+                </div>
+                
+                <div class="category-card" data-category="storage" data-category-name="Storage" data-category-desc="S3, EBS, backup solutions" onclick="handleCardClick('storage.html')">
+                    <div class="category-icon">💾</div>
+                    <h3>Storage</h3>
+                    <p>S3, EBS, backup solutions</p>
+                </div>
+
+                <!-- No Results Message -->
+                <div class="no-results" id="noResults">
+                    <div class="no-results-icon">🔍</div>
+                    <h3>No categories found</h3>
+                    <p>Try adjusting your search terms</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <button id="scroll-to-top" class="scroll-to-top" aria-label="Scroll to top">↑</button>
+
+    <script>
+        // Theme Toggle Functionality
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('themeIcon');
+            
+            body.classList.toggle('light-mode');
+            
+            if (body.classList.contains('light-mode')) {
+                themeIcon.textContent = '☀️';
+                localStorage.setItem('theme', 'light');
+            } else {
+                themeIcon.textContent = '🌙';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Sidebar functions
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobileOverlay');
+            
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+            
+            if (sidebar.classList.contains('open')) {
+                overlay.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            } else {
+                overlay.style.display = 'none';
+                document.body.style.overflow = '';
+            }
+        }
+
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobileOverlay');
+            
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+            overlay.style.display = 'none';
+            document.body.style.overflow = '';
+        }
+
+        function toggleSidebarCollapse() {
+            const sidebar = document.getElementById('sidebar');
+            
+            // Only allow collapse on desktop
+            if (window.innerWidth > 768) {
+                sidebar.classList.toggle('collapsed');
+                localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
+            }
+        }
+
+        // Navigation helper
+        function navigateTo(url) {
+            // Close mobile sidebar if open
+            if (window.innerWidth <= 768) {
+                closeSidebar();
+            }
+            window.location.href = url;
+        }
+
+        // User menu
+        function toggleUserMenu() {
+            const userName = localStorage.getItem('userName');
+            
+            if (!userName) {
+                const name = prompt('Welcome! Please enter your name to personalize your experience:');
+                if (name && name.trim() !== '') {
+                    localStorage.setItem('userName', name.trim());
+                    updateProfileDisplay(name.trim());
+                    alert('Welcome, ' + name.trim() + '! Your profile has been set up.');
+                }
+            } else {
+                const choice = prompt(
+                    'Account Menu - ' + userName + '\n\n' +
+                    '1. View Profile\n' +
+                    '2. Settings\n' +
+                    '3. Sign Out\n\n' +
+                    'Enter your choice (1-3):'
+                );
+                
+                if (choice === '1') viewProfile();
+                else if (choice === '2') manageSettings();
+                else if (choice === '3') signOut();
+            }
+        }
+
+        function viewProfile() {
+            const userName = localStorage.getItem('userName');
+            const joinDate = localStorage.getItem('userJoinDate') || new Date().toISOString();
+            
+            const joinDateFormatted = new Date(joinDate).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            
+            alert(
+                '👤 Profile Information\n\n' +
+                'Name: ' + userName + '\n' +
+                'Member Since: ' + joinDateFormatted
+            );
+        }
+
+        function manageSettings() {
+            alert('⚙️ Settings\n\nFeature coming soon!\n\nYou\'ll be able to:\n- Customize dashboard\n- Set study reminders\n- Manage notifications\n- Export progress data');
+        }
+
+        function signOut() {
+            if (confirm('Are you sure you want to sign out?')) {
+                localStorage.removeItem('userName');
+                updateProfileDisplay('');
+                alert('👋 You have been signed out successfully!');
+            }
+        }
+
+        function updateProfileDisplay(name) {
+            const profileName = document.getElementById('profileName');
+            if (name && name.trim() !== '') {
+                profileName.textContent = name;
+                profileName.style.display = 'inline';
+            } else {
+                profileName.textContent = '';
+                profileName.style.display = 'none';
+            }
+        }
+
+        // Search functionality
+        function initializeSearch() {
+            const searchInput = document.getElementById('category-search');
+            const categoryCards = document.querySelectorAll('.category-card:not(.no-results)');
+            const noResults = document.getElementById('noResults');
+
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase().trim();
+                let visibleCount = 0;
+
+                categoryCards.forEach(card => {
+                    const name = card.dataset.categoryName.toLowerCase();
+                    const desc = card.dataset.categoryDesc.toLowerCase();
+                    const isVisible = name.includes(searchTerm) || desc.includes(searchTerm);
+
+                    card.style.display = isVisible ? 'block' : 'none';
+                    if (isVisible) visibleCount++;
+                });
+
+                // Show/hide no results message
+                if (visibleCount === 0 && searchTerm !== '') {
+                    noResults.classList.add('visible');
+                } else {
+                    noResults.classList.remove('visible');
+                }
+            });
+        }
+
+        // Card click handler
+        function handleCardClick(url) {
+            // Close mobile sidebar if open
+            if (window.innerWidth <= 768) {
+                closeSidebar();
+            }
+            window.location.href = url;
+        }
+
+        // Scroll to top functionality
+        function initializeScrollToTop() {
+            const scrollButton = document.getElementById('scroll-to-top');
+
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    scrollButton.classList.add('visible');
+                } else {
+                    scrollButton.classList.remove('visible');
+                }
+            });
+
+            scrollButton.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        }
+
+        // Accessibility improvements
+        function initializeAccessibility() {
+            const categoryCards = document.querySelectorAll('.category-card:not(.no-results)');
+
+            categoryCards.forEach((card) => {
+                card.setAttribute('tabindex', '0');
+                card.setAttribute('role', 'button');
+                card.setAttribute('aria-label', `Navigate to ${card.dataset.categoryName} category`);
+                
+                // Add keyboard support
+                card.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        card.click();
+                    }
+                });
+            });
+        }
+
+        // Handle window resize
+        function handleResize() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobileOverlay');
+            
+            if (window.innerWidth > 768) {
+                sidebar.classList.remove('open');
+                overlay.style.display = 'none';
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            } else {
+                sidebar.classList.remove('collapsed');
+            }
+        }
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            const sidebar = document.getElementById('sidebar');
+            const sidebarCollapsed = localStorage.getItem('sidebarCollapsed');
+            const userName = localStorage.getItem('userName');
+            const savedTheme = localStorage.getItem('theme');
+            const themeIcon = document.getElementById('themeIcon');
+            
+            // Only apply collapsed state on desktop
+            if (window.innerWidth > 768 && sidebarCollapsed === 'true') {
+                sidebar.classList.add('collapsed');
+            }
+
+            if (userName) {
+                updateProfileDisplay(userName);
+            }
+
+            // Restore theme
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-mode');
+                themeIcon.textContent = '☀️';
+            } else {
+                themeIcon.textContent = '🌙';
+            }
+
+            // Set join date if not exists
+            if (!localStorage.getItem('userJoinDate')) {
+                localStorage.setItem('userJoinDate', new Date().toISOString());
+            }
+
+            initializeSearch();
+            initializeScrollToTop();
+            initializeAccessibility();
+
+            // Add resize listener
+            window.addEventListener('resize', handleResize);
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeSidebar();
+            }
+        });
+
+        // Handle touch swipe to close sidebar on mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const sidebar = document.getElementById('sidebar');
+            if (window.innerWidth <= 768 && sidebar.classList.contains('open')) {
+                if (touchEndX < touchStartX - 50) {
+                    closeSidebar();
+                }
+            }
+        }
+    </script>
+</body>
+</html>

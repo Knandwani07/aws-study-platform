@@ -1,0 +1,2415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AWS Quizzes - Study Hub</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  :root {
+    --bg-primary: #0f1b2a;
+    --bg-secondary: #16202e;
+    --bg-tertiary: #1a2433;
+    --bg-header: #232f3e;
+    --border-color: #2a3f5f;
+    --border-light: #3f4e5f;
+    --text-primary: #ffffff;
+    --text-secondary: #aab7c4;
+    --text-muted: #687078;
+    --accent-blue: #0972d3;
+    --accent-blue-hover: #0d5baa;
+    --accent-orange: #ff9900;
+    --accent-orange-hover: #ec7211;
+    --success-color: #1e8e3e;
+    --error-color: #d13212;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.5);
+    --sidebar-width: 260px;
+    --sidebar-collapsed-width: 70px;
+    --header-height: 70px;
+  }
+
+  body.light-mode {
+    --bg-primary: #f2f3f3;
+    --bg-secondary: #ffffff;
+    --bg-tertiary: #fafafa;
+    --bg-header: #ffffff;
+    --border-color: #d5dbdb;
+    --border-light: #e9ecef;
+    --text-primary: #16191f;
+    --text-secondary: #5f6b7a;
+    --text-muted: #879596;
+    --accent-blue: #0972d3;
+    --accent-blue-hover: #0d5baa;
+    --accent-orange: #ff9900;
+    --accent-orange-hover: #ec7211;
+    --success-color: #1e8e3e;
+    --error-color: #d13212;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.12);
+  }
+
+  body {
+    font-family: 'Amazon Ember', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* =============================
+     HEADER
+  ============================= */
+  .aws-header {
+    background: var(--bg-header);
+    border-bottom: 2px solid var(--border-light);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    height: var(--header-height);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  body.light-mode .aws-header {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    max-width: 1920px;
+    margin: 0 auto;
+    height: 100%;
+    gap: 16px;
+  }
+
+  .console-title-container {
+    flex: 0 0 auto;
+  }
+
+  .console-home-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    letter-spacing: -0.5px;
+    white-space: nowrap;
+  }
+
+  .title-icon {
+    font-size: 1.375rem;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  }
+
+  body.light-mode .title-icon {
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+  }
+
+  .quick-nav {
+    display: flex;
+    gap: 8px;
+    flex: 1;
+    justify-content: center;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .quick-nav::-webkit-scrollbar { display: none; }
+
+  .nav-pill {
+    padding: 8px 14px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
+    border: 2px solid var(--border-light);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  body.light-mode .nav-pill {
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.03), rgba(0, 0, 0, 0.01));
+  }
+
+  .nav-pill:hover {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.08));
+    border-color: var(--accent-blue);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(9, 114, 211, 0.3);
+  }
+
+  body.light-mode .nav-pill:hover {
+    background: linear-gradient(135deg, rgba(9, 114, 211, 0.08), rgba(9, 114, 211, 0.04));
+    box-shadow: 0 4px 12px rgba(9, 114, 211, 0.2);
+  }
+
+  .nav-pill.active {
+    background: linear-gradient(135deg, var(--accent-orange), #ec7211);
+    border-color: var(--accent-orange);
+    color: #000;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+
+  .header-divider {
+    width: 2px;
+    height: 36px;
+    background: linear-gradient(180deg, transparent, var(--border-light), transparent);
+    margin: 0 4px;
+  }
+
+  .theme-toggle-btn {
+    position: relative;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    border: 2px solid var(--border-light);
+    color: var(--text-primary);
+    padding: 0;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.25rem;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  body.light-mode .theme-toggle-btn {
+    background: linear-gradient(135deg, rgba(255, 200, 0, 0.15), rgba(255, 200, 0, 0.08));
+    border-color: rgba(255, 200, 0, 0.3);
+  }
+
+  .theme-toggle-btn:hover {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.1));
+    border-color: var(--accent-orange);
+    transform: translateY(-2px) rotate(15deg);
+    box-shadow: 0 6px 20px rgba(255, 153, 0, 0.4);
+  }
+
+  body.light-mode .theme-toggle-btn:hover {
+    background: linear-gradient(135deg, rgba(255, 200, 0, 0.25), rgba(255, 200, 0, 0.15));
+    border-color: #ffc800;
+    box-shadow: 0 6px 20px rgba(255, 200, 0, 0.5);
+  }
+
+  .theme-icon {
+    font-size: 1.25rem;
+    transition: transform 0.3s ease;
+  }
+
+  .header-btn-profile {
+    background: linear-gradient(135deg, rgba(255, 153, 0, 0.15), rgba(255, 153, 0, 0.1));
+    border: 2px solid rgba(255, 153, 0, 0.3);
+    color: var(--text-primary);
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  .header-btn-profile:hover {
+    background: linear-gradient(135deg, rgba(255, 153, 0, 0.25), rgba(255, 153, 0, 0.15));
+    border-color: var(--accent-orange);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(255, 153, 0, 0.5);
+  }
+
+  #profileAvatar { font-size: 1.1rem; }
+
+  .menu-toggle {
+    display: none;
+    background: none;
+    border: 2px solid var(--border-light);
+    color: var(--text-primary);
+    font-size: 1.25rem;
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .menu-toggle:hover {
+    border-color: var(--accent-orange);
+    background: rgba(255, 153, 0, 0.1);
+  }
+
+  /* =============================
+     LAYOUT
+  ============================= */
+  .console-container {
+    display: flex;
+    min-height: calc(100vh - var(--header-height));
+  }
+
+  /* =============================
+     SIDEBAR
+  ============================= */
+  .sidebar {
+    width: var(--sidebar-width);
+    background-color: var(--bg-secondary);
+    border-right: 1px solid var(--border-color);
+    overflow-y: auto;
+    overflow-x: hidden;
+    transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+  }
+
+  .sidebar.collapsed { width: var(--sidebar-collapsed-width); }
+
+  .sidebar-toggle {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    height: 48px;
+    background-color: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.2s;
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+
+  .sidebar-toggle:hover {
+    background-color: var(--bg-tertiary);
+    color: var(--accent-orange);
+  }
+
+  .toggle-icon { transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
+  .sidebar.collapsed .toggle-icon { transform: rotate(180deg); }
+
+  .sidebar-content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .sidebar-section {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .sidebar-title {
+    color: var(--text-muted);
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 0 20px 10px;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 1;
+  }
+
+  .sidebar.collapsed .sidebar-title { opacity: 0; padding: 0 10px; }
+
+  .sidebar-item {
+    color: var(--text-secondary);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.875rem;
+    border-left: 3px solid transparent;
+    white-space: nowrap;
+    position: relative;
+    margin: 2px 0;
+  }
+
+  .sidebar-item:hover {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    border-left-color: var(--accent-blue);
+  }
+
+  .sidebar-item.active {
+    background-color: var(--bg-tertiary);
+    border-left-color: var(--accent-orange);
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .sidebar-item-icon {
+    width: 22px;
+    height: 22px;
+    text-align: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .sidebar-item-text {
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 1;
+  }
+
+  .sidebar.collapsed .sidebar-item-text { opacity: 0; width: 0; overflow: hidden; }
+  .sidebar.collapsed .sidebar-item { justify-content: center; padding: 12px 0; gap: 0; }
+
+  .sidebar.collapsed .sidebar-item::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: calc(100% + 12px);
+    top: 50%;
+    transform: translateY(-50%) translateX(-10px);
+    background: linear-gradient(135deg, var(--bg-header), #1a2433);
+    color: var(--text-primary);
+    padding: 8px 14px;
+    border-radius: 6px;
+    white-space: nowrap;
+    font-size: 0.875rem;
+    z-index: 1000;
+    box-shadow: var(--shadow-lg);
+    pointer-events: none;
+    opacity: 0;
+    transition: all 0.2s ease;
+    border: 1px solid var(--border-light);
+  }
+
+  .sidebar.collapsed .sidebar-item:hover::before {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+
+  /* Mobile overlay */
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 998;
+    backdrop-filter: blur(2px);
+  }
+
+  .sidebar-overlay.active { display: block; }
+
+  /* =============================
+     MAIN CONTENT
+  ============================= */
+  .content-area {
+    flex: 1;
+    background-color: var(--bg-primary);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 32px;
+    min-width: 0;
+  }
+
+  .page-header {
+    margin-bottom: 36px;
+    text-align: left;
+  }
+
+  .page-title {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    color: var(--text-primary);
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+  }
+
+  .page-subtitle {
+    font-size: 1.0625rem;
+    color: var(--text-secondary);
+    font-weight: 400;
+  }
+
+  .section-header { margin-bottom: 24px; }
+
+  .section-title {
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
+    font-weight: 600;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-title::before {
+    content: '';
+    width: 4px;
+    height: 28px;
+    background: linear-gradient(180deg, var(--accent-orange), #ffad33);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  /* =============================
+     DIFFICULTY CARDS
+  ============================= */
+  .difficulty-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 24px;
+  }
+
+  .difficulty-card-modern {
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+    border: 2px solid var(--border-color);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    box-shadow: var(--shadow-md);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .difficulty-card-modern::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--accent-orange), #ffad33, var(--accent-orange));
+    background-size: 200% 100%;
+    animation: shimmer 3s linear infinite;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  .difficulty-card-modern:hover::before { opacity: 1; }
+
+  .difficulty-card-modern:hover {
+    transform: translateY(-6px) scale(1.01);
+    border-color: var(--accent-orange);
+    box-shadow: 0 12px 32px rgba(255, 153, 0, 0.3);
+  }
+
+  .card-header {
+    padding: 24px 22px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: linear-gradient(135deg, rgba(255, 153, 0, 0.05), transparent);
+  }
+
+  .difficulty-icon {
+    font-size: 40px;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  .difficulty-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.5px;
+  }
+
+  .card-content {
+    padding: 22px;
+    flex: 1;
+  }
+
+  .difficulty-desc {
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+  }
+
+  .difficulty-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .difficulty-features li {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    padding-left: 26px;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .difficulty-features li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--success-color);
+    font-weight: 700;
+    font-size: 1rem;
+  }
+
+  .card-footer {
+    padding: 20px 22px;
+    border-top: 1px solid var(--border-color);
+    background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.08));
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .select-difficulty-btn {
+    width: 100%;
+    background: linear-gradient(135deg, var(--accent-orange), #ec7211);
+    border: none;
+    color: #000;
+    padding: 14px 24px;
+    border-radius: 8px;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 12px rgba(255, 153, 0, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .select-difficulty-btn:hover {
+    background: linear-gradient(135deg, #ec7211, var(--accent-orange));
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 153, 0, 0.4);
+  }
+
+  .select-difficulty-btn.practice-btn {
+    background: linear-gradient(135deg, var(--accent-blue), #0d5baa);
+    box-shadow: 0 4px 12px rgba(9, 114, 211, 0.3);
+  }
+
+  .select-difficulty-btn.practice-btn:hover {
+    background: linear-gradient(135deg, #0d5baa, var(--accent-blue));
+    box-shadow: 0 8px 20px rgba(9, 114, 211, 0.4);
+  }
+
+  .nav-link {
+    color: var(--accent-blue);
+    text-decoration: none;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.2s;
+    padding: 6px 0;
+  }
+
+  .nav-link:hover { color: var(--accent-blue-hover); gap: 10px; }
+
+  /* =============================
+     SCREENS
+  ============================= */
+  .screen { display: none; }
+
+  .screen.active {
+    display: block;
+    animation: fadeIn 0.4s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* =============================
+     QUIZ SCREEN
+  ============================= */
+  .quiz-progress-header {
+    background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    padding: 22px 24px;
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    box-shadow: var(--shadow-md);
+    flex-wrap: wrap;
+  }
+
+  .progress-info { flex: 1; min-width: 200px; }
+
+  .question-counter {
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+
+  .progress-bar {
+    background-color: var(--bg-tertiary);
+    height: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .progress-fill {
+    background: linear-gradient(90deg, var(--accent-orange), #ffad33);
+    height: 100%;
+    width: 0%;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 10px rgba(255, 153, 0, 0.5);
+  }
+
+  .quiz-timer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.375rem;
+    color: var(--text-primary);
+    padding: 10px 20px;
+    background: var(--bg-tertiary);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .quiz-timer.warning {
+    border-color: var(--accent-orange);
+    color: var(--accent-orange);
+    animation: pulse 1s ease-in-out infinite;
+  }
+
+  .quiz-timer.critical {
+    border-color: var(--error-color);
+    color: var(--error-color);
+    animation: pulse 0.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+
+  /* =============================
+     QUESTION CARD
+  ============================= */
+  .question-card {
+    background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    padding: 28px 28px 28px 34px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .question-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 6px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--accent-orange), #ffad33);
+  }
+
+  .question-header {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .question-category,
+  .question-difficulty {
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+
+  .question-category {
+    background: linear-gradient(135deg, rgba(9, 114, 211, 0.2), rgba(9, 114, 211, 0.1));
+    color: var(--accent-blue);
+    border: 1px solid var(--accent-blue);
+  }
+
+  .question-difficulty {
+    background: linear-gradient(135deg, rgba(255, 153, 0, 0.2), rgba(255, 153, 0, 0.1));
+    color: var(--accent-orange);
+    border: 1px solid var(--accent-orange);
+  }
+
+  .bookmark-btn {
+    margin-left: auto;
+    background: linear-gradient(135deg, rgba(255, 153, 0, 0.1), transparent);
+    border: 2px solid var(--border-color);
+    color: var(--text-secondary);
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+  }
+
+  .bookmark-btn:hover {
+    border-color: var(--accent-orange);
+    color: var(--accent-orange);
+    transform: translateY(-2px);
+  }
+
+  .bookmark-btn.bookmarked {
+    background: linear-gradient(135deg, var(--accent-orange), #ec7211);
+    border-color: var(--accent-orange);
+    color: #000;
+  }
+
+  .question-text {
+    font-size: clamp(1rem, 2.5vw, 1.375rem);
+    font-weight: 500;
+    line-height: 1.6;
+    color: var(--text-primary);
+  }
+
+  /* =============================
+     OPTIONS
+  ============================= */
+  .options-grid-modern {
+    display: grid;
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+
+  .option-card {
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    padding: 18px 20px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .option-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, var(--accent-orange), #ffad33);
+    transform: scaleY(0);
+    transition: transform 0.3s;
+  }
+
+  .option-card:hover {
+    border-color: var(--accent-orange);
+    background-color: var(--bg-tertiary);
+    transform: translateX(6px);
+  }
+
+  .option-card:hover::before { transform: scaleY(1); }
+
+  .option-card.selected {
+    border-color: var(--accent-orange);
+    background: linear-gradient(135deg, rgba(255, 153, 0, 0.1), transparent);
+    box-shadow: 0 4px 12px rgba(255, 153, 0, 0.2);
+  }
+
+  .option-card.selected::before { transform: scaleY(1); }
+
+  .option-card.correct {
+    border-color: var(--success-color);
+    background: linear-gradient(135deg, rgba(30, 142, 62, 0.15), transparent);
+    box-shadow: 0 4px 12px rgba(30, 142, 62, 0.3);
+  }
+
+  .option-card.correct::before { background: var(--success-color); transform: scaleY(1); }
+
+  .option-card.incorrect {
+    border-color: var(--error-color);
+    background: linear-gradient(135deg, rgba(209, 50, 18, 0.15), transparent);
+    box-shadow: 0 4px 12px rgba(209, 50, 18, 0.3);
+  }
+
+  .option-card.incorrect::before { background: var(--error-color); transform: scaleY(1); }
+
+  .option-card.disabled { pointer-events: none; opacity: 0.75; }
+
+  .option-letter {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-secondary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1rem;
+    flex-shrink: 0;
+    border: 2px solid var(--border-color);
+  }
+
+  .option-card.selected .option-letter {
+    background: linear-gradient(135deg, var(--accent-orange), #ec7211);
+    color: #000;
+    border-color: var(--accent-orange);
+  }
+
+  .option-card.correct .option-letter {
+    background: var(--success-color);
+    color: #fff;
+    border-color: var(--success-color);
+  }
+
+  .option-card.incorrect .option-letter {
+    background: var(--error-color);
+    color: #fff;
+    border-color: var(--error-color);
+  }
+
+  .option-text {
+    flex: 1;
+    font-size: clamp(0.9rem, 2vw, 1.0625rem);
+    line-height: 1.5;
+  }
+
+  /* =============================
+     EXPLANATION
+  ============================= */
+  .explanation-box {
+    background: linear-gradient(135deg, rgba(9, 114, 211, 0.1), transparent);
+    border: 2px solid var(--accent-blue);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 24px;
+    display: none;
+  }
+
+  .explanation-box.show {
+    display: block;
+    animation: fadeIn 0.4s ease-in-out;
+  }
+
+  .explanation-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--accent-blue);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .explanation-text {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* =============================
+     QUIZ ACTIONS
+  ============================= */
+  .quiz-actions {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary-large {
+    background: linear-gradient(135deg, var(--accent-orange), #ec7211);
+    border: none;
+    color: #000;
+    padding: 14px 32px;
+    border-radius: 8px;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(255, 153, 0, 0.3);
+    white-space: nowrap;
+  }
+
+  .btn-primary-large:hover:not(:disabled) {
+    background: linear-gradient(135deg, #ec7211, var(--accent-orange));
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 153, 0, 0.4);
+  }
+
+  .btn-primary-large:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  .btn-secondary-large {
+    background-color: var(--bg-secondary);
+    border: 2px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 14px 32px;
+    border-radius: 8px;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+  }
+
+  .btn-secondary-large:hover:not(:disabled) {
+    background-color: var(--bg-tertiary);
+    border-color: var(--accent-orange);
+    transform: translateY(-2px);
+  }
+
+  .btn-secondary-large:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  .btn-outline-large {
+    background-color: transparent;
+    border: 2px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 14px 32px;
+    border-radius: 8px;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+  }
+
+  .btn-outline-large:hover {
+    background-color: var(--bg-tertiary);
+    border-color: var(--accent-blue);
+    transform: translateY(-2px);
+  }
+
+  .hidden { display: none !important; }
+
+  .quiz-navigation {
+    display: flex;
+    gap: 14px;
+    padding-top: 24px;
+    border-top: 2px solid var(--border-color);
+    flex-wrap: wrap;
+  }
+
+  /* =============================
+     RESULTS SCREEN
+  ============================= */
+  .results-container { max-width: 960px; margin: 0 auto; }
+
+  .results-header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+
+  .celebration-icon {
+    font-size: 80px;
+    margin-bottom: 20px;
+    animation: bounce 1s ease-in-out;
+    display: block;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-16px); }
+  }
+
+  .results-title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -1px;
+    margin-bottom: 12px;
+  }
+
+  .score-display {
+    background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+    border: 2px solid var(--border-color);
+    border-radius: 16px;
+    padding: 36px 32px;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 60px;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    overflow: hidden;
+    flex-wrap: wrap;
+  }
+
+  .score-display::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--accent-orange), #ffad33, var(--accent-blue));
+    background-size: 200% 100%;
+    animation: shimmer 3s linear infinite;
+  }
+
+  .score-circle-large { text-align: center; }
+
+  .score-number {
+    font-size: clamp(3rem, 8vw, 5rem);
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--accent-orange), #ffad33);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 6px;
+    line-height: 1;
+  }
+
+  .score-label {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 700;
+  }
+
+  .score-breakdown { display: flex; gap: 36px; flex-wrap: wrap; justify-content: center; }
+
+  .score-item { text-align: center; }
+
+  .score-value {
+    display: block;
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+  }
+
+  .score-desc {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .results-message {
+    text-align: center;
+    margin-bottom: 32px;
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .results-actions-modern {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin-bottom: 36px;
+    flex-wrap: wrap;
+  }
+
+  .performance-insights {
+    background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+    border: 2px solid var(--border-color);
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: var(--shadow-md);
+  }
+
+  .performance-insights h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 24px;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .performance-insights h3::before { content: '📊'; font-size: 1.75rem; }
+
+  .insights-grid { display: grid; gap: 14px; }
+
+  .insight-item {
+    padding: 20px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    border-left: 6px solid var(--accent-orange);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s;
+  }
+
+  .insight-item:hover { transform: translateX(6px); box-shadow: var(--shadow-md); }
+
+  .insight-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+
+  .insight-desc {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  /* =============================
+     BOOKMARKED SECTION
+  ============================= */
+  .bookmarked-section {
+    background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+    border: 2px solid var(--border-color);
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: var(--shadow-md);
+    margin-top: 48px;
+  }
+
+  .bookmarked-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .bookmarked-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .bookmarked-title::before { content: '🔖'; font-size: 1.75rem; }
+
+  .bookmarked-count {
+    background: linear-gradient(135deg, var(--accent-orange), #ec7211);
+    color: #000;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 700;
+  }
+
+  .bookmarked-empty {
+    text-align: center;
+    padding: 36px 20px;
+    color: var(--text-secondary);
+  }
+
+  .bookmarked-empty-icon { font-size: 52px; margin-bottom: 14px; opacity: 0.5; }
+  .bookmarked-empty-text { font-size: 1rem; line-height: 1.6; }
+
+  .bookmarked-question-item {
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    padding: 18px;
+    margin-bottom: 14px;
+    transition: all 0.3s;
+  }
+
+  .bookmarked-question-item:hover {
+    border-color: var(--accent-orange);
+    transform: translateX(6px);
+  }
+
+  .bookmarked-question-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 10px;
+  }
+
+  .bookmarked-question-text {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    flex: 1;
+    line-height: 1.5;
+  }
+
+  .remove-bookmark-btn {
+    background: linear-gradient(135deg, rgba(209, 50, 18, 0.2), rgba(209, 50, 18, 0.1));
+    border: 1px solid var(--error-color);
+    color: var(--error-color);
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .remove-bookmark-btn:hover { background: var(--error-color); color: #fff; }
+
+  .bookmarked-question-meta {
+    display: flex;
+    gap: 12px;
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    flex-wrap: wrap;
+  }
+
+  /* =============================
+     SCROLLBAR
+  ============================= */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg-secondary); }
+  ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--border-light); }
+
+  /* =============================
+     RESPONSIVE: 1200px
+  ============================= */
+  @media (max-width: 1200px) {
+    .difficulty-cards { grid-template-columns: 1fr; gap: 20px; }
+    .quick-nav { gap: 6px; }
+    .nav-pill { padding: 7px 11px; font-size: 0.8125rem; }
+  }
+
+  /* =============================
+     RESPONSIVE: TABLET (1024px)
+  ============================= */
+  @media (max-width: 1024px) {
+    .quick-nav { display: none; }
+
+    .menu-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sidebar {
+      position: fixed;
+      left: -280px;
+      top: var(--header-height);
+      height: calc(100vh - var(--header-height));
+      z-index: 999;
+      transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: var(--shadow-lg);
+      width: var(--sidebar-width) !important;
+    }
+
+    .sidebar.open { left: 0; }
+
+    .sidebar.collapsed { width: var(--sidebar-width) !important; }
+    .sidebar.collapsed .sidebar-item-text { opacity: 1; width: auto; overflow: visible; }
+    .sidebar.collapsed .sidebar-title { opacity: 1; padding: 0 20px 10px; }
+    .sidebar.collapsed .sidebar-item { justify-content: flex-start; padding: 12px 20px; gap: 14px; }
+    .sidebar-toggle { display: none; }
+
+    .difficulty-cards { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* =============================
+     RESPONSIVE: MOBILE (768px)
+  ============================= */
+  @media (max-width: 768px) {
+    :root { --header-height: 60px; }
+
+    .header-content { padding: 0 14px; gap: 10px; }
+
+    .console-home-title { font-size: 1rem; gap: 7px; }
+    .title-icon { font-size: 1.125rem; }
+
+    .theme-toggle-btn { width: 40px; height: 40px; font-size: 1.125rem; }
+    .theme-icon { font-size: 1.125rem; }
+
+    .header-btn-profile { padding: 7px 10px; font-size: 0.8125rem; }
+    #profileAvatar { font-size: 1rem; }
+    #profileName { display: none !important; }
+
+    .header-divider { height: 28px; margin: 0 2px; }
+
+    .content-area { padding: 16px; }
+
+    .difficulty-cards { grid-template-columns: 1fr; gap: 16px; }
+
+    .quiz-progress-header {
+      padding: 16px;
+      gap: 14px;
+    }
+
+    .quiz-timer {
+      font-size: 1.125rem;
+      padding: 8px 14px;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .progress-info { min-width: 100%; }
+
+    .question-card { padding: 20px 20px 20px 26px; }
+
+    .question-header { gap: 8px; }
+    .question-category, .question-difficulty { padding: 5px 10px; font-size: 0.6875rem; }
+
+    .bookmark-btn { padding: 5px 10px; font-size: 0.75rem; gap: 5px; }
+    #bookmarkText { display: none; }
+
+    .option-card { padding: 14px 16px; gap: 12px; }
+    .option-letter { width: 34px; height: 34px; font-size: 0.875rem; }
+
+    .quiz-actions { flex-direction: column; gap: 10px; }
+    .btn-primary-large,
+    .btn-secondary-large,
+    .btn-outline-large {
+      width: 100%;
+      justify-content: center;
+      padding: 14px 20px;
+    }
+
+    .quiz-navigation { flex-direction: column; gap: 10px; }
+
+    .score-display { gap: 28px; padding: 24px 20px; }
+    .score-breakdown { gap: 20px; }
+
+    .results-actions-modern { flex-direction: column; align-items: center; }
+    .results-actions-modern .btn-primary-large,
+    .results-actions-modern .btn-secondary-large,
+    .results-actions-modern .btn-outline-large { width: 100%; max-width: 360px; }
+
+    .bookmarked-section { padding: 20px; }
+    .bookmarked-title { font-size: 1.25rem; }
+    .bookmarked-question-header { flex-direction: column; gap: 10px; }
+    .remove-bookmark-btn { align-self: flex-start; }
+  }
+
+  /* =============================
+     RESPONSIVE: SMALL MOBILE (480px)
+  ============================= */
+  @media (max-width: 480px) {
+    :root { --header-height: 56px; }
+
+    .header-content { padding: 0 12px; gap: 8px; }
+    .console-home-title span:last-child { display: none; }
+    .header-divider { display: none; }
+
+    .content-area { padding: 12px; }
+
+    .card-header { padding: 18px; gap: 12px; }
+    .difficulty-icon { font-size: 32px; }
+    .difficulty-name { font-size: 1.25rem; }
+    .card-content { padding: 18px; }
+    .card-footer { padding: 16px 18px; }
+
+    .performance-insights { padding: 20px; }
+    .bookmarked-section { padding: 16px; }
+  }
+
+  @media (max-width: 360px) {
+    .score-breakdown { gap: 14px; }
+    .quiz-timer { font-size: 1rem; }
+  }
+</style>
+</head>
+<body>
+  <!-- AWS Console Header -->
+  <header class="aws-header">
+    <div class="header-content">
+      <button class="menu-toggle" onclick="toggleSidebar()" aria-label="Toggle menu">☰</button>
+
+      <div class="console-title-container">
+        <h1 class="console-home-title">
+          <span class="title-icon">🧠</span>
+          <span>Quizzes</span>
+        </h1>
+      </div>
+
+      <div class="quick-nav">
+        <div class="nav-pill" onclick="window.location.href='index.html'"><span>🏠</span><span>Home</span></div>
+        <div class="nav-pill" onclick="window.location.href='categories.html'"><span>🗂️</span><span>Services</span></div>
+        <div class="nav-pill active" onclick="window.location.href='quizzes.html'"><span>🧠</span><span>Quizzes</span></div>
+        <div class="nav-pill" onclick="window.location.href='keywords.html'"><span>🔑</span><span>Keywords</span></div>
+        <div class="nav-pill" onclick="window.location.href='architectural-diagrams.html'"><span>🏗️</span><span>Diagrams</span></div>
+        <div class="nav-pill" onclick="window.location.href='roadmap.html'"><span>🗺️</span><span>Roadmap</span></div>
+      </div>
+
+      <div class="header-right">
+        <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeToggleBtn" title="Toggle Theme">
+          <span class="theme-icon" id="themeIcon">🌙</span>
+        </button>
+        <div class="header-divider"></div>
+        <div class="header-btn-profile" onclick="toggleUserMenu()" title="Account" id="profileBtn">
+          <span id="profileAvatar">👤</span>
+          <span id="profileName"></span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sidebar overlay -->
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+  <!-- Main Console Container -->
+  <div class="console-container">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-toggle" onclick="toggleSidebarCollapse()" title="Toggle sidebar">
+        <span class="toggle-icon">◀</span>
+      </div>
+      <div class="sidebar-content">
+        <div class="sidebar-section">
+          <div class="sidebar-title">Navigation</div>
+          <div class="sidebar-item" onclick="window.location.href='index.html'" data-tooltip="Console Home">
+            <span class="sidebar-item-icon">🏠</span>
+            <span class="sidebar-item-text">Console Home</span>
+          </div>
+          <div class="sidebar-item" onclick="window.location.href='categories.html'" data-tooltip="Service Cards">
+            <span class="sidebar-item-icon">🗂️</span>
+            <span class="sidebar-item-text">Service Cards</span>
+          </div>
+          <div class="sidebar-item active" onclick="window.location.href='quizzes.html'" data-tooltip="Quizzes">
+            <span class="sidebar-item-icon">🧠</span>
+            <span class="sidebar-item-text">Quizzes</span>
+          </div>
+          <div class="sidebar-item" onclick="window.location.href='keywords.html'" data-tooltip="Keywords">
+            <span class="sidebar-item-icon">🔑</span>
+            <span class="sidebar-item-text">Keywords</span>
+          </div>
+          <div class="sidebar-item" onclick="window.location.href='architectural-diagrams.html'" data-tooltip="Diagrams">
+            <span class="sidebar-item-icon">🏗️</span>
+            <span class="sidebar-item-text">Diagrams</span>
+          </div>
+          <div class="sidebar-item" onclick="window.location.href='roadmap.html'" data-tooltip="Roadmap">
+            <span class="sidebar-item-icon">🗺️</span>
+            <span class="sidebar-item-text">Roadmap</span>
+          </div>
+        </div>
+        <div class="sidebar-section">
+          <div class="sidebar-title">Resources</div>
+          <div class="sidebar-item" onclick="window.open('https://docs.aws.amazon.com/', '_blank')" data-tooltip="Documentation">
+            <span class="sidebar-item-icon">📚</span>
+            <span class="sidebar-item-text">AWS Documentation</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="content-area">
+
+      <!-- SELECTION SCREEN -->
+      <div id="categoriesPage" class="screen active">
+        <div class="page-header">
+          <h1 class="page-title">AWS Quizzes</h1>
+          <p class="page-subtitle">Master AWS with Interactive Quizzes</p>
+        </div>
+
+        <div class="section-header">
+          <h2 class="section-title">Choose Your Challenge Level</h2>
+        </div>
+
+        <div class="difficulty-cards">
+          <!-- Beginner -->
+          <div class="difficulty-card-modern">
+            <div class="card-header">
+              <div class="difficulty-icon">🌱</div>
+              <div class="difficulty-name">Beginner</div>
+            </div>
+            <div class="card-content">
+              <div class="difficulty-desc">Perfect for AWS newcomers starting their journey</div>
+              <ul class="difficulty-features">
+                <li>25 carefully crafted questions</li>
+                <li>Fundamental AWS services and basics</li>
+                <li>Timed mode: 25 minutes</li>
+              </ul>
+            </div>
+            <div class="card-footer">
+              <button class="select-difficulty-btn" data-difficulty="beginner" data-mode="timed">⏱ Timed Mode (25:00)</button>
+              <button class="select-difficulty-btn practice-btn" data-difficulty="beginner" data-mode="practice">📖 Practice Mode (Untimed)</button>
+              <a href="index.html" class="nav-link">← Back to Dashboard</a>
+            </div>
+          </div>
+
+          <!-- Intermediate -->
+          <div class="difficulty-card-modern">
+            <div class="card-header">
+              <div class="difficulty-icon">⚡</div>
+              <div class="difficulty-name">Intermediate</div>
+            </div>
+            <div class="card-content">
+              <div class="difficulty-desc">For those with hands-on AWS experience</div>
+              <ul class="difficulty-features">
+                <li>25 challenging questions</li>
+                <li>Real-world scenarios and best practices</li>
+                <li>Timed mode: 25 minutes</li>
+              </ul>
+            </div>
+            <div class="card-footer">
+              <button class="select-difficulty-btn" data-difficulty="intermediate" data-mode="timed">⏱ Timed Mode (25:00)</button>
+              <button class="select-difficulty-btn practice-btn" data-difficulty="intermediate" data-mode="practice">📖 Practice Mode (Untimed)</button>
+              <a href="index.html" class="nav-link">← Back to Dashboard</a>
+            </div>
+          </div>
+
+          <!-- Advanced -->
+          <div class="difficulty-card-modern">
+            <div class="card-header">
+              <div class="difficulty-icon">👑</div>
+              <div class="difficulty-name">Advanced</div>
+            </div>
+            <div class="card-content">
+              <div class="difficulty-desc">For AWS professionals and architects</div>
+              <ul class="difficulty-features">
+                <li>25 expert-level questions</li>
+                <li>Enterprise-level challenges and architecture</li>
+                <li>Timed mode: 25 minutes</li>
+              </ul>
+            </div>
+            <div class="card-footer">
+              <button class="select-difficulty-btn" data-difficulty="advanced" data-mode="timed">⏱ Timed Mode (25:00)</button>
+              <button class="select-difficulty-btn practice-btn" data-difficulty="advanced" data-mode="practice">📖 Practice Mode (Untimed)</button>
+              <a href="index.html" class="nav-link">← Back to Dashboard</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bookmarked Questions -->
+        <div id="bookmarkedSection" class="bookmarked-section">
+          <div class="bookmarked-header">
+            <h3 class="bookmarked-title">Bookmarked Questions</h3>
+            <div class="bookmarked-count" id="bookmarkedCount">0</div>
+          </div>
+          <div id="bookmarkedList">
+            <div class="bookmarked-empty">
+              <div class="bookmarked-empty-icon">🔖</div>
+              <div class="bookmarked-empty-text">No bookmarked questions yet.<br>Bookmark challenging questions while taking quizzes to review them later!</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUIZ SCREEN -->
+      <div id="quizScreen" class="screen">
+        <div class="quiz-progress-header">
+          <div class="progress-info">
+            <div class="question-counter">
+              Question <span id="currentQuestionNum">1</span> of <span id="totalQuestionNum">25</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" id="progressFill"></div>
+            </div>
+          </div>
+          <div class="quiz-timer" id="quizTimer">
+            <span class="timer-icon">⏱️</span>
+            <span class="timer-text" id="timerText">25:00</span>
+          </div>
+        </div>
+
+        <div class="quiz-content">
+          <div class="question-card">
+            <div class="question-header">
+              <div class="question-category" id="questionCategory">AWS Fundamentals</div>
+              <div class="question-difficulty" id="questionDifficulty">Beginner</div>
+              <button class="bookmark-btn" id="bookmarkBtn" onclick="toggleBookmark()">
+                <span id="bookmarkIcon">🔖</span>
+                <span id="bookmarkText">Bookmark</span>
+              </button>
+            </div>
+            <h2 class="question-text" id="questionText">Loading question...</h2>
+          </div>
+
+          <div class="options-grid-modern" id="optionsGrid"></div>
+
+          <div class="explanation-box" id="explanationBox">
+            <div class="explanation-title">
+              <span id="explanationIcon">💡</span>
+              <span id="explanationLabel">Explanation</span>
+            </div>
+            <div class="explanation-text" id="explanationText"></div>
+          </div>
+
+          <div class="quiz-actions">
+            <button id="checkAnswerBtn" class="btn-primary-large hidden" disabled>
+              <span>✓</span> Check Answer
+            </button>
+            <button id="skipQuestionBtn" class="btn-secondary-large" disabled>
+              <span>→</span> Next Question
+            </button>
+            <button id="finishQuizBtn" class="btn-outline-large hidden">
+              <span>🏁</span> Finish Quiz
+            </button>
+          </div>
+
+          <div class="quiz-navigation">
+            <button class="btn-secondary-large" onclick="window.location.href='index.html'">
+              <span>🏠</span> Back to Dashboard
+            </button>
+            <button class="btn-outline-large" onclick="goToSelection()">
+              <span>📝</span> Back to Quiz Selection
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESULTS SCREEN -->
+      <div id="resultsScreen" class="screen">
+        <div class="results-container">
+          <div class="results-header">
+            <span class="celebration-icon" id="celebrationIcon">🎉</span>
+            <h1 class="results-title" id="resultsTitle">Quiz Complete!</h1>
+          </div>
+
+          <div class="score-display">
+            <div class="score-circle-large">
+              <div class="score-number" id="finalScore">0</div>
+              <div class="score-label">Score</div>
+            </div>
+            <div class="score-breakdown">
+              <div class="score-item">
+                <span class="score-value" id="correctAnswers">0</span>
+                <span class="score-desc">Correct</span>
+              </div>
+              <div class="score-item">
+                <span class="score-value" id="totalQuestionsResult">25</span>
+                <span class="score-desc">Total</span>
+              </div>
+              <div class="score-item">
+                <span class="score-value" id="accuracyPercent">0%</span>
+                <span class="score-desc">Accuracy</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="results-message">
+            <p id="resultsMessage">Great job! Keep practicing to master AWS.</p>
+          </div>
+
+          <div class="results-actions-modern">
+            <button id="retakeQuizBtn" class="btn-primary-large">
+              <span>🔄</span> Retake Quiz
+            </button>
+            <button id="viewDashboardBtn" class="btn-secondary-large">
+              <span>🏠</span> Back to Dashboard
+            </button>
+            <button id="shareResultsBtn" class="btn-outline-large">
+              <span>📤</span> Share Results
+            </button>
+          </div>
+
+          <div class="performance-insights">
+            <h3>Performance Insights</h3>
+            <div class="insights-grid" id="insightsGrid"></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end content-area -->
+  </div><!-- end console-container -->
+
+  <script>
+    // =============================
+    // QUIZ DATA
+    // =============================
+    const quizData = {
+      beginner: [
+        { question: "What does EC2 stand for in AWS?", options: ["Elastic Compute Cloud", "Enhanced Cloud Computing", "Easy Cloud Configuration", "Elastic Container Cloud"], correct: 0, category: "AWS Fundamentals", explanation: "EC2 stands for Elastic Compute Cloud. It's AWS's web service that provides resizable compute capacity in the cloud, allowing you to run virtual servers." },
+        { question: "Which AWS service is used for object storage?", options: ["EBS", "S3", "RDS", "DynamoDB"], correct: 1, category: "Storage", explanation: "Amazon S3 (Simple Storage Service) is used for object storage. It's designed to store and retrieve any amount of data from anywhere on the web." },
+        { question: "What is the primary purpose of AWS IAM?", options: ["Data storage", "Identity and access management", "Content delivery", "Database management"], correct: 1, category: "Security", explanation: "IAM (Identity and Access Management) is used to securely control access to AWS resources. It allows you to manage users, groups, and permissions." },
+        { question: "Which service provides a managed relational database?", options: ["DynamoDB", "S3", "RDS", "EC2"], correct: 2, category: "Database", explanation: "Amazon RDS (Relational Database Service) is a managed service that makes it easy to set up, operate, and scale relational databases in the cloud." },
+        { question: "What does VPC stand for?", options: ["Virtual Private Cloud", "Very Private Computing", "Virtual Public Cloud", "Verified Private Connection"], correct: 0, category: "Networking", explanation: "VPC stands for Virtual Private Cloud. It allows you to launch AWS resources in a logically isolated virtual network that you define." },
+        { question: "Which AWS service is used for DNS management?", options: ["CloudFront", "Route 53", "Direct Connect", "VPC"], correct: 1, category: "Networking", explanation: "Amazon Route 53 is a highly available and scalable Domain Name System (DNS) web service designed to route end users to applications." },
+        { question: "What is AWS Lambda?", options: ["A database service", "A serverless compute service", "A storage service", "A monitoring service"], correct: 1, category: "Compute", explanation: "AWS Lambda is a serverless compute service that runs your code in response to events and automatically manages the underlying compute resources." },
+        { question: "Which service provides content delivery network capabilities?", options: ["S3", "CloudFront", "EC2", "EBS"], correct: 1, category: "Networking", explanation: "Amazon CloudFront is a fast content delivery network (CDN) service that securely delivers data, videos, applications, and APIs to customers globally." },
+        { question: "What is Amazon CloudWatch used for?", options: ["Data storage", "Monitoring and observability", "Content delivery", "User authentication"], correct: 1, category: "Management", explanation: "Amazon CloudWatch is a monitoring and observability service that provides data and actionable insights for AWS resources and applications." },
+        { question: "Which AWS service provides NoSQL database capabilities?", options: ["RDS", "Redshift", "DynamoDB", "Aurora"], correct: 2, category: "Database", explanation: "Amazon DynamoDB is a fully managed NoSQL database service that provides fast and predictable performance with seamless scalability." },
+        { question: "What does the 'Principle of Least Privilege' refer to?", options: ["IAM users should not be granted any permissions to keep your account safe", "You should grant your users only the permissions they need when they need them and nothing more", "All IAM users should have at least the necessary permissions to access the core AWS services", "All trusted IAM users should have access to any AWS service in the respective AWS account"], correct: 1, category: "Security", explanation: "The Principle of Least Privilege means granting users only the minimum permissions necessary to perform their job functions, reducing security risks." },
+        { question: "Which of the following infrastructure correlates to a VPC's subnet?", options: ["Availability zone", "Edge location", "Region", "Server"], correct: 0, category: "Networking", explanation: "A subnet in a VPC is associated with a specific Availability Zone. Each subnet must reside entirely within one Availability Zone." },
+        { question: "Which AWS service allows you to orchestrate Docker containers in a simple and cost-effective manner?", options: ["AWS Batch", "AWS CodeCommit", "AWS Lambda", "Amazon ECS"], correct: 3, category: "Containers", explanation: "Amazon ECS (Elastic Container Service) is a highly scalable container orchestration service that supports Docker containers and allows you to run applications on a managed cluster." },
+        { question: "Which of the following is NOT a standard design principle when designing systems in AWS?", options: ["Loose coupling", "Disposable resources instead of fixed servers", "Servers, not services", "Design for failure"], correct: 2, category: "AWS Architecture", explanation: "AWS promotes 'Services, not servers' - using managed services instead of managing servers yourself. This is a key cloud architecture principle." },
+        { question: "A company is planning to replace its physical on-premises compute servers with AWS serverless compute services. Which pillar of the AWS Well-Architected Framework does this plan represent?", options: ["Security", "Performance efficiency", "Operational excellence", "Reliability"], correct: 1, category: "Well-Architected Framework", explanation: "Performance efficiency focuses on using IT and computing resources efficiently, including the use of serverless architectures to improve performance." },
+        { question: "Which AWS service or tool should a company use to manage multiple AWS accounts and share Reserved Instances across departments?", options: ["AWS Systems Manager", "Cost Explorer", "AWS Trusted Advisor", "AWS Organizations"], correct: 3, category: "Management", explanation: "AWS Organizations helps you centrally manage and govern multiple AWS accounts, including sharing Reserved Instances across accounts." },
+        { question: "Which of the following is an advantage of using the AWS Cloud?", options: ["Stop guessing about capacity", "AWS manages all compliance needs", "Data is automatically secure", "AWS audits all user data"], correct: 0, category: "Cloud Benefits", explanation: "With AWS, you can scale resources up or down as needed, eliminating the need to guess infrastructure capacity needs in advance." },
+        { question: "What is the recommended approach for deploying updates to a decoupled architecture in AWS?", options: ["Schedule updates during off-peak hours to minimize impact on users", "Use a continuous delivery pipeline to automate testing and deployment", "Roll out updates gradually to a subset of users to ensure stability", "Manually deploy updates to each component individually"], correct: 1, category: "DevOps", explanation: "A continuous delivery pipeline automates the build, test, and deployment process, enabling faster and more reliable updates to decoupled architectures." },
+        { question: "Which IAM entity should be used for long-term programmatic access to AWS?", options: ["IAM Policy", "IAM Group", "IAM User", "IAM Role"], correct: 2, category: "Security", explanation: "IAM Users with access keys are designed for long-term programmatic access. However, IAM roles are preferred for applications running on AWS." },
+        { question: "A company has built an image classification model to predict plant diseases. Which evaluation metric should measure the model's performance?", options: ["R-squared score", "Accuracy", "Root mean squared error (RMSE)", "Learning rate"], correct: 1, category: "Machine Learning", explanation: "Accuracy is the appropriate metric for classification models, measuring the percentage of correct predictions out of all predictions made." },
+        { question: "Which cloud computing deployment model connects infrastructure between cloud-based resources and existing on-premises resources?", options: ["Mixed", "On-premises", "Hybrid", "Cloud"], correct: 2, category: "Cloud Fundamentals", explanation: "A hybrid cloud deployment connects on-premises infrastructure with cloud-based resources, allowing data and applications to move between them." },
+        { question: "If a company migrates to AWS cloud, which service would help them perform identity management similar to their on-premises operations team?", options: ["AWS Outposts", "AWS IAM", "AWS Federation", "Amazon Redshift"], correct: 1, category: "Security", explanation: "AWS IAM (Identity and Access Management) provides comprehensive identity and access control similar to on-premises identity management systems." },
+        { question: "A company has a MySQL database on a single EC2 instance that requires higher availability. What should you suggest?", options: ["Migrate to Amazon RDS with Multi-AZ DB instance deployments", "Add an Application Load Balancer to the EC2 instance", "Upgrade EC2 instance size (Increase CPU & RAM)", "Enable termination protection to avoid outages"], correct: 0, category: "Database", explanation: "Amazon RDS with Multi-AZ provides high availability by automatically replicating data to a standby instance in a different Availability Zone." },
+        { question: "Which AWS service helps improve code quality and identify the most expensive lines of code for microservices?", options: ["AWS CodeBuild", "Amazon CodeGuru", "AWS CodeDeploy", "AWS CodePipeline"], correct: 1, category: "Developer Tools", explanation: "Amazon CodeGuru uses machine learning to provide intelligent recommendations for improving code quality and identifying performance issues." },
+        { question: "Which AWS service allows you to store Docker images?", options: ["AWS Batch", "Amazon ECR", "AWS Lambda", "Amazon ECS"], correct: 1, category: "Containers", explanation: "Amazon ECR (Elastic Container Registry) is a fully managed Docker container registry that makes it easy to store, manage, and deploy Docker container images." }
+      ],
+      intermediate: [
+        { question: "What is the maximum size of an S3 object?", options: ["5 GB", "50 GB", "500 GB", "5 TB"], correct: 3, category: "Storage", explanation: "The maximum size for a single S3 object is 5 TB. For uploads larger than 5 GB, you should use multipart upload." },
+        { question: "Which EC2 pricing model offers the highest discount?", options: ["On-Demand", "Reserved Instances", "Spot Instances", "Dedicated Hosts"], correct: 2, category: "Compute", explanation: "Spot Instances can offer up to 90% discount compared to On-Demand prices, as they utilize unused EC2 capacity." },
+        { question: "What is the default limit for VPCs per region?", options: ["3", "5", "10", "20"], correct: 1, category: "Networking", explanation: "By default, you can create up to 5 VPCs per AWS region. This limit can be increased by submitting a request to AWS Support." },
+        { question: "Which service enables automated backups for RDS?", options: ["CloudWatch", "Lambda", "Automated Snapshots", "S3 Glacier"], correct: 2, category: "Database", explanation: "RDS Automated Snapshots automatically create backups of your database during the backup window you specify." },
+        { question: "What is the purpose of AWS Auto Scaling?", options: ["Cost optimization", "Automatic capacity adjustment", "Security monitoring", "Data replication"], correct: 1, category: "Compute", explanation: "AWS Auto Scaling automatically adjusts capacity to maintain steady, predictable performance at the lowest possible cost." },
+        { question: "Which protocol does AWS Storage Gateway support?", options: ["HTTP only", "NFS and SMB", "FTP only", "SFTP only"], correct: 1, category: "Storage", explanation: "AWS Storage Gateway supports industry-standard protocols including NFS (Network File System) and SMB (Server Message Block)." },
+        { question: "What is the maximum retention period for CloudWatch Logs?", options: ["7 days", "30 days", "1 year", "Indefinite"], correct: 3, category: "Management", explanation: "CloudWatch Logs can retain log data indefinitely. You can configure retention settings from 1 day to 10 years, or never expire." },
+        { question: "Which service provides managed Kubernetes?", options: ["ECS", "EKS", "Fargate", "Lambda"], correct: 1, category: "Compute", explanation: "Amazon EKS (Elastic Kubernetes Service) is a managed Kubernetes service that makes it easy to run Kubernetes on AWS." },
+        { question: "What is AWS Shield?", options: ["Data encryption service", "DDoS protection service", "Firewall service", "Backup service"], correct: 1, category: "Security", explanation: "AWS Shield is a managed DDoS (Distributed Denial of Service) protection service that safeguards applications running on AWS." },
+        { question: "Which storage class is most cost-effective for infrequently accessed data?", options: ["S3 Standard", "S3 Intelligent-Tiering", "S3 Glacier", "S3 One Zone-IA"], correct: 2, category: "Storage", explanation: "S3 Glacier is the most cost-effective for long-term archival of infrequently accessed data, with retrieval times from minutes to hours." },
+        { question: "Which AWS storage can handle huge amounts of key-value pair data with inconsistent schemas for a multi-tier online learning site?", options: ["Amazon Aurora", "Amazon Redshift", "Amazon DynamoDB", "Amazon RDS PostgreSQL"], correct: 2, category: "Database", explanation: "DynamoDB is a NoSQL database perfect for key-value data with flexible schemas, offering high performance at any scale." },
+        { question: "A bank using RDS PostgreSQL needs to generate monthly reports. What should be done to reduce impact on the database with the LEAST effort?", options: ["Create a cross-Region read replica and direct reporting traffic to the replica", "Create a Multi-AZ database and direct reporting traffic to the standby", "Create an Amazon Redshift database and direct reporting traffic to the Amazon Redshift database", "Create a read replica and direct reporting traffic to the replica"], correct: 3, category: "Database", explanation: "Creating a read replica is the simplest solution that offloads read traffic from the primary database without requiring data migration or cross-region setup." },
+        { question: "For HPC applications requiring low latency and high throughput communication between EC2 instances, which configuration meets these requirements?", options: ["Launch the EC2 instances in an Auto Scaling group in two Regions and peer the VPCs", "Use a Spread placement group while launching the EC2 instances in one Availability Zone", "Launch the EC2 instances in an Auto Scaling group spanning multiple Availability Zones", "Use a cluster placement group while launching the EC2 instances in one Availability Zone"], correct: 3, category: "Compute", explanation: "Cluster placement groups provide low-latency network performance necessary for tightly-coupled node-to-node communication in HPC applications." },
+        { question: "To restore a DynamoDB table to the state just before corrupted data was written, what should you use?", options: ["Use DynamoDB on-demand backup to restore the table", "Use DynamoDB Streams to restore the table", "Configure the DynamoDB table as a global table and point the application to use the table from another AWS region", "Use DynamoDB point in time recovery to restore the table"], correct: 3, category: "Database", explanation: "Point-in-time recovery allows you to restore a table to any point in time during the last 35 days, perfect for recovering from data corruption." },
+        { question: "To set up consistent resource provisioning across AWS accounts and regions in AWS Organizations, which option should you recommend?", options: ["Use AWS CloudFormation StackSets to deploy the same template across AWS accounts and regions", "Use AWS CloudFormation stacks to deploy the same template across AWS accounts and regions", "Use AWS Resource Access Manager (RAM) to deploy the same template across AWS accounts and regions", "Use AWS CloudFormation templates to deploy the same template across AWS accounts and regions"], correct: 0, category: "Management", explanation: "CloudFormation StackSets extend the functionality of stacks by enabling you to create, update, or delete stacks across multiple accounts and regions." },
+        { question: "Which AWS service can be used to log all traffic over a VPN connection between AWS and an on-premise data center?", options: ["Amazon VPC flow logs", "ELB access logs", "AWS CloudTrail logs", "Amazon CloudWatch Logs"], correct: 0, category: "Networking", explanation: "VPC Flow Logs capture information about IP traffic going to and from network interfaces in your VPC, including VPN connections." },
+        { question: "What is the MOST secure way to allow an application in a private subnet to access Amazon SNS service endpoints in the same region?", options: ["Use AWS PrivateLink", "Use an egress-only Internet Gateway", "Use a NAT gateway", "Use a NAT instance"], correct: 0, category: "Security", explanation: "AWS PrivateLink provides private connectivity between VPCs and AWS services without exposing traffic to the public internet." },
+        { question: "Users see different subsets of documents when refreshing the website with EC2 instances in different AZs behind an ALB. What should you propose?", options: ["Configure the Application Load Balancer to direct a user to the server with the documents", "Copy the data so both EBS volumes contain all the documents", "Copy the data from both EBS volumes to Amazon EFS. Modify the application to save new documents to Amazon EFS", "Configure the Application Load Balancer to send the request to both servers. Return each document from the correct server"], correct: 2, category: "Storage", explanation: "Amazon EFS provides shared file storage accessible from multiple EC2 instances simultaneously, ensuring all instances see the same data." },
+        { question: "For a university assisting NASA with HPC applications to identify landing sites, which EC2 instance topology should be used?", options: ["Deploy in a cluster placement group for low network latency and high network throughput", "Deploy in a partition placement group for distributed workloads", "Deploy in an Auto Scaling group for high availability", "Deploy in a spread placement group to avoid correlated failures"], correct: 0, category: "Compute", explanation: "Cluster placement groups are recommended for HPC applications that need low network latency and high network throughput." },
+        { question: "For intermediary query results kept for 24 hours and heavily referenced in a data lake staging zone, which is the MOST cost-effective storage strategy?", options: ["Store in S3 Glacier Instant Retrieval storage class", "Store in S3 One Zone-Infrequent Access storage class", "Store in S3 Standard-Infrequent Access storage class", "Store in S3 Standard storage class"], correct: 3, category: "Storage", explanation: "S3 Standard is most cost-effective for frequently accessed data with a short lifecycle, as other classes charge retrieval fees." },
+        { question: "For RDS instances in a private subnet needing internet access for patch downloads (IPv4 only), which is the optimal fully managed solution?", options: ["Configure an Egress-only internet gateway for the resources in the private subnet", "Configure the Internet Gateway of the VPC to be accessible to the private subnet resources", "Configure a NAT instance in the public subnet of the VPC", "Configure a NAT Gateway in the public subnet of the VPC"], correct: 3, category: "Networking", explanation: "NAT Gateway is a fully managed service that enables instances in private subnets to access the internet for updates while remaining private." },
+        { question: "To address in-flight requests getting dropped when an EC2 instance becomes unhealthy behind an ELB, which feature should be used?", options: ["Sticky Sessions", "Cross Zone load balancing", "Idle Timeout", "Connection Draining"], correct: 3, category: "Compute", explanation: "Connection Draining ensures that in-flight requests are completed before an instance is deregistered or becomes unhealthy." },
+        { question: "For a hybrid cloud web log archival solution with cached frequently accessed logs locally, which solution should you recommend?", options: ["Use AWS Volume Gateway - Cached Volume", "Use AWS Direct Connect", "Use AWS Snowball Edge Storage Optimized device", "Use AWS Volume Gateway - Stored Volume"], correct: 0, category: "Storage", explanation: "Volume Gateway in Cached mode stores primary data in S3 while caching frequently accessed data locally for low-latency access." },
+        { question: "For a Lambda function in AWS account A to access an S3 bucket in AWS account B, what should you recommend?", options: ["Create an IAM role for the Lambda function that grants access to the S3 bucket. Set as execution role", "Create an IAM role for the Lambda function that grants access to the S3 bucket. Set as execution role and ensure bucket policy grants access", "AWS Lambda cannot access resources across AWS accounts. Use Identity federation", "The S3 bucket owner should make the bucket public"], correct: 1, category: "Security", explanation: "Cross-account access requires both an IAM role with appropriate permissions and an S3 bucket policy that allows access from the other account." },
+        { question: "For an application running 24x7 needing 80 instances 80% of the time, which is the MOST cost-optimal solution?", options: ["Purchase 80 spot instances. Use Auto Scaling Group for remaining as on-demand", "Purchase 80 on-demand instances. Use Auto Scaling Group with mix of on-demand and spot", "Purchase 80 reserved instances. Use Auto Scaling Group with mix of on-demand and spot", "Purchase 20 on-demand instances. Use Auto Scaling Group for remaining as spot"], correct: 2, category: "Cost Optimization", explanation: "Reserved Instances for the baseline (80% = 64 instances) provide maximum savings, with Auto Scaling using Spot/On-Demand for variable demand." }
+      ],
+      advanced: [
+        { question: "What is the maximum number of read replicas for RDS MySQL?", options: ["3", "5", "10", "15"], correct: 3, category: "Database", explanation: "Amazon RDS for MySQL supports up to 15 read replicas, which can be used to scale read operations and improve application performance." },
+        { question: "Which AWS service provides managed Apache Kafka?", options: ["Kinesis", "MSK", "SQS", "SNS"], correct: 1, category: "Analytics", explanation: "Amazon MSK (Managed Streaming for Apache Kafka) is a fully managed service that makes it easy to build and run applications that use Apache Kafka." },
+        { question: "What is the difference between AWS Config and CloudTrail?", options: ["Config monitors resources, CloudTrail logs API calls", "They are the same", "Config logs events, CloudTrail monitors compliance", "No difference"], correct: 0, category: "Management", explanation: "AWS Config monitors and records AWS resource configurations for compliance, while CloudTrail logs API calls and user activity for auditing." },
+        { question: "Which service enables cross-region replication for DynamoDB?", options: ["Global Tables", "DynamoDB Streams", "DAX", "Backup and Restore"], correct: 0, category: "Database", explanation: "DynamoDB Global Tables provide fully managed, multi-region, and multi-master replication for globally distributed applications." },
+        { question: "What is the minimum storage for an EBS Provisioned IOPS volume?", options: ["1 GB", "4 GB", "10 GB", "100 GB"], correct: 1, category: "Storage", explanation: "EBS Provisioned IOPS (io1/io2) volumes require a minimum size of 4 GB and can scale up to 16 TB." },
+        { question: "Which AWS service can be used to build a data lake?", options: ["Redshift", "S3 + Glue + Athena", "RDS", "DynamoDB"], correct: 1, category: "Analytics", explanation: "A data lake on AWS typically uses S3 for storage, AWS Glue for ETL, and Amazon Athena for querying data using standard SQL." },
+        { question: "What is AWS Transit Gateway used for?", options: ["Content delivery", "Connecting multiple VPCs", "Load balancing", "DNS management"], correct: 1, category: "Networking", explanation: "AWS Transit Gateway acts as a network hub that simplifies connectivity between thousands of VPCs and on-premises networks." },
+        { question: "Which encryption method does S3 use for server-side encryption by default?", options: ["AES-128", "AES-256", "RSA-2048", "3DES"], correct: 1, category: "Security", explanation: "Amazon S3 uses AES-256 encryption for server-side encryption (SSE-S3), providing strong encryption for data at rest." },
+        { question: "What is the maximum Lambda function timeout?", options: ["5 minutes", "10 minutes", "15 minutes", "30 minutes"], correct: 2, category: "Compute", explanation: "AWS Lambda functions can run for a maximum of 15 minutes (900 seconds) before timing out." },
+        { question: "Which service provides managed blockchain?", options: ["AWS Blockchain", "Amazon Managed Blockchain", "Hyperledger on EC2", "Ethereum on ECS"], correct: 1, category: "Blockchain", explanation: "Amazon Managed Blockchain is a fully managed service for creating and managing blockchain networks using Hyperledger Fabric or Ethereum." },
+        { question: "For managing sensitive client data with RDS, S3, and Lambda while adhering to least privilege, which strategy minimizes operational complexity?", options: ["Develop IAM roles with minimal privileges for all teams with specific policies", "Utilize IAM Identity Center with permission sets for RDS and S3 access", "Assign unique IAM users to each team member with IAM Access Analyzer", "Leverage AWS Organizations with cross-account IAM roles"], correct: 1, category: "Security", explanation: "IAM Identity Center (formerly AWS SSO) provides centralized access management with permission sets, simplifying least privilege access across services." },
+        { question: "For a global team with on-premises Active Directory and multiple AWS accounts, what's the best way to integrate identity management?", options: ["Deploy AWS Directory Service with AWS managed Microsoft AD and build trust", "Set up individual IAM users with MFA for each team member", "Implement AD Connector with IAM Identity Center for AD groups", "Utilize Amazon Cognito for identity federation with Active Directory"], correct: 2, category: "Security", explanation: "AD Connector with IAM Identity Center allows seamless integration of existing Active Directory with AWS, enabling centralized access management." },
+        { question: "To make an application on EC2 instances in private subnets accessible to internet clients with least effort, what should you do?", options: ["Create AMI and launch new instances in public subnets with ALB", "Create ALB and associate three public subnets, add private instances to ALB", "Create ALB and associate three private subnets, add private instances to ALB", "Create NAT gateway in public subnet and add route to private subnets"], correct: 1, category: "Networking", explanation: "An Application Load Balancer in public subnets can route internet traffic to instances in private subnets, providing secure access." },
+        { question: "For IoT sensors sending real-time ordered data from manufacturing equipment, which solution is MOST efficient?", options: ["Use Kinesis Data Streams with shard per asset, Kinesis Firehose to EBS", "Use Kinesis Data Streams with partition per asset, Kinesis Firehose to S3", "Use SQS FIFO queue per asset, trigger Lambda to save to EFS", "Use SQS standard queue per asset, trigger Lambda to save to S3"], correct: 1, category: "IoT", explanation: "Kinesis Data Streams with partitioning maintains order per asset, and Firehose efficiently delivers data to S3 for analysis and storage." },
+        { question: "Route 53 routes to two NLB nodes (AZ-A with 4 targets, AZ-B with 6 targets). Cross-zone is disabled. What's the traffic distribution?", options: ["Each of the four targets in AZ-A receives 10% of the traffic", "Each of the four targets in AZ-A receives 12.5% of the traffic", "Each of the six targets in AZ-B receives 10% of the traffic", "Each of the four targets in AZ-A receives 8% of the traffic"], correct: 1, category: "Networking", explanation: "With cross-zone disabled, each NLB node gets 50% of traffic. AZ-A's 50% is split among 4 targets = 12.5% each." },
+        { question: "To trigger image analysis on only one of four EC2 instances for each S3 photo upload, what do you recommend?", options: ["Create S3 Event Notification that sends message to SQS queue for EC2 to read", "Create EventBridge event that invokes one of the EC2 instances", "Create S3 Event Notification that sends message to SNS topic for EC2 subscription", "Subscribe EC2 instances to S3 Inventory stream"], correct: 0, category: "Architecture", explanation: "SQS ensures each message (S3 event) is processed by only one consumer, preventing duplicate processing across multiple EC2 instances." },
+        { question: "To encrypt each file with a different encryption key when moving on-premises encrypted data to S3, what should you use?", options: ["Use Multi-Region keys for client-side encryption", "Store data in different S3 buckets with SSE-S3", "Configure single S3 bucket with SSE-S3", "Configure single S3 bucket with SSE-KMS and use encryption context"], correct: 3, category: "Security", explanation: "SSE-KMS with encryption context allows you to use different encryption keys per file while maintaining centralized key management." },
+        { question: "For a Lambda function in main account to access EFS in another account, what's the most cost-effective solution?", options: ["Establish new EFS in main account and use DataSync to transfer data", "Set up VPC peering between VPCs of both accounts", "Develop secondary Lambda in other account to mount EFS", "Transfer files from EFS to Lambda layer"], correct: 1, category: "Networking", explanation: "VPC peering enables Lambda to directly access EFS in another account without data duplication or additional infrastructure costs." },
+        { question: "For game servers requiring extremely low latency for UDP traffic, what's the most cost-effective way to manage millions of requests?", options: ["Deploy Application Load Balancer for incoming traffic", "Utilize Gateway Load Balancer to manage traffic", "Implement Network Load Balancer configured for UDP", "Establish duplicate infrastructure across different regions"], correct: 2, category: "Compute", explanation: "Network Load Balancer supports UDP protocol and provides ultra-low latency, making it ideal for real-time gaming applications." },
+        { question: "To centralize security group rule updates across multiple AWS accounts for CIDR ranges, what's the cost-effective approach?", options: ["Develop VPC security groups in management account", "Set up customer-managed VPC prefix list and share via AWS RAM", "Implement AWS-managed prefix list with Security Hub policy", "Configure security groups in central account with Firewall Manager"], correct: 1, category: "Security", explanation: "Customer-managed prefix lists can be shared across accounts using AWS RAM, enabling centralized CIDR management without duplication." },
+        { question: "To prevent developers from attaching administrator policy while allowing them to use existing IAM policies, what should you do?", options: ["Disable IAM activity using service control policies", "Set permissions boundary on developer IAM role denying administrator access", "Assign all IAM duties to security operations team", "Send alert via SNS when developer creates new policy"], correct: 1, category: "Security", explanation: "Permissions boundaries set the maximum permissions a user can have, preventing privilege escalation while allowing flexibility within boundaries." },
+        { question: "To migrate data from on-premises NAS using SMB protocol to AWS managed service, which actions should you take?", options: ["Migrate to Amazon FSx for Lustre using AWS DataSync", "Migrate to Amazon S3 using AWS Snowball Edge device", "Migrate to Amazon EFS using AWS Server Migration Service", "Migrate to Amazon FSx for Windows File Server using AWS DataSync"], correct: 3, category: "Migration", explanation: "FSx for Windows File Server supports SMB protocol, and DataSync efficiently transfers data from on-premises to AWS." },
+        { question: "To safeguard against EBS snapshot deletion without keeping them forever, what's the best approach?", options: ["Adjust IAM permissions to prevent deletion", "Transfer EBS snapshots to different AWS Region", "Implement 7-day retention policy in AWS Recycle Bin", "Store EBS snapshots in S3 Standard-IA"], correct: 2, category: "Data Protection", explanation: "AWS Recycle Bin provides a safety net by retaining deleted resources for a specified period, allowing recovery from accidental deletions." },
+        { question: "For a financial modeling application requiring high-performance file system with seamless S3 integration, which storage should be used?", options: ["Amazon FSx for Lustre", "Amazon Elastic File System (EFS)", "Amazon Elastic Block Store (EBS)", "Amazon FSx for Windows File Server"], correct: 0, category: "Storage", explanation: "FSx for Lustre provides high-performance file storage optimized for HPC workloads with native S3 integration for data processing." },
+        { question: "To automate OS inventory, updates, and vulnerability reviews for hundreds of EC2 instances, what should you propose?", options: ["Implement Systems Manager Patch Manager and configure Security Hub", "Implement Systems Manager Patch Manager and deploy Amazon Inspector", "Utilize AWS Shield Advanced and AWS Config for patch management", "Deploy Amazon GuardDuty and AWS Config for patch updates"], correct: 1, category: "Management", explanation: "Systems Manager Patch Manager automates patching, while Amazon Inspector assesses vulnerabilities, providing comprehensive security management." }
+      ]
+    };
+
+    // =============================
+    // STATE
+    // =============================
+    let currentDifficulty = 'beginner';
+    let currentQuizMode = 'timed';
+    let currentQuestionIndex = 0;
+    let selectedAnswer = null;
+    let score = 0;
+    let answeredQuestions = [];
+    let timer = null;
+    let timeRemaining = 1500; // 25 minutes = 1500 seconds
+    let bookmarkedQuestions = [];
+
+    // 25 minutes per quiz (25 questions × 60 seconds each)
+    const TIMER_DURATION = 1500; // 25:00
+
+    // =============================
+    // THEME
+    // =============================
+    function toggleTheme() {
+      const body = document.body;
+      const themeIcon = document.getElementById('themeIcon');
+      body.classList.toggle('light-mode');
+      const isLight = body.classList.contains('light-mode');
+      themeIcon.textContent = isLight ? '☀️' : '🌙';
+      localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    }
+
+    // =============================
+    // SIDEBAR
+    // =============================
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('active');
+    }
+
+    function closeSidebar() {
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('sidebarOverlay').classList.remove('active');
+    }
+
+    function toggleSidebarCollapse() {
+      const sidebar = document.getElementById('sidebar');
+      sidebar.classList.toggle('collapsed');
+      localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
+    }
+
+    // =============================
+    // USER MENU
+    // =============================
+    function toggleUserMenu() {
+      const userName = localStorage.getItem('userName');
+      if (!userName) {
+        const name = prompt('Welcome! Please enter your name to personalize your experience:');
+        if (name && name.trim() !== '') {
+          localStorage.setItem('userName', name.trim());
+          updateProfileDisplay(name.trim());
+          alert('Welcome, ' + name.trim() + '! Your profile has been set up.');
+        }
+      } else {
+        const choice = prompt('Account Menu - ' + userName + '\n\n1. View Profile\n2. Settings\n3. Sign Out\n\nEnter your choice (1-3):');
+        if (choice === '1') viewProfile();
+        else if (choice === '2') manageSettings();
+        else if (choice === '3') signOut();
+      }
+    }
+
+    function viewProfile() {
+      const userName = localStorage.getItem('userName');
+      const joinDate = localStorage.getItem('userJoinDate') || new Date().toISOString();
+      const fmt = new Date(joinDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+      alert('👤 Profile Information\n\nName: ' + userName + '\nMember Since: ' + fmt);
+    }
+
+    function manageSettings() {
+      alert('⚙️ Settings\n\nFeature coming soon!');
+    }
+
+    function signOut() {
+      if (confirm('Are you sure you want to sign out?')) {
+        localStorage.removeItem('userName');
+        updateProfileDisplay('');
+        alert('👋 You have been signed out successfully!');
+      }
+    }
+
+    function updateProfileDisplay(name) {
+      const profileName = document.getElementById('profileName');
+      if (name && name.trim() !== '') {
+        profileName.textContent = name;
+        profileName.style.display = 'inline';
+      } else {
+        profileName.textContent = '';
+        profileName.style.display = 'none';
+      }
+    }
+
+    // =============================
+    // BOOKMARKS
+    // =============================
+    function loadBookmarkedQuestions() {
+      const saved = localStorage.getItem('bookmarkedQuestions');
+      if (saved) {
+        bookmarkedQuestions = JSON.parse(saved);
+        displayBookmarkedQuestions();
+      }
+    }
+
+    function saveBookmarkedQuestions() {
+      localStorage.setItem('bookmarkedQuestions', JSON.stringify(bookmarkedQuestions));
+    }
+
+    function displayBookmarkedQuestions() {
+      const list = document.getElementById('bookmarkedList');
+      const count = document.getElementById('bookmarkedCount');
+      count.textContent = bookmarkedQuestions.length;
+
+      if (bookmarkedQuestions.length === 0) {
+        list.innerHTML = `<div class="bookmarked-empty"><div class="bookmarked-empty-icon">🔖</div><div class="bookmarked-empty-text">No bookmarked questions yet.<br>Bookmark challenging questions while taking quizzes to review them later!</div></div>`;
+        return;
+      }
+
+      list.innerHTML = '';
+      bookmarkedQuestions.forEach((bookmark, index) => {
+        const item = document.createElement('div');
+        item.className = 'bookmarked-question-item';
+        item.innerHTML = `
+          <div class="bookmarked-question-header">
+            <div class="bookmarked-question-text">${bookmark.question}</div>
+            <button class="remove-bookmark-btn" onclick="removeBookmark(${index})">Remove</button>
+          </div>
+          <div class="bookmarked-question-meta">
+            <span>📚 ${bookmark.difficulty.charAt(0).toUpperCase() + bookmark.difficulty.slice(1)}</span>
+            <span>🏷️ ${bookmark.category}</span>
+          </div>`;
+        list.appendChild(item);
+      });
+    }
+
+    function toggleBookmark() {
+      const question = quizData[currentDifficulty][currentQuestionIndex];
+      const existingIndex = bookmarkedQuestions.findIndex(b =>
+        b.difficulty === currentDifficulty && b.questionIndex === currentQuestionIndex
+      );
+
+      const btn = document.getElementById('bookmarkBtn');
+      const icon = document.getElementById('bookmarkIcon');
+      const text = document.getElementById('bookmarkText');
+
+      if (existingIndex !== -1) {
+        bookmarkedQuestions.splice(existingIndex, 1);
+        btn.classList.remove('bookmarked');
+        icon.textContent = '🔖';
+        text.textContent = 'Bookmark';
+      } else {
+        bookmarkedQuestions.push({
+          difficulty: currentDifficulty,
+          questionIndex: currentQuestionIndex,
+          question: question.question,
+          category: question.category
+        });
+        btn.classList.add('bookmarked');
+        icon.textContent = '✅';
+        text.textContent = 'Bookmarked';
+      }
+
+      saveBookmarkedQuestions();
+      displayBookmarkedQuestions();
+    }
+
+    function removeBookmark(index) {
+      bookmarkedQuestions.splice(index, 1);
+      saveBookmarkedQuestions();
+      displayBookmarkedQuestions();
+    }
+
+    function updateBookmarkButton() {
+      const existingIndex = bookmarkedQuestions.findIndex(b =>
+        b.difficulty === currentDifficulty && b.questionIndex === currentQuestionIndex
+      );
+      const btn = document.getElementById('bookmarkBtn');
+      const icon = document.getElementById('bookmarkIcon');
+      const text = document.getElementById('bookmarkText');
+
+      if (existingIndex !== -1) {
+        btn.classList.add('bookmarked');
+        icon.textContent = '✅';
+        text.textContent = 'Bookmarked';
+      } else {
+        btn.classList.remove('bookmarked');
+        icon.textContent = '🔖';
+        text.textContent = 'Bookmark';
+      }
+    }
+
+    // =============================
+    // QUIZ START
+    // =============================
+    document.querySelectorAll('.select-difficulty-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        currentDifficulty = e.target.dataset.difficulty;
+        currentQuizMode = e.target.dataset.mode;
+        startQuiz();
+      });
+    });
+
+    function startQuiz() {
+      currentQuestionIndex = 0;
+      score = 0;
+      answeredQuestions = [];
+      selectedAnswer = null;
+      timeRemaining = TIMER_DURATION; // 25 minutes
+
+      // Switch screens
+      document.getElementById('categoriesPage').classList.remove('active');
+      document.getElementById('quizScreen').classList.add('active');
+      document.getElementById('resultsScreen').classList.remove('active');
+
+      document.getElementById('totalQuestionNum').textContent = quizData[currentDifficulty].length;
+
+      // Timer setup
+      const timerEl = document.getElementById('quizTimer');
+      if (currentQuizMode === 'practice') {
+        timerEl.style.display = 'none';
+      } else {
+        timerEl.style.display = 'flex';
+        timerEl.className = 'quiz-timer';
+        updateTimerDisplay();
+        startTimer();
+      }
+
+      loadQuestion();
+    }
+
+    function goToSelection() {
+      if (timer) { clearInterval(timer); timer = null; }
+      document.getElementById('quizScreen').classList.remove('active');
+      document.getElementById('resultsScreen').classList.remove('active');
+      document.getElementById('categoriesPage').classList.add('active');
+    }
+
+    // =============================
+    // TIMER
+    // =============================
+    function updateTimerDisplay() {
+      const mins = Math.floor(timeRemaining / 60);
+      const secs = timeRemaining % 60;
+      document.getElementById('timerText').textContent =
+        String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+
+      // Visual warnings
+      const timerEl = document.getElementById('quizTimer');
+      if (timeRemaining <= 60) {
+        timerEl.className = 'quiz-timer critical';
+      } else if (timeRemaining <= 300) {
+        timerEl.className = 'quiz-timer warning';
+      } else {
+        timerEl.className = 'quiz-timer';
+      }
+    }
+
+    function startTimer() {
+      if (timer) clearInterval(timer);
+      timer = setInterval(() => {
+        timeRemaining--;
+        updateTimerDisplay();
+        if (timeRemaining <= 0) {
+          clearInterval(timer);
+          timer = null;
+          finishQuiz();
+        }
+      }, 1000);
+    }
+
+    // =============================
+    // LOAD QUESTION
+    // =============================
+    function loadQuestion() {
+      const questions = quizData[currentDifficulty];
+      const question = questions[currentQuestionIndex];
+      selectedAnswer = null;
+
+      // Update header info
+      document.getElementById('currentQuestionNum').textContent = currentQuestionIndex + 1;
+      document.getElementById('totalQuestionNum').textContent = questions.length;
+      document.getElementById('questionCategory').textContent = question.category;
+      document.getElementById('questionDifficulty').textContent =
+        currentDifficulty.charAt(0).toUpperCase() + currentDifficulty.slice(1);
+
+      // Set question text
+      document.getElementById('questionText').textContent = question.question;
+
+      // Progress bar
+      const progressPercent = ((currentQuestionIndex + 1) / questions.length) * 100;
+      document.getElementById('progressFill').style.width = progressPercent + '%';
+
+      // Build options
+      const optionsGrid = document.getElementById('optionsGrid');
+      optionsGrid.innerHTML = '';
+
+      const wasAnswered = answeredQuestions[currentQuestionIndex] !== undefined;
+
+      question.options.forEach((option, index) => {
+        const card = document.createElement('div');
+        card.className = 'option-card';
+
+        if (wasAnswered) {
+          card.classList.add('disabled');
+          if (index === question.correct) card.classList.add('correct');
+          if (index === answeredQuestions[currentQuestionIndex] && answeredQuestions[currentQuestionIndex] !== question.correct) {
+            card.classList.add('incorrect');
+          }
+        }
+
+        card.innerHTML = `
+          <div class="option-letter">${String.fromCharCode(65 + index)}</div>
+          <div class="option-text">${option}</div>`;
+
+        if (!wasAnswered) {
+          card.addEventListener('click', () => selectOption(index, card));
+        }
+
+        optionsGrid.appendChild(card);
+      });
+
+      // Explanation
+      const explanationBox = document.getElementById('explanationBox');
+      if (wasAnswered && currentQuizMode === 'practice') {
+        document.getElementById('explanationText').textContent = question.explanation;
+        explanationBox.classList.add('show');
+      } else {
+        explanationBox.classList.remove('show');
+      }
+
+      // Buttons
+      const checkBtn = document.getElementById('checkAnswerBtn');
+      const skipBtn = document.getElementById('skipQuestionBtn');
+      const finishBtn = document.getElementById('finishQuizBtn');
+
+      if (currentQuizMode === 'timed') {
+        checkBtn.classList.add('hidden');
+      } else {
+        checkBtn.classList.remove('hidden');
+        checkBtn.disabled = !wasAnswered ? true : true; // always reset
+        if (wasAnswered) checkBtn.disabled = true;
+      }
+
+      skipBtn.disabled = false;
+      skipBtn.classList.remove('hidden');
+      finishBtn.classList.add('hidden');
+
+      if (currentQuestionIndex === questions.length - 1) {
+        finishBtn.classList.remove('hidden');
+      }
+
+      updateBookmarkButton();
+    }
+
+    // =============================
+    // SELECT OPTION
+    // =============================
+    function selectOption(index, card) {
+      document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      selectedAnswer = index;
+
+      if (currentQuizMode === 'practice') {
+        document.getElementById('checkAnswerBtn').disabled = false;
+      }
+
+      // In timed mode, auto-record but don't reveal answer
+      if (currentQuizMode === 'timed') {
+        // Answer recorded on Next/Finish click
+      }
+    }
+
+    // =============================
+    // CHECK ANSWER (Practice mode)
+    // =============================
+    document.getElementById('checkAnswerBtn').addEventListener('click', () => {
+      if (selectedAnswer === null) return;
+
+      const question = quizData[currentDifficulty][currentQuestionIndex];
+      const options = document.querySelectorAll('.option-card');
+
+      answeredQuestions[currentQuestionIndex] = selectedAnswer;
+
+      options.forEach((card, index) => {
+        card.classList.add('disabled');
+        if (index === question.correct) card.classList.add('correct');
+        else if (index === selectedAnswer && selectedAnswer !== question.correct) card.classList.add('incorrect');
+      });
+
+      if (selectedAnswer === question.correct) score++;
+
+      document.getElementById('explanationText').textContent = question.explanation;
+      document.getElementById('explanationBox').classList.add('show');
+      document.getElementById('checkAnswerBtn').disabled = true;
+    });
+
+    // =============================
+    // NEXT QUESTION
+    // =============================
+    document.getElementById('skipQuestionBtn').addEventListener('click', () => {
+      // In timed mode: record answer on navigation
+      if (currentQuizMode === 'timed' && selectedAnswer !== null && answeredQuestions[currentQuestionIndex] === undefined) {
+        const question = quizData[currentDifficulty][currentQuestionIndex];
+        answeredQuestions[currentQuestionIndex] = selectedAnswer;
+        if (selectedAnswer === question.correct) score++;
+      }
+
+      if (currentQuestionIndex < quizData[currentDifficulty].length - 1) {
+        currentQuestionIndex++;
+        loadQuestion();
+      }
+    });
+
+    // =============================
+    // FINISH QUIZ
+    // =============================
+    document.getElementById('finishQuizBtn').addEventListener('click', () => {
+      if (currentQuizMode === 'timed' && selectedAnswer !== null && answeredQuestions[currentQuestionIndex] === undefined) {
+        const question = quizData[currentDifficulty][currentQuestionIndex];
+        answeredQuestions[currentQuestionIndex] = selectedAnswer;
+        if (selectedAnswer === question.correct) score++;
+      }
+      finishQuiz();
+    });
+
+    function finishQuiz() {
+      if (timer) { clearInterval(timer); timer = null; }
+      showResults();
+    }
+
+    // =============================
+    // SHOW RESULTS
+    // =============================
+    function showResults() {
+      document.getElementById('quizScreen').classList.remove('active');
+      document.getElementById('resultsScreen').classList.add('active');
+
+      const totalQuestions = quizData[currentDifficulty].length;
+      const answeredCount = answeredQuestions.filter(a => a !== undefined).length;
+      const accuracy = answeredCount > 0 ? Math.round((score / answeredCount) * 100) : 0;
+
+      document.getElementById('finalScore').textContent = score;
+      document.getElementById('correctAnswers').textContent = score;
+      document.getElementById('totalQuestionsResult').textContent = answeredCount + ' / ' + totalQuestions;
+      document.getElementById('accuracyPercent').textContent = accuracy + '%';
+
+      let message = '';
+      let icon = '🎉';
+
+      if (answeredCount < totalQuestions) {
+        message = `You answered ${answeredCount} out of ${totalQuestions} questions. `;
+      }
+
+      if (accuracy >= 90) { message += 'Outstanding! You have mastered this level!'; icon = '🏆'; }
+      else if (accuracy >= 70) { message += 'Great job! You have a solid understanding!'; icon = '🎉'; }
+      else if (accuracy >= 50) { message += 'Good effort! Keep practicing to improve!'; icon = '👍'; }
+      else { message += 'Keep learning! Review the topics and try again!'; icon = '📚'; }
+
+      document.getElementById('celebrationIcon').textContent = icon;
+      document.getElementById('resultsMessage').textContent = message;
+
+      document.getElementById('insightsGrid').innerHTML = `
+        <div class="insight-item">
+          <div class="insight-title">Questions Answered</div>
+          <div class="insight-desc">${answeredCount} out of ${totalQuestions} questions</div>
+        </div>
+        <div class="insight-item">
+          <div class="insight-title">Performance Level</div>
+          <div class="insight-desc">${accuracy >= 70 ? 'Excellent' : accuracy >= 50 ? 'Good' : 'Needs Improvement'}</div>
+        </div>
+        <div class="insight-item">
+          <div class="insight-title">Quiz Mode</div>
+          <div class="insight-desc">${currentQuizMode === 'practice' ? 'Practice Mode (Untimed)' : 'Timed Mode (25 min)'}</div>
+        </div>
+        <div class="insight-item">
+          <div class="insight-title">Difficulty Completed</div>
+          <div class="insight-desc">${currentDifficulty.charAt(0).toUpperCase() + currentDifficulty.slice(1)}</div>
+        </div>
+        <div class="insight-item">
+          <div class="insight-title">Recommendation</div>
+          <div class="insight-desc">${accuracy >= 80 && currentDifficulty !== 'advanced' ? 'Try the next difficulty level!' : 'Practice more on this level or review the topics.'}</div>
+        </div>`;
+    }
+
+    // =============================
+    // RESULT BUTTONS
+    // =============================
+    document.getElementById('retakeQuizBtn').addEventListener('click', () => {
+      document.getElementById('resultsScreen').classList.remove('active');
+      document.getElementById('categoriesPage').classList.add('active');
+    });
+
+    document.getElementById('viewDashboardBtn').addEventListener('click', () => {
+      window.location.href = 'index.html';
+    });
+
+    document.getElementById('shareResultsBtn').addEventListener('click', () => {
+      const answeredCount = answeredQuestions.filter(a => a !== undefined).length;
+      const modeText = currentQuizMode === 'practice' ? 'Practice' : 'Timed';
+      const text = `I scored ${score}/${answeredCount} on the AWS ${currentDifficulty} quiz (${modeText} Mode)!`;
+      if (navigator.share) {
+        navigator.share({ title: 'AWS Quiz Results', text: text });
+      } else {
+        alert('Share: ' + text);
+      }
+    });
+
+    // =============================
+    // INIT
+    // =============================
+    window.addEventListener('DOMContentLoaded', () => {
+      const sidebar = document.getElementById('sidebar');
+      const sidebarCollapsed = localStorage.getItem('sidebarCollapsed');
+      const userName = localStorage.getItem('userName');
+      const savedTheme = localStorage.getItem('theme');
+      const themeIcon = document.getElementById('themeIcon');
+
+      // Only collapse on desktop
+      if (sidebarCollapsed === 'true' && window.innerWidth > 1024) {
+        sidebar.classList.add('collapsed');
+      }
+
+      if (userName) updateProfileDisplay(userName);
+
+      if (savedTheme === 'light') {
+        document.body.classList.add('light-mode');
+        themeIcon.textContent = '☀️';
+      } else {
+        themeIcon.textContent = '🌙';
+      }
+
+      if (!localStorage.getItem('userJoinDate')) {
+        localStorage.setItem('userJoinDate', new Date().toISOString());
+      }
+
+      loadBookmarkedQuestions();
+
+      // Close sidebar on mobile nav clicks
+      document.querySelectorAll('.sidebar-item').forEach(item => {
+        item.addEventListener('click', () => {
+          if (window.innerWidth <= 1024) closeSidebar();
+        });
+      });
+    });
+  </script>
+</body>
+</html>

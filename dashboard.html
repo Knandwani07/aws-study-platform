@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Exam Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e40af 100%);
+            font-family: 'Inter', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+        .fade-in {
+            animation: fadeIn 0.8s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen text-white">
+    <div class="container mx-auto px-6 py-8">
+        <!-- Welcome Message -->
+        <div class="fade-in mb-8">
+            <h1 class="text-3xl font-bold mb-2">Welcome back, <span id="userName" class="text-purple-400">Alex</span>!</h1>
+            <p class="text-gray-300 text-lg">You've reviewed <span id="studiedCards" class="text-blue-400 font-semibold">30</span> of <span id="totalCards" class="text-blue-400 font-semibold">124</span> cards.</p>
+        </div>
+
+        <!-- Charts Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <!-- Progress by Category Chart -->
+            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 shadow-xl fade-in">
+                <h3 class="text-xl font-semibold mb-4 text-center">Progress by Category</h3>
+                <div class="chart-container">
+                    <canvas id="categoryChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Daily Study Streak Chart -->
+            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 shadow-xl fade-in">
+                <h3 class="text-xl font-semibold mb-4 text-center">Daily Study Streak</h3>
+                <div class="chart-container">
+                    <canvas id="streakChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Accuracy Over Time Chart -->
+            <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 shadow-xl fade-in">
+                <h3 class="text-xl font-semibold mb-4 text-center">Accuracy Over Time</h3>
+                <div class="chart-container">
+                    <canvas id="accuracyChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Strip -->
+        <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 shadow-xl fade-in">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 text-center">
+                <div class="flex flex-col items-center">
+                    <i class="fas fa-layer-group text-3xl text-blue-400 mb-2"></i>
+                    <span class="text-2xl font-bold" id="totalCardsDisplay">124</span>
+                    <span class="text-gray-300">Total Cards</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <i class="fas fa-check-circle text-3xl text-green-400 mb-2"></i>
+                    <span class="text-2xl font-bold" id="studiedCardsDisplay">30</span>
+                    <span class="text-gray-300">Cards Studied</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <i class="fas fa-bullseye text-3xl text-yellow-400 mb-2"></i>
+                    <span class="text-2xl font-bold" id="accuracyDisplay">87%</span>
+                    <span class="text-gray-300">Accuracy</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <i class="fas fa-fire text-3xl text-red-400 mb-2"></i>
+                    <span class="text-2xl font-bold" id="streakDisplay">5 days 🔥</span>
+                    <span class="text-gray-300">Streak</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Chart.js configuration
+        Chart.defaults.color = '#e5e7eb';
+        Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.1)';
+
+        // Progress by Category Chart
+        const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+        new Chart(categoryCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Compute', 'Storage', 'Database', 'Networking', 'Security'],
+                datasets: [{
+                    data: [85, 60, 45, 70, 55],
+                    backgroundColor: [
+                        '#8b5cf6',
+                        '#3b82f6',
+                        '#10b981',
+                        '#f59e0b',
+                        '#ef4444'
+                    ],
+                    borderWidth: 0,
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { padding: 20, usePointStyle: true }
+                    }
+                }
+            }
+        });
+
+        // Daily Study Streak Chart
+        const streakCtx = document.getElementById('streakChart').getContext('2d');
+        new Chart(streakCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{
+                    label: 'Cards Studied',
+                    data: [12, 8, 15, 10, 18, 5, 14],
+                    backgroundColor: 'rgba(139, 92, 246, 0.8)',
+                    borderColor: '#8b5cf6',
+                    borderWidth: 2,
+                    borderRadius: 8,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        // Accuracy Over Time Chart
+        const accuracyCtx = document.getElementById('accuracyChart').getContext('2d');
+        new Chart(accuracyCtx, {
+            type: 'line',
+            data: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5'],
+                datasets: [{
+                    label: 'Accuracy %',
+                    data: [65, 72, 78, 85, 87],
+                    borderColor: '#10b981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#10b981',
+                    pointBorderColor: '#ffffff',
+                    pointBorderWidth: 2,
+                    pointRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        min: 60,
+                        max: 100,
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        // Dynamic data update functions
+        function updateDashboard(userData) {
+            document.getElementById('userName').textContent = userData.name;
+            document.getElementById('studiedCards').textContent = userData.studiedCards;
+            document.getElementById('totalCards').textContent = userData.totalCards;
+            document.getElementById('totalCardsDisplay').textContent = userData.totalCards;
+            document.getElementById('studiedCardsDisplay').textContent = userData.studiedCards;
+            document.getElementById('accuracyDisplay').textContent = userData.accuracy + '%';
+            document.getElementById('streakDisplay').textContent = userData.streak + ' days 🔥';
+        }
+
+        // Example usage
+        // updateDashboard({
+        //     name: 'Sarah',
+        //     studiedCards: 45,
+        //     totalCards: 150,
+        //     accuracy: 92,
+        //     streak: 8
+        // });
+    </script>
+</body>
+</html>

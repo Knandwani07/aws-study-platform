@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AWS Certification Roadmap</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --bg-primary: #0f1b2a;
+            --bg-secondary: #16202e;
+            --bg-tertiary: #1a2433;
+            --bg-header: #232f3e;
+            --bg-header-gradient-start: #232f3e;
+            --bg-header-gradient-end: #1a2433;
+            --border-color: #2a3f5f;
+            --border-light: #3f4e5f;
+            --text-primary: #ffffff;
+            --text-secondary: #aab7c4;
+            --text-muted: #687078;
+            --accent-blue: #0972d3;
+            --accent-orange: #ff9900;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+            --shadow-md: 0 4px 8px rgba(0,0,0,0.4);
+            --shadow-lg: 0 8px 16px rgba(0,0,0,0.5);
+            --sidebar-width: 260px;
+            --sidebar-collapsed-width: 70px;
+            --header-height: 70px;
+        }
+
+        body.light-mode {
+            --bg-primary: #f2f3f3;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #fafafa;
+            --bg-header: #ffffff;
+            --bg-header-gradient-start: #ffffff;
+            --bg-header-gradient-end: #f8f9fa;
+            --border-color: #d5dbdb;
+            --border-light: #e9ecef;
+            --text-primary: #16191f;
+            --text-secondary: #5f6b7a;
+            --text-muted: #879596;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 8px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 16px rgba(0,0,0,0.12);
+        }
+
+        html { width: 100%; overflow-x: hidden; }
+
+        body {
+            font-family: 'Amazon Ember', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            width: 100%;
+            max-width: 100vw;
+            overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* ── HEADER ── */
+        .aws-header {
+            background: linear-gradient(180deg, var(--bg-header-gradient-start) 0%, var(--bg-header-gradient-end) 100%);
+            border-bottom: 2px solid var(--border-light);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+            height: var(--header-height);
+            width: 100%;
+        }
+
+        body.light-mode .aws-header { box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            max-width: 1920px;
+            margin: 0 auto;
+            height: 100%;
+            gap: 16px;
+            width: 100%;
+        }
+
+        .console-title-container { flex: 0 0 auto; }
+
+        .console-home-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin: 0;
+        }
+
+        .title-icon { font-size: 1.3rem; }
+
+        .quick-nav {
+            display: flex;
+            gap: 9px;
+            flex: 1;
+            justify-content: center;
+            overflow-x: auto;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .quick-nav::-webkit-scrollbar { display: none; }
+
+        .nav-pill {
+            padding: 8px 13px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+            border: 2px solid var(--border-light);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.8125rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+            flex-shrink: 0;
+            transition: all 0.25s ease;
+        }
+
+        .nav-pill:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(9,114,211,0.3);
+        }
+
+        .nav-pill.active {
+            background: linear-gradient(135deg, var(--accent-orange), #ec7211);
+            border-color: var(--accent-orange);
+            color: #000;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .header-divider {
+            width: 2px;
+            height: 32px;
+            background: linear-gradient(180deg, transparent, var(--border-light), transparent);
+        }
+
+        .theme-toggle-btn {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            border: 2px solid var(--border-light);
+            border-radius: 10px;
+            cursor: pointer;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .theme-toggle-btn:hover {
+            border-color: var(--accent-orange);
+            transform: rotate(15deg);
+            box-shadow: 0 4px 16px rgba(255,153,0,0.4);
+        }
+
+        .theme-icon { display: block; }
+
+        .header-btn-profile {
+            background: linear-gradient(135deg, rgba(255,153,0,0.15), rgba(255,153,0,0.1));
+            border: 2px solid rgba(255,153,0,0.3);
+            color: var(--text-primary);
+            padding: 8px 11px;
+            border-radius: 10px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            flex-shrink: 0;
+            transition: all 0.25s ease;
+        }
+
+        .header-btn-profile:hover {
+            border-color: var(--accent-orange);
+            box-shadow: 0 4px 12px rgba(255,153,0,0.4);
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: 2px solid var(--border-light);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1.15rem;
+            cursor: pointer;
+            padding: 6px 9px;
+            flex-shrink: 0;
+            line-height: 1;
+            transition: all 0.2s;
+        }
+        .menu-toggle:hover { border-color: var(--accent-orange); color: var(--accent-orange); }
+
+        /* ── LAYOUT ── */
+        .console-container {
+            display: flex;
+            min-height: calc(100vh - var(--header-height));
+            width: 100%;
+            max-width: 100vw;
+            /* CRITICAL: contain child overflow */
+            overflow: hidden;
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            top: var(--header-height);
+            background: rgba(0,0,0,0.65);
+            z-index: 998;
+            backdrop-filter: blur(2px);
+        }
+        .sidebar-overlay.active { display: block; }
+
+        /* ── SIDEBAR ── */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+            overflow-x: hidden;
+            transition: width 0.35s cubic-bezier(0.4,0,0.2,1);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .sidebar.collapsed { width: var(--sidebar-collapsed-width); }
+
+        .sidebar-toggle {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            height: 48px;
+            background-color: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+        .sidebar-toggle:hover { background-color: var(--bg-tertiary); color: var(--accent-orange); }
+
+        .toggle-icon { transition: transform 0.35s cubic-bezier(0.4,0,0.2,1); }
+        .sidebar.collapsed .toggle-icon { transform: rotate(180deg); }
+
+        .sidebar-content { flex: 1; overflow-y: auto; overflow-x: hidden; }
+        .sidebar-section { padding: 14px 0; border-bottom: 1px solid var(--border-color); }
+
+        .sidebar-title {
+            color: var(--text-muted);
+            font-size: 0.6875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            padding: 0 20px 10px;
+            font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            opacity: 1;
+            transition: opacity 0.3s;
+        }
+        .sidebar.collapsed .sidebar-title { opacity: 0; }
+
+        .sidebar-item {
+            color: var(--text-secondary);
+            padding: 11px 20px;
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            border-left: 3px solid transparent;
+            white-space: nowrap;
+            position: relative;
+            margin: 2px 0;
+            transition: all 0.2s ease;
+        }
+        .sidebar-item:hover { background-color: var(--bg-tertiary); color: var(--text-primary); border-left-color: var(--accent-blue); }
+        .sidebar-item.active { background-color: var(--bg-tertiary); border-left-color: var(--accent-orange); color: var(--text-primary); font-weight: 500; }
+
+        .sidebar-item-icon { width: 22px; height: 22px; font-size: 1.05rem; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+
+        .sidebar-item-text { opacity: 1; transition: opacity 0.3s; }
+        .sidebar.collapsed .sidebar-item-text { opacity: 0; width: 0; overflow: hidden; }
+        .sidebar.collapsed .sidebar-item { justify-content: center; padding: 12px 0; gap: 0; }
+
+        .sidebar.collapsed .sidebar-item::before {
+            content: attr(data-tooltip);
+            position: absolute;
+            left: calc(100% + 10px);
+            top: 50%;
+            transform: translateY(-50%) translateX(-8px);
+            background: var(--bg-header);
+            color: var(--text-primary);
+            padding: 7px 12px;
+            border-radius: 6px;
+            white-space: nowrap;
+            font-size: 0.8125rem;
+            z-index: 1000;
+            box-shadow: var(--shadow-lg);
+            pointer-events: none;
+            opacity: 0;
+            transition: all 0.2s ease;
+            border: 1px solid var(--border-light);
+        }
+        .sidebar.collapsed .sidebar-item:hover::before { opacity: 1; transform: translateY(-50%) translateX(0); }
+
+        /* ── MAIN CONTENT ── */
+        .main-content {
+            flex: 1;
+            min-width: 0;           /* CRITICAL — prevents flex overflow */
+            width: 0;               /* forces flex to respect min-width */
+            background-color: var(--bg-primary);
+            overflow-x: hidden;
+            overflow-y: auto;
+            padding: 22px;
+        }
+
+        /* ── PAGE HEADER ── */
+        .page-header {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 22px;
+            margin-bottom: 18px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+        }
+
+        .page-title { font-size: 1.7rem; color: var(--text-primary); margin-bottom: 8px; font-weight: 700; line-height: 1.3; }
+        .page-subtitle { color: var(--text-secondary); font-size: 0.9375rem; line-height: 1.65; margin-bottom: 16px; }
+
+        .stats { display: flex; gap: 18px; flex-wrap: wrap; }
+        .stat-item { display: flex; align-items: center; gap: 7px; font-weight: 600; color: var(--text-secondary); font-size: 0.875rem; }
+        .stat-number { color: var(--accent-orange); font-size: 1.35rem; font-weight: 700; }
+
+        /* ── CONTROLS ── */
+        .controls {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 14px 18px;
+            margin-bottom: 18px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        /* scrollable rows */
+        .controls-row {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            padding-bottom: 2px;
+        }
+        .controls-row::-webkit-scrollbar { display: none; }
+
+        .view-btn {
+            padding: 7px 13px;
+            border: 2px solid var(--border-color);
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.8125rem;
+            white-space: nowrap;
+            flex-shrink: 0;
+            transition: all 0.25s;
+        }
+        .view-btn.active { background: linear-gradient(135deg, var(--accent-orange), #ec7211); color: #000; border-color: transparent; }
+
+        .filter-tab {
+            padding: 7px 11px;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            flex-shrink: 0;
+            transition: all 0.25s;
+        }
+        .filter-tab:hover, .filter-tab.active { background: linear-gradient(135deg, var(--accent-orange), #ec7211); color: #000; border-color: transparent; }
+
+        /* ── CERT LEVELS ── */
+        .cert-levels { background: var(--bg-secondary); border-radius: 12px; padding: 18px; margin-bottom: 18px; border: 1px solid var(--border-color); }
+        .cert-levels h2 { font-size: 1.2rem; color: var(--text-primary); margin-bottom: 14px; }
+
+        .levels-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+
+        .level-card { background: var(--bg-tertiary); padding: 14px; border-radius: 10px; border-left: 4px solid var(--accent-blue); transition: transform 0.25s; }
+        .level-card:hover { transform: translateY(-3px); }
+        .level-badge { display: inline-block; background: var(--accent-blue); color: white; padding: 3px 10px; border-radius: 20px; font-weight: 700; font-size: 0.6875rem; margin-bottom: 7px; }
+        .level-name { font-size: 0.9375rem; font-weight: 700; color: var(--text-primary); margin-bottom: 3px; }
+        .level-desc { color: var(--text-secondary); font-size: 0.75rem; }
+
+        /* ── PATHS SECTION ── */
+        .paths-section { display: grid; gap: 18px; width: 100%; }
+
+        /* Timeline */
+        .paths-section.timeline-view .path-category { position: relative; padding-left: 54px; }
+        .paths-section.timeline-view .path-category::before { content: ''; position: absolute; left: 18px; top: 0; bottom: 0; width: 4px; background: linear-gradient(180deg, var(--accent-blue), var(--accent-orange)); }
+        .paths-section.timeline-view .category-icon { position: absolute; left: -8px; top: 16px; z-index: 1; box-shadow: 0 0 0 6px var(--bg-primary); }
+
+        /* Grid */
+        .paths-section.grid-view { grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); }
+        .paths-section.grid-view .cert-node:not(:last-child)::after { display: none; }
+        .paths-section.grid-view .roadmap { flex-wrap: wrap; }
+        .paths-section.grid-view .cert-node { width: 136px; min-width: 136px; max-width: 136px; }
+
+        /* ── PATH CATEGORY ── */
+        .path-category {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            width: 100%;
+            /* CRITICAL: contain horizontal children */
+            overflow: hidden;
+        }
+
+        .category-header { display: flex; align-items: center; gap: 13px; padding-bottom: 14px; margin-bottom: 4px; border-bottom: 2px solid var(--border-color); }
+        .category-icon { width: 50px; height: 50px; background: linear-gradient(135deg, var(--accent-blue), var(--accent-orange)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+        .category-title h2 { font-size: 1.4rem; color: var(--text-primary); margin-bottom: 3px; }
+        .category-subtitle { color: var(--text-secondary); font-size: 0.875rem; }
+
+        .career-paths { display: grid; gap: 14px; margin-top: 16px; }
+
+        /* ── CAREER PATH ── */
+        .career-path {
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+            padding: 16px;
+            border: 2px solid var(--border-color);
+            transition: border-color 0.25s, box-shadow 0.25s;
+            /* CRITICAL: contain the roadmap's horizontal scroll */
+            overflow: hidden;
+            min-width: 0;
+        }
+        .career-path:hover { border-color: var(--accent-blue); box-shadow: 0 6px 22px rgba(9,114,211,0.2); }
+
+        .path-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+        .path-info { flex: 1; min-width: 0; }
+        .path-title { font-size: 1.0625rem; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; line-height: 1.35; }
+        .path-desc { color: var(--text-secondary); font-size: 0.875rem; line-height: 1.6; }
+        .cert-count { background: linear-gradient(135deg, var(--accent-blue), var(--accent-orange)); color: white; padding: 5px 11px; border-radius: 20px; font-weight: 700; font-size: 0.75rem; white-space: nowrap; flex-shrink: 0; align-self: flex-start; }
+
+        /* ── ROADMAP WRAPPER + ROADMAP ── */
+        .roadmap-wrapper {
+            /* isolates horizontal scrolling; nothing bleeds past here */
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .roadmap {
+            display: flex;
+            gap: 14px;
+            overflow-x: auto;
+            padding: 6px 2px 10px;
+            -webkit-overflow-scrolling: touch;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent-blue) var(--bg-tertiary);
+        }
+        .roadmap::-webkit-scrollbar { height: 4px; }
+        .roadmap::-webkit-scrollbar-track { background: var(--bg-tertiary); border-radius: 10px; }
+        .roadmap::-webkit-scrollbar-thumb { background: var(--accent-blue); border-radius: 10px; }
+
+        /* ── CERT NODE ── */
+        .cert-node {
+            width: 175px;
+            min-width: 175px;
+            max-width: 175px;
+            background: var(--bg-primary);
+            border-radius: 10px;
+            padding: 11px;
+            border: 2px solid var(--border-color);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            scroll-snap-align: start;
+            flex-shrink: 0;
+            transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
+        }
+
+        .cert-node:not(:last-child)::after {
+            content: '→';
+            position: absolute;
+            right: -20px;
+            top: 38%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: var(--accent-orange);
+            font-weight: bold;
+            pointer-events: none;
+        }
+
+        .cert-node:hover { border-color: var(--accent-blue); box-shadow: 0 4px 16px rgba(9,114,211,0.28); transform: translateY(-2px); }
+
+        .cert-image {
+            width: 100%;
+            height: 118px;
+            min-height: 118px;
+            max-height: 118px;
+            background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-orange) 100%);
+            border-radius: 7px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 11px;
+            font-weight: 600;
+            text-align: center;
+            padding: 8px;
+            object-fit: contain;
+        }
+
+        .cert-level-badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 0.5625rem; font-weight: 700; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.3px; }
+        .badge-foundational { background: #48bb78; color: #fff; }
+        .badge-associate     { background: #4299e1; color: #fff; }
+        .badge-professional  { background: #ed8936; color: #fff; }
+        .badge-specialty     { background: #9f7aea; color: #fff; }
+
+        .cert-name { font-size: 0.8125rem; font-weight: 700; color: var(--text-primary); line-height: 1.4; margin-bottom: 4px; }
+        .cert-description { font-size: 0.6875rem; color: var(--text-secondary); line-height: 1.5; flex-grow: 1; }
+
+        .new-badge { display: inline-block; background: #f56565; color: white; padding: 1px 5px; border-radius: 5px; font-size: 0.5rem; font-weight: 700; margin-left: 3px; animation: pulse 2s infinite; vertical-align: middle; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+
+        /* ── SCROLLBAR (global) ── */
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: var(--bg-secondary); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--border-light); }
+
+        /* ── RESPONSIVE 1200px ── */
+        @media (max-width: 1200px) {
+            .nav-pill { padding: 7px 10px; font-size: 0.75rem; }
+            .levels-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* ── RESPONSIVE 1024px ── */
+        @media (max-width: 1024px) {
+            .sidebar { width: var(--sidebar-collapsed-width); }
+            .paths-section.grid-view { grid-template-columns: 1fr; }
+        }
+
+        /* ── RESPONSIVE 768px (mobile) ── */
+        @media (max-width: 768px) {
+            :root { --header-height: 58px; }
+
+            .menu-toggle { display: flex; align-items: center; justify-content: center; }
+            .quick-nav { display: none; }
+            .header-content { padding: 0 12px; gap: 8px; }
+            .header-divider { display: none; }
+            .console-home-title { font-size: 1.05rem; }
+            .title-icon { font-size: 1.05rem; }
+            .theme-toggle-btn { width: 40px; height: 40px; font-size: 1.15rem; }
+            .header-btn-profile { padding: 7px 9px; }
+            #profileName { display: none !important; }
+
+            /* Sidebar drawer */
+            .sidebar {
+                position: fixed;
+                left: -290px;
+                top: var(--header-height);
+                height: calc(100vh - var(--header-height));
+                z-index: 999;
+                transition: left 0.28s cubic-bezier(0.4,0,0.2,1);
+                box-shadow: var(--shadow-lg);
+                width: 260px !important;
+            }
+            .sidebar.open { left: 0; }
+            .sidebar-toggle { display: none; }
+
+            .main-content { padding: 10px; }
+
+            .page-header { padding: 14px; margin-bottom: 14px; }
+            .page-title { font-size: 1.2rem; }
+            .page-subtitle { font-size: 0.8125rem; margin-bottom: 12px; }
+            .stats { gap: 12px; }
+            .stat-number { font-size: 1.1rem; }
+            .stat-item { font-size: 0.8125rem; }
+
+            .controls { padding: 11px 12px; margin-bottom: 14px; gap: 9px; }
+
+            .cert-levels { padding: 13px; margin-bottom: 14px; }
+            .cert-levels h2 { font-size: 1rem; margin-bottom: 10px; }
+            .levels-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+            .level-card { padding: 11px; }
+            .level-name { font-size: 0.875rem; }
+            .level-desc { font-size: 0.6875rem; }
+
+            .path-category { padding: 13px; }
+            .category-header { gap: 10px; padding-bottom: 12px; }
+            .category-icon { width: 42px; height: 42px; font-size: 20px; }
+            .category-title h2 { font-size: 1.1rem; }
+            .category-subtitle { font-size: 0.75rem; }
+
+            .career-paths { gap: 11px; margin-top: 13px; }
+            .career-path { padding: 11px; }
+            .path-title { font-size: 0.9375rem; }
+            .path-desc { font-size: 0.8125rem; }
+
+            /* cert nodes — tight on mobile */
+            .cert-node {
+                width: 145px;
+                min-width: 145px;
+                max-width: 145px;
+                padding: 9px;
+            }
+
+            .cert-node:not(:last-child)::after {
+                right: -17px;
+                font-size: 15px;
+            }
+
+            .cert-image { height: 100px; min-height: 100px; max-height: 100px; font-size: 10px; }
+            .cert-name { font-size: 0.75rem; }
+            .cert-description { font-size: 0.625rem; }
+
+            .paths-section.grid-view { grid-template-columns: 1fr; }
+            .paths-section.grid-view .cert-node { width: 136px; min-width: 136px; max-width: 136px; }
+            .paths-section.timeline-view .path-category { padding-left: 32px; }
+            .paths-section.timeline-view .path-category::before { left: 9px; width: 3px; }
+        }
+
+        /* ── RESPONSIVE 480px ── */
+        @media (max-width: 480px) {
+            :root { --header-height: 54px; }
+
+            .header-content { padding: 0 10px; gap: 7px; }
+            .console-home-title { font-size: 0.9375rem; }
+            .theme-toggle-btn { width: 37px; height: 37px; }
+            .header-btn-profile { padding: 6px 8px; }
+
+            .main-content { padding: 8px; }
+            .page-header { padding: 12px; }
+            .page-title { font-size: 1.1rem; }
+
+            .cert-node {
+                width: 132px;
+                min-width: 132px;
+                max-width: 132px;
+                padding: 8px;
+            }
+            .cert-node:not(:last-child)::after { right: -15px; font-size: 13px; }
+            .cert-image { height: 90px; min-height: 90px; max-height: 90px; }
+        }
+
+        /* ── RESPONSIVE 380px ── */
+        @media (max-width: 380px) {
+            :root { --header-height: 52px; }
+            .console-home-title span:not(.title-icon) { display: none; }
+            .main-content { padding: 7px; }
+
+            .cert-node { width: 120px; min-width: 120px; max-width: 120px; padding: 7px; }
+            .cert-node:not(:last-child)::after { right: -14px; font-size: 12px; }
+            .cert-image { height: 82px; min-height: 82px; max-height: 82px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+    <!-- HEADER -->
+    <header class="aws-header">
+        <div class="header-content">
+            <button class="menu-toggle" onclick="toggleSidebar()" aria-label="Toggle menu">☰</button>
+
+            <div class="console-title-container">
+                <h1 class="console-home-title">
+                    <span class="title-icon">🗺️</span>
+                    <span>Roadmap</span>
+                </h1>
+            </div>
+
+            <nav class="quick-nav" aria-label="Main navigation">
+                <div class="nav-pill" onclick="window.location.href='index.html'"><span>🏠</span><span>Home</span></div>
+                <div class="nav-pill" onclick="window.location.href='categories.html'"><span>🗂️</span><span>Services</span></div>
+                <div class="nav-pill" onclick="window.location.href='quizzes.html'"><span>🧠</span><span>Quizzes</span></div>
+                <div class="nav-pill" onclick="window.location.href='keywords.html'"><span>🔑</span><span>Keywords</span></div>
+                <div class="nav-pill" onclick="window.location.href='architectural-diagrams.html'"><span>🏗️</span><span>Diagrams</span></div>
+                <div class="nav-pill active" onclick="window.location.href='roadmap.html'"><span>🗺️</span><span>Roadmap</span></div>
+            </nav>
+
+            <div class="header-right">
+                <button class="theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle theme">
+                    <span class="theme-icon" id="themeIcon">🌙</span>
+                </button>
+                <div class="header-divider"></div>
+                <div class="header-btn-profile" onclick="toggleUserMenu()" role="button" tabindex="0">
+                    <span id="profileAvatar">👤</span>
+                    <span id="profileName"></span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="console-container">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-toggle" onclick="toggleSidebarCollapse()">
+                <span class="toggle-icon">◀</span>
+            </div>
+            <div class="sidebar-content">
+                <div class="sidebar-section">
+                    <div class="sidebar-title">Navigation</div>
+                    <div class="sidebar-item" onclick="navigate('index.html')" data-tooltip="Console Home"><span class="sidebar-item-icon">🏠</span><span class="sidebar-item-text">Console Home</span></div>
+                    <div class="sidebar-item" onclick="navigate('categories.html')" data-tooltip="Service Cards"><span class="sidebar-item-icon">🗂️</span><span class="sidebar-item-text">Service Cards</span></div>
+                    <div class="sidebar-item" onclick="navigate('quizzes.html')" data-tooltip="Quizzes"><span class="sidebar-item-icon">🧠</span><span class="sidebar-item-text">Quizzes</span></div>
+                    <div class="sidebar-item" onclick="navigate('keywords.html')" data-tooltip="Keywords"><span class="sidebar-item-icon">🔑</span><span class="sidebar-item-text">Keywords</span></div>
+                    <div class="sidebar-item" onclick="navigate('architectural-diagrams.html')" data-tooltip="Diagrams"><span class="sidebar-item-icon">🏗️</span><span class="sidebar-item-text">Diagrams</span></div>
+                    <div class="sidebar-item active" onclick="navigate('roadmap.html')" data-tooltip="Roadmap"><span class="sidebar-item-icon">🗺️</span><span class="sidebar-item-text">Roadmap</span></div>
+                </div>
+                <div class="sidebar-section">
+                    <div class="sidebar-title">Resources</div>
+                    <div class="sidebar-item" onclick="window.open('https://docs.aws.amazon.com/','_blank')" data-tooltip="Documentation"><span class="sidebar-item-icon">📚</span><span class="sidebar-item-text">AWS Documentation</span></div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN -->
+        <main class="main-content">
+
+            <div class="page-header">
+                <h1 class="page-title">Your AWS Certification Journey</h1>
+                <p class="page-subtitle">Navigate through comprehensive certification paths tailored to your career goals. From foundational knowledge to specialized expertise, chart your course to AWS mastery.</p>
+                <div class="stats">
+                    <div class="stat-item"><span class="stat-number">12+</span><span>Certifications</span></div>
+                    <div class="stat-item"><span class="stat-number">9</span><span>Career Paths</span></div>
+                    <div class="stat-item"><span class="stat-number">4</span><span>Levels</span></div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <div class="controls-row">
+                    <button class="view-btn active">🗺️ Explore Paths</button>
+                    <button class="view-btn">📊 Timeline View</button>
+                    <button class="view-btn">📦 Grid View</button>
+                </div>
+                <div class="controls-row">
+                    <button class="filter-tab active">All Paths</button>
+                    <button class="filter-tab">🏛️ Architects</button>
+                    <button class="filter-tab">📊 Data &amp; Analytics</button>
+                    <button class="filter-tab">💻 Development</button>
+                    <button class="filter-tab">⚙️ Operations</button>
+                    <button class="filter-tab">🤖 AI/ML</button>
+                </div>
+            </div>
+
+            <div class="cert-levels">
+                <h2>📚 Certification Levels</h2>
+                <div class="levels-grid">
+                    <div class="level-card"><span class="level-badge">FND</span><div class="level-name">Foundational</div><div class="level-desc">Entry-level knowledge</div></div>
+                    <div class="level-card"><span class="level-badge">ASC</span><div class="level-name">Associate</div><div class="level-desc">Core competency</div></div>
+                    <div class="level-card"><span class="level-badge">PRO</span><div class="level-name">Professional</div><div class="level-desc">Advanced expertise</div></div>
+                    <div class="level-card"><span class="level-badge">SPC</span><div class="level-name">Specialty</div><div class="level-desc">Specialized skills</div></div>
+                </div>
+            </div>
+
+            <div class="paths-section" id="pathsSection">
+
+                <!-- Architects -->
+                <div class="path-category" data-category="Architects">
+                    <div class="category-header">
+                        <div class="category-icon">🏛️</div>
+                        <div class="category-title"><h2>Architects</h2><div class="category-subtitle">Design and build scalable, secure, and resilient cloud solutions</div></div>
+                    </div>
+                    <div class="career-paths">
+                        <div class="career-path">
+                            <div class="path-header">
+                                <div class="path-info"><div class="path-title">Solutions Architect</div><div class="path-desc">Design, develop, and manage cloud infrastructure and design secure applications to the cloud.</div></div>
+                                <div class="cert-count">4 Certifications</div>
+                            </div>
+                            <div class="roadmap-wrapper"><div class="roadmap">
+                                <div class="cert-node"><img src="images/ccp.png" alt="" class="cert-image" onerror="this.style.cssText='display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:600;text-align:center;';this.removeAttribute('src')"><span class="cert-level-badge badge-foundational">Foundational</span><div class="cert-name">AWS Certified Cloud Practitioner</div><div class="cert-description">Foundational understanding of AWS Cloud, services, and terminology</div></div>
+                                <div class="cert-node"><img src="images/saa.png" alt="" class="cert-image" onerror="this.style.cssText='display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:600;text-align:center;';this.removeAttribute('src')"><span class="cert-level-badge badge-associate">Associate</span><div class="cert-name">Solutions Architect Associate</div><div class="cert-description">Design and deploy scalable systems on AWS</div></div>
+                                <div class="cert-node"><img src="images/sap.png" alt="" class="cert-image" onerror="this.style.cssText='display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:600;text-align:center;';this.removeAttribute('src')"><span class="cert-level-badge badge-professional">Professional</span><div class="cert-name">Solutions Architect Professional</div><div class="cert-description">Advanced cloud architecture design and migration</div></div>
+                                <div class="cert-node"><img src="images/scs.png" alt="" class="cert-image" onerror="this.style.cssText='display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:600;text-align:center;';this.removeAttribute('src')"><span class="cert-level-badge badge-specialty">Specialty</span><div class="cert-name">Security Specialty</div><div class="cert-description">Implement and manage security controls on AWS</div></div>
+                            </div></div>
+                        </div>
+                        <div class="career-path">
+                            <div class="path-header">
+                                <div class="path-info"><div class="path-title">Application Architect</div><div class="path-desc">Design significant aspects of application architecture including UI, middleware, infrastructure, and integrations.</div></div>
+                                <div class="cert-count">5 Certifications</div>
+                            </div>
+                            <div class="roadmap-wrapper"><div class="roadmap">
+                                <div class="cert-node"><img src="images/ccp.png" alt="" class="cert-image" onerror="this.style.cssText='display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:600;text-align:center;';this.removeAttribute('src')"><span class="cert-level-badge badge-foundational">Foundational</span><div class="cert-name">Cloud Practitioner</div><div class="cert-description">Foundational AWS cloud concepts and services</div></div>
+                                <div class="cert-node"><img src="images/dva.png" alt="" class="cert-image" onerror="this.style.cssText='display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:600;text-align:center;';this.removeAttribute('src')"><span class="cert-level-badge badge-associate">Associate</span><div class="cert-name">Developer Associate</div><div class="cert-description">Develop and maintain AWS applications</div></div>
+                                <div class="cert-node"><img src="images/saa.png" alt="" class="cert-image" onerror="this.style.cssText='display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:600;text-align:center;';this.removeAttribute('src')"><span class="cert-level-badge badge-associate">Associate</span><div class="cert-name">Solutions Architect</div><div class="cert-description">Design scalable AWS solutions and architectures</div></div>
+                                <div class="cert-node"><img src="images/sap.png" alt="" class="cert-image" onerror="this.style.cssText='display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:600;text-align:center;';this.removeAttribute('src')"><span class="cert-level-badge badge-professional">Professional</span><div class="cert-name">Solutions Architect Professional</div><div class="cert-description">Advanced architecture and complex migrations</div></div>
+                                <div class="cert-node"><img src="images/dop.png" alt="" class="cert-image" onerror="this.style.cssText='display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:600;text-align:center;';this.removeAttribute('src')"><span class="cert-level-badge badge-professional">Professional</span><div class="cert-name">DevOps Engineer Professional</div><div class="cert-description">Automate and optimize AWS infrastructure</div></div>
+                            </div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data & Analytics -->
+                <div class="path-category" data-category="Data & Analytics">
+                    <div class="category-header">
+                        <div class="category-icon">📊</div>
+                        <div class="category-title"><h2>Data &amp; Analytics</h2><div class="category-subtitle">Build and manage data pipelines and analytics solutions</div></div>
+                    </div>
+                    <div class="career-paths">
+                        <div class="career-path">
+                            <div class="path-header">
+                                <div class="path-info"><div class="path-title">Cloud Data Engineer</div><div class="path-desc">Automate collection and processing of structured/semi-structured data and monitor pipeline performance.</div></div>
+                                <div class="cert-count">4 Certifications</div>
+                            </div>
+                            <div class="roadmap-wrapper"><div class="roadmap">
+                                <div class="cert-node"><img src="images/ccp.png" alt="" class="cert-image" onerror="this.style.cssText='display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:600;text-align:center;';this.removeAttribute('src')"><span class="cert-level-badge badge-foundational">Foundational</span><div class="cert-name">Cloud Practitioner</div><div class="cert-description">Foundational AWS cloud concepts and services</div></div>
+                                <div class="cert-node"><img src="images/dea.png" alt="" class="cert-image" onerror="this.style.cssText='display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:600;text-align:center;';this.removeAttribute('src')"><span class="cert-level-badge badge-associate">Associate</span><div class="cert-name">Data Engineer Associate</div><div class="cert-description">Design and maintain data pipelines and analytics</div></div>
+                                <div class="cert-node"><img src="images/mla.png" alt="" class="cert-image" onerror="this.style.cssText='display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:600;text-align:center;';this.removeAttribute('src')"><span class="cert-level-badge badge-associate">Associate</span><div class="cert-name">ML Engineer Associate</div><div class="cert-description">Build and deploy ML models and pipelines</div></div>
+                                <div class="cert-node"><img src="images/mls.png" alt="" class="cert-image" onerror="this.style.cssText='display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:600;text-align:center;';this.removeAttribute('src')"><span class="cert-level-badge badge-specialty">Specialty</span><div class="cert-name">Machine Learning Specialty</div><div class="cert-description">Advanced ML solutions and optimization</div></div>
+                            </div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Development -->
+                <div class="path-category" data-category="Development">
+                    <div class="category-header">
+                        <div class="category-icon">💻</div>
+                        <div class="category-title"><h2>Development</h2><div class="category-subtitle">Build and deploy cloud-native applications</div></div>
+                    </div>
+                    <div class="career-paths">
+                        <div class="career-path">
+                            <div class="path-header">
+                                <div class="path-info"><div class="path-title">Software Development Engineer</div><div class="path-desc">Develop, construct, and maintain software across platforms and devices.</div></div>
+                                <div class="cert-count">3 Certifications</div>
+                            </div>
+                            <div class="roadmap-wrapper"><div class="roadmap">
+                                <div class="cert-node"><img src="images/ccp.png" alt="" class="cert-image" onerror="this.style.cssText='display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:600;text-align:center;';this.removeAttribute('src')"><span class="cert-level-badge badge-foundational">Foundational</span><div class="cert-name">Cloud Practitioner</div><div class="cert-description">Foundational AWS cloud concepts and services</div></div>
+                                <div class="cert-node"><img src="images/dva.png" alt="" class="cert-image" onerror="this.style.cssText='display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:600;text-align:center;';this.removeAttribute('src')"><span class="cert-level-badge badge-associate">Associate</span><div class="cert-name">Developer</div><div class="cert-description">Develop and maintain AWS applications</div></div>
+                                <div class="cert-node"><img src="images/dop.png" alt="" class="cert-image" onerror="this.style.cssText='display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:600;text-align:center;';this.removeAttribute('src')"><span class="cert-level-badge badge-professional">Professional</span><div class="cert-name">DevOps Engineer</div><div class="cert-description">Automate and optimize AWS infrastructure</div></div>
+                            </div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Operations -->
+                <div class="path-category" data-category="Operations">
+                    <div class="category-header">
+                        <div class="category-icon">⚙️</div>
+                        <div class="category-title"><h2>Operations</h2><div class="category-subtitle">Manage and optimize cloud infrastructure and operations</div></div>
+                    </div>
+                    <div class="career-paths">
+                        <div class="career-path">
+                            <div class="path-header">
+                                <div class="path-info"><div class="path-title">Systems Administrator</div><div class="path-desc">Install, upgrade, and maintain computer components and software, and integrate automation processes.</div></div>
+                                <div class="cert-count">3 Certifications</div>
+                            </div>
+                            <div class="roadmap-wrapper"><div class="roadmap">
+                                <div class="cert-node"><img src="images/ccp.png" alt="" class="cert-image" onerror="this.style.cssText='display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:600;text-align:center;';this.removeAttribute('src')"><span class="cert-level-badge badge-foundational">Foundational</span><div class="cert-name">Cloud Practitioner</div><div class="cert-description">Foundational AWS cloud concepts and services</div></div>
+                                <div class="cert-node"><img src="images/cloudops.png" alt="" class="cert-image" onerror="this.style.cssText='display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:600;text-align:center;';this.removeAttribute('src')"><span class="cert-level-badge badge-associate">Associate</span><div class="cert-name">CloudOps Administrator Associate</div><div class="cert-description">Deploy, manage, and operate AWS systems</div></div>
+                                <div class="cert-node"><img src="images/dop.png" alt="" class="cert-image" onerror="this.style.cssText='display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:600;text-align:center;';this.removeAttribute('src')"><span class="cert-level-badge badge-professional">Professional</span><div class="cert-name">DevOps Engineer</div><div class="cert-description">Automate and optimize AWS infrastructure</div></div>
+                            </div></div>
+                        </div>
+                        <div class="career-path">
+                            <div class="path-header">
+                                <div class="path-info"><div class="path-title">Cloud Engineer</div><div class="path-desc">Implement and operate an organization's networked computing infrastructure and implement security systems.</div></div>
+                                <div class="cert-count">5 Certifications</div>
+                            </div>
+                            <div class="roadmap-wrapper"><div class="roadmap">
+                                <div class="cert-node"><img src="images/ccp.png" alt="" class="cert-image" onerror="this.style.cssText='display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:600;text-align:center;';this.removeAttribute('src')"><span class="cert-level-badge badge-foundational">Foundational</span><div class="cert-name">Cloud Practitioner</div><div class="cert-description">Foundational AWS cloud concepts and services</div></div>
+                                <div class="cert-node"><img src="images/dva.png" alt="" class="cert-image" onerror="this.style.cssText='display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:600;text-align:center;';this.removeAttribute('src')"><span class="cert-level-badge badge-associate">Associate</span><div class="cert-name">Developer</div><div class="cert-description">Develop and maintain AWS applications</div></div>
+                                <div class="cert-node"><img src="images/ans.png" alt="" class="cert-image" onerror="this.style.cssText='display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:600;text-align:center;';this.removeAttribute('src')"><span class="cert-level-badge badge-specialty">Specialty</span><div class="cert-name">Advanced Networking Specialty</div><div class="cert-description">Design and implement complex networking solutions</div></div>
+                                <div class="cert-node"><img src="images/dop.png" alt="" class="cert-image" onerror="this.style.cssText='display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:600;text-align:center;';this.removeAttribute('src')"><span class="cert-level-badge badge-professional">Professional</span><div class="cert-name">DevOps Engineer</div><div class="cert-description">Automate and optimize AWS infrastructure</div></div>
+                                <div class="cert-node"><img src="images/scs.png" alt="" class="cert-image" onerror="this.style.cssText='display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:600;text-align:center;';this.removeAttribute('src')"><span class="cert-level-badge badge-specialty">Specialty</span><div class="cert-name">Security</div><div class="cert-description">Implement and manage security controls on AWS</div></div>
+                            </div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI/ML -->
+                <div class="path-category" data-category="AI/ML">
+                    <div class="category-header">
+                        <div class="category-icon">🤖</div>
+                        <div class="category-title"><h2>AI/ML</h2><div class="category-subtitle">Build intelligent systems and machine learning solutions</div></div>
+                    </div>
+                    <div class="career-paths">
+                        <div class="career-path">
+                            <div class="path-header">
+                                <div class="path-info"><div class="path-title">Machine Learning Engineer</div><div class="path-desc">Research, build, and design AI systems to automate predictive models and machine learning schemes.</div></div>
+                                <div class="cert-count">4 Certifications</div>
+                            </div>
+                            <div class="roadmap-wrapper"><div class="roadmap">
+                                <div class="cert-node"><img src="images/ccp.png" alt="" class="cert-image" onerror="this.style.cssText='display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:600;text-align:center;';this.removeAttribute('src')"><span class="cert-level-badge badge-foundational">Foundational</span><div class="cert-name">Cloud Practitioner</div><div class="cert-description">Foundational AWS cloud concepts and services</div></div>
+                                <div class="cert-node"><img src="images/dea.png" alt="" class="cert-image" onerror="this.style.cssText='display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:600;text-align:center;';this.removeAttribute('src')"><span class="cert-level-badge badge-associate">Associate</span><div class="cert-name">Data Engineer</div><div class="cert-description">Design and maintain data pipelines and analytics</div></div>
+                                <div class="cert-node"><img src="images/mla.png" alt="" class="cert-image" onerror="this.style.cssText='display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:600;text-align:center;';this.removeAttribute('src')"><span class="cert-level-badge badge-associate">Associate</span><div class="cert-name">Machine Learning Engineer</div><div class="cert-description">Build and deploy ML models and pipelines</div></div>
+                                <div class="cert-node"><img src="images/mls.png" alt="" class="cert-image" onerror="this.style.cssText='display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:600;text-align:center;';this.removeAttribute('src')"><span class="cert-level-badge badge-specialty">Specialty</span><div class="cert-name">Machine Learning</div><div class="cert-description">Advanced ML solutions and optimization</div></div>
+                            </div></div>
+                        </div>
+                        <div class="career-path">
+                            <div class="path-header">
+                                <div class="path-info"><div class="path-title">AI Enthusiast / College Student <span class="new-badge">NEW</span></div><div class="path-desc">Students and professionals interested in AI and cloud technologies, starting their certification journey.</div></div>
+                                <div class="cert-count">3 Certifications</div>
+                            </div>
+                            <div class="roadmap-wrapper"><div class="roadmap">
+                                <div class="cert-node"><img src="images/ccp.png" alt="" class="cert-image" onerror="this.style.cssText='display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:600;text-align:center;';this.removeAttribute('src')"><span class="cert-level-badge badge-foundational">Foundational</span><div class="cert-name">Cloud Practitioner</div><div class="cert-description">Foundational AWS cloud concepts and services</div></div>
+                                <div class="cert-node"><img src="images/ai.png" alt="" class="cert-image" onerror="this.style.cssText='display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:600;text-align:center;';this.removeAttribute('src')"><span class="cert-level-badge badge-foundational">Foundational</span><div class="cert-name">AI Practitioner <span class="new-badge">NEW</span></div><div class="cert-description">Foundational AI and ML concepts for beginners</div></div>
+                                <div class="cert-node"><img src="images/gai.png" alt="" class="cert-image" onerror="this.style.cssText='display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:600;text-align:center;';this.removeAttribute('src')"><span class="cert-level-badge badge-professional">Professional</span><div class="cert-name">Generative AI Developer <span class="new-badge">NEW</span></div><div class="cert-description">Build and deploy generative AI applications</div></div>
+                            </div></div>
+                        </div>
+                        <div class="career-path">
+                            <div class="path-header">
+                                <div class="path-info"><div class="path-title">Pure AI/ML Specialist <span class="new-badge">NEW</span></div><div class="path-desc">Professionals focused exclusively on AI and ML without broad cloud infrastructure.</div></div>
+                                <div class="cert-count">4 Certifications</div>
+                            </div>
+                            <div class="roadmap-wrapper"><div class="roadmap">
+                                <div class="cert-node"><img src="images/ai.png" alt="" class="cert-image" onerror="this.style.cssText='display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:600;text-align:center;';this.removeAttribute('src')"><span class="cert-level-badge badge-foundational">Foundational</span><div class="cert-name">AI Practitioner</div><div class="cert-description">Foundational AI and ML concepts for beginners</div></div>
+                                <div class="cert-node"><img src="images/gai.png" alt="" class="cert-image" onerror="this.style.cssText='display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:600;text-align:center;';this.removeAttribute('src')"><span class="cert-level-badge badge-professional">Professional</span><div class="cert-name">Generative AI Developer</div><div class="cert-description">Build and deploy generative AI applications</div></div>
+                                <div class="cert-node"><img src="images/mla.png" alt="" class="cert-image" onerror="this.style.cssText='display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:600;text-align:center;';this.removeAttribute('src')"><span class="cert-level-badge badge-associate">Associate</span><div class="cert-name">Machine Learning Engineer</div><div class="cert-description">Build and deploy ML models and pipelines</div></div>
+                                <div class="cert-node"><img src="images/mls.png" alt="" class="cert-image" onerror="this.style.cssText='display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:600;text-align:center;';this.removeAttribute('src')"><span class="cert-level-badge badge-specialty">Specialty</span><div class="cert-name">Machine Learning</div><div class="cert-description">Advanced ML solutions and optimization</div></div>
+                            </div></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- /paths-section -->
+        </main>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            const light = document.body.classList.contains('light-mode');
+            document.getElementById('themeIcon').textContent = light ? '☀️' : '🌙';
+            localStorage.setItem('theme', light ? 'light' : 'dark');
+        }
+
+        function toggleSidebar() {
+            const sb = document.getElementById('sidebar');
+            const ov = document.getElementById('sidebarOverlay');
+            const open = sb.classList.toggle('open');
+            ov.classList.toggle('active', open);
+            document.body.style.overflow = open ? 'hidden' : '';
+        }
+
+        function closeSidebar() {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('sidebarOverlay').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function toggleSidebarCollapse() {
+            const sb = document.getElementById('sidebar');
+            sb.classList.toggle('collapsed');
+            localStorage.setItem('sidebarCollapsed', sb.classList.contains('collapsed'));
+        }
+
+        function navigate(url) { closeSidebar(); window.location.href = url; }
+
+        function toggleUserMenu() {
+            const n = localStorage.getItem('userName');
+            if (!n) {
+                const name = prompt('Welcome! Enter your name:');
+                if (name?.trim()) { localStorage.setItem('userName', name.trim()); updateProfileDisplay(name.trim()); }
+            } else {
+                const c = prompt('Account: ' + n + '\n\n1. View Profile\n2. Settings\n3. Sign Out\n\nEnter (1-3):');
+                if (c === '1') alert('👤 Name: ' + n);
+                else if (c === '2') alert('⚙️ Settings coming soon!');
+                else if (c === '3' && confirm('Sign out?')) { localStorage.removeItem('userName'); updateProfileDisplay(''); }
+            }
+        }
+
+        function updateProfileDisplay(name) {
+            const el = document.getElementById('profileName');
+            el.textContent = name || '';
+            el.style.display = name ? 'inline' : 'none';
+        }
+
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.addEventListener('click', function () {
+                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                const f = this.textContent.trim();
+                document.querySelectorAll('.path-category').forEach(cat => {
+                    const name = cat.querySelector('.category-title h2').textContent.trim();
+                    cat.style.display = (
+                        f === 'All Paths' ||
+                        (f.includes('Architects') && name === 'Architects') ||
+                        (f.includes('Data') && name === 'Data & Analytics') ||
+                        (f.includes('Development') && name === 'Development') ||
+                        (f.includes('Operations') && name === 'Operations') ||
+                        (f.includes('AI') && name === 'AI/ML')
+                    ) ? 'block' : 'none';
+                });
+                document.getElementById('pathsSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+
+        document.querySelectorAll('.view-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                const ps = document.getElementById('pathsSection');
+                ps.classList.remove('timeline-view', 'grid-view');
+                if (this.textContent.includes('Timeline')) ps.classList.add('timeline-view');
+                else if (this.textContent.includes('Grid')) ps.classList.add('grid-view');
+                ps.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const sb = document.getElementById('sidebar');
+            if (localStorage.getItem('sidebarCollapsed') === 'true' && window.innerWidth > 768) sb.classList.add('collapsed');
+            const name = localStorage.getItem('userName');
+            if (name) updateProfileDisplay(name);
+            if (localStorage.getItem('theme') === 'light') {
+                document.body.classList.add('light-mode');
+                document.getElementById('themeIcon').textContent = '☀️';
+            }
+            if (!localStorage.getItem('userJoinDate')) localStorage.setItem('userJoinDate', new Date().toISOString());
+            window.addEventListener('resize', () => { if (window.innerWidth > 768) closeSidebar(); });
+            document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSidebar(); });
+        });
+    </script>
+</body>
+</html>

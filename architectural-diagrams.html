@@ -1,0 +1,2282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+<meta name="theme-color" content="#0f1b2a">
+<title>Architectural Diagrams - AWS Study Hub</title>
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  :root {
+    --bg-primary: #0f1b2a;
+    --bg-secondary: #16202e;
+    --bg-tertiary: #1a2433;
+    --bg-header: #232f3e;
+    --border-color: #2a3f5f;
+    --border-light: #3f4e5f;
+    --text-primary: #ffffff;
+    --text-secondary: #aab7c4;
+    --text-muted: #687078;
+    --accent-blue: #0972d3;
+    --accent-blue-hover: #0d5baa;
+    --accent-orange: #ff9900;
+    --accent-orange-hover: #ec7211;
+    --success-color: #1e8e3e;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.5);
+    --sidebar-width: 260px;
+    --sidebar-collapsed-width: 70px;
+    --header-height: 70px;
+    --page-title-color: #ffffff;
+    --page-subtitle-color: #ffffff;
+  }
+
+  body.light-mode {
+    --bg-primary: #f2f3f3;
+    --bg-secondary: #ffffff;
+    --bg-tertiary: #fafafa;
+    --bg-header: #ffffff;
+    --border-color: #d5dbdb;
+    --border-light: #e9ecef;
+    --text-primary: #16191f;
+    --text-secondary: #5f6b7a;
+    --text-muted: #879596;
+    --accent-blue: #0972d3;
+    --accent-blue-hover: #0d5baa;
+    --accent-orange: #ff9900;
+    --accent-orange-hover: #ec7211;
+    --success-color: #1e8e3e;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.12);
+    --page-title-color: #000000;
+    --page-subtitle-color: #000000;
+  }
+
+  body {
+    font-family: 'Amazon Ember', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    overflow-x: hidden;
+  }
+
+  /* AWS Header */
+  .aws-header {
+    background: var(--bg-header);
+    border-bottom: 2px solid var(--border-light);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    height: var(--header-height);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  body.light-mode .aws-header {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    max-width: 1920px;
+    margin: 0 auto;
+    height: 100%;
+    gap: 24px;
+  }
+
+  /* Console Home Title */
+  .console-title-container {
+    flex: 0 0 auto;
+  }
+
+  .console-home-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0;
+    letter-spacing: -0.5px;
+  }
+
+  .title-icon {
+    font-size: 1.5rem;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  }
+
+  body.light-mode .title-icon {
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+  }
+
+  /* Quick Nav Pills */
+  .quick-nav {
+    display: flex;
+    gap: 12px;
+    flex: 1;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .nav-pill {
+    padding: 10px 20px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
+    border: 2px solid var(--border-light);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+  }
+
+  body.light-mode .nav-pill {
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.03), rgba(0, 0, 0, 0.01));
+  }
+
+  .nav-pill:hover {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.08));
+    border-color: var(--accent-blue);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(9, 114, 211, 0.3);
+  }
+
+  body.light-mode .nav-pill:hover {
+    background: linear-gradient(135deg, rgba(9, 114, 211, 0.08), rgba(9, 114, 211, 0.04));
+    box-shadow: 0 4px 12px rgba(9, 114, 211, 0.2);
+  }
+
+  .nav-pill.active {
+    background: linear-gradient(135deg, var(--accent-orange), #ec7211);
+    border-color: var(--accent-orange);
+    color: #000;
+  }
+
+  /* Right Side Controls */
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .header-divider {
+    width: 2px;
+    height: 40px;
+    background: linear-gradient(180deg, transparent, var(--border-light), transparent);
+    margin: 0 8px;
+  }
+
+  /* Theme Toggle Button */
+  .theme-toggle-btn {
+    position: relative;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    border: 2px solid var(--border-light);
+    color: var(--text-primary);
+    padding: 0;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.5rem;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  body.light-mode .theme-toggle-btn {
+    background: linear-gradient(135deg, rgba(255, 200, 0, 0.15), rgba(255, 200, 0, 0.08));
+    border-color: rgba(255, 200, 0, 0.3);
+  }
+
+  .theme-toggle-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+  }
+
+  .theme-toggle-btn:hover::before {
+    left: 100%;
+  }
+
+  .theme-toggle-btn:hover {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.1));
+    border-color: var(--accent-orange);
+    transform: translateY(-2px) rotate(15deg);
+    box-shadow: 0 6px 20px rgba(255, 153, 0, 0.4);
+  }
+
+  body.light-mode .theme-toggle-btn:hover {
+    background: linear-gradient(135deg, rgba(255, 200, 0, 0.25), rgba(255, 200, 0, 0.15));
+    border-color: #ffc800;
+    box-shadow: 0 6px 20px rgba(255, 200, 0, 0.5);
+  }
+
+  .theme-icon {
+    font-size: 1.5rem;
+    transition: transform 0.3s ease;
+    display: block;
+  }
+
+  .theme-toggle-btn:hover .theme-icon {
+    transform: scale(1.1);
+  }
+
+  /* Profile Button */
+  .header-btn-profile {
+    background: linear-gradient(135deg, rgba(255, 153, 0, 0.15), rgba(255, 153, 0, 0.1));
+    border: 2px solid rgba(255, 153, 0, 0.3);
+    color: var(--text-primary);
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+    overflow: hidden;
+    font-weight: 600;
+    min-width: 50px;
+  }
+
+  .header-btn-profile:hover {
+    background: linear-gradient(135deg, rgba(255, 153, 0, 0.25), rgba(255, 153, 0, 0.15));
+    border-color: var(--accent-orange);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(255, 153, 0, 0.5);
+  }
+
+  #profileAvatar {
+    font-size: 1.25rem;
+  }
+
+  /* Main Container */
+  .console-container {
+    display: flex;
+    min-height: calc(100vh - var(--header-height));
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: var(--sidebar-width);
+    background-color: var(--bg-secondary);
+    border-right: 1px solid var(--border-color);
+    overflow-y: auto;
+    overflow-x: hidden;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sidebar.collapsed {
+    width: var(--sidebar-collapsed-width);
+  }
+
+  .sidebar-toggle {
+    position: sticky;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 48px;
+    background-color: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.2s;
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+
+  .sidebar-toggle:hover {
+    background-color: var(--bg-tertiary);
+    color: var(--accent-orange);
+  }
+
+  .toggle-icon {
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .sidebar.collapsed .toggle-icon {
+    transform: rotate(180deg);
+  }
+
+  .sidebar-content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .sidebar-section {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .sidebar-title {
+    color: var(--text-muted);
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 0 20px 10px;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 1;
+  }
+
+  .sidebar.collapsed .sidebar-title {
+    opacity: 0;
+    padding: 0 10px;
+  }
+
+  .sidebar-item {
+    color: var(--text-secondary);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.875rem;
+    border-left: 3px solid transparent;
+    white-space: nowrap;
+    position: relative;
+    margin: 2px 0;
+  }
+
+  .sidebar-item:hover {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    border-left-color: var(--accent-blue);
+  }
+
+  .sidebar-item.active {
+    background-color: var(--bg-tertiary);
+    border-left-color: var(--accent-orange);
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .sidebar-item-icon {
+    width: 22px;
+    height: 22px;
+    text-align: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .sidebar-item-text {
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 1;
+  }
+
+  .sidebar.collapsed .sidebar-item-text {
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+  }
+
+  .sidebar.collapsed .sidebar-item {
+    justify-content: center;
+    padding: 12px 0;
+    gap: 0;
+  }
+
+  /* Tooltip */
+  .sidebar.collapsed .sidebar-item::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: calc(100% + 12px);
+    top: 50%;
+    transform: translateY(-50%) translateX(-10px);
+    background: linear-gradient(135deg, var(--bg-header), #1a2433);
+    color: var(--text-primary);
+    padding: 8px 14px;
+    border-radius: 6px;
+    white-space: nowrap;
+    font-size: 0.875rem;
+    z-index: 1000;
+    box-shadow: var(--shadow-lg);
+    pointer-events: none;
+    opacity: 0;
+    transition: all 0.2s ease;
+    border: 1px solid var(--border-light);
+  }
+
+  .sidebar.collapsed .sidebar-item:hover::before {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+
+  /* Main Content */
+  .main-content {
+    flex: 1;
+    background-color: var(--bg-primary);
+    overflow-y: auto;
+    transition: margin-left 0.3s ease;
+    padding: 32px;
+  }
+
+  .page-header {
+    margin-bottom: 32px;
+    text-align: left;
+  }
+
+  .page-title {
+    font-size: 2.5rem;
+    color: var(--page-title-color);
+    font-weight: 700;
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+    transition: color 0.3s ease;
+  }
+
+  .page-subtitle {
+    font-size: 1.125rem;
+    color: var(--page-subtitle-color);
+    max-width: 900px;
+    line-height: 1.6;
+    transition: color 0.3s ease;
+  }
+
+  /* Diagram Grid */
+  .diagrams-container {
+    display: grid;
+    gap: 32px;
+    max-width: 1600px;
+  }
+
+  /* Individual Diagram Card */
+  .diagram-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s ease;
+  }
+
+  .diagram-card:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+  }
+
+  /* Diagram Header */
+  .diagram-header {
+    padding: 24px 28px;
+    background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-secondary));
+    border-bottom: 2px solid var(--border-color);
+  }
+
+  .diagram-title-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+
+  .diagram-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.3;
+    flex: 1;
+  }
+
+  .diagram-number {
+    background: linear-gradient(135deg, var(--accent-orange), var(--accent-orange-hover));
+    color: #000;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .diagram-subtitle {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+
+  .diagram-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .diagram-tag {
+    padding: 6px 12px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .diagram-tag.primary {
+    background: linear-gradient(135deg, rgba(9, 114, 211, 0.2), rgba(9, 114, 211, 0.1));
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
+  }
+
+  /* Split Layout */
+  .diagram-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    min-height: 500px;
+  }
+
+  /* Image Section */
+  .diagram-visual {
+    background: var(--bg-primary);
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-right: 1px solid var(--border-color);
+    position: relative;
+  }
+
+  .diagram-image-wrapper {
+    width: 100%;
+    max-width: 100%;
+    position: relative;
+  }
+
+  .diagram-image-wrapper img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  .diagram-image-wrapper img:hover {
+    transform: scale(1.03);
+    box-shadow: 0 8px 24px rgba(255, 153, 0, 0.4);
+  }
+
+  .zoom-hint {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  .diagram-image-wrapper:hover .zoom-hint {
+    opacity: 1;
+  }
+
+  /* Explanation Section */
+  .diagram-explanation {
+    padding: 28px;
+    background: var(--bg-secondary);
+    overflow-y: auto;
+    max-height: 600px;
+  }
+
+  .explanation-intro {
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--border-color);
+  }
+
+  .explanation-intro h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--accent-orange);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .explanation-intro p {
+    color: var(--text-secondary);
+    line-height: 1.7;
+    font-size: 0.9375rem;
+  }
+
+  .explanation h4 {
+    color: var(--text-primary);
+    margin: 15px 0 8px;
+    font-size: 1.05rem;
+  }
+
+  .explanation p {
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+    line-height: 1.7;
+  }
+
+  .explanation strong {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  /* Key Takeaways Box */
+  .key-takeaways {
+    background: linear-gradient(135deg, rgba(9, 114, 211, 0.15), rgba(9, 114, 211, 0.05));
+    border: 1px solid var(--accent-blue);
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 24px;
+  }
+
+  .key-takeaways h4 {
+    color: var(--accent-blue);
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .key-takeaways ul {
+    list-style: none;
+    margin: 0;
+  }
+
+  .key-takeaways li {
+    padding-left: 24px;
+    position: relative;
+    margin-bottom: 8px;
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+  }
+
+  .key-takeaways li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--success-color);
+    font-weight: 700;
+    font-size: 1rem;
+  }
+
+  strong {
+    color: var(--text-primary);
+  }
+
+  /* Modal */
+  .modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .modal-content {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 8px;
+    object-fit: contain;
+  }
+
+  .close {
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    font-size: 40px;
+    color: #fff;
+    cursor: pointer;
+    z-index: 10000;
+    transition: color 0.3s ease;
+    background: rgba(0, 0, 0, 0.5);
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+  }
+
+  .close:hover {
+    color: var(--accent-orange);
+    background: rgba(0, 0, 0, 0.8);
+  }
+
+  /* Particles */
+  .particles {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    animation: float linear infinite;
+  }
+
+  @keyframes float {
+    from { transform: translateY(0); }
+    to { transform: translateY(-1200px); }
+  }
+
+  /* Mobile menu toggle */
+  .menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 8px;
+    min-width: 40px;
+    min-height: 40px;
+  }
+
+  /* Mobile Menu Overlay */
+  .mobile-menu-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 998;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .mobile-menu-overlay.active {
+    opacity: 1;
+  }
+
+  /* Back to Top Button */
+  .back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, var(--accent-orange), var(--accent-orange-hover));
+    color: #000;
+    border: none;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-lg);
+    z-index: 900;
+    transition: all 0.3s ease;
+  }
+
+  .back-to-top:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(255, 153, 0, 0.6);
+  }
+
+  .back-to-top.visible {
+    display: flex;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 1200px) {
+    .quick-nav {
+      gap: 8px;
+    }
+
+    .nav-pill {
+      padding: 8px 14px;
+      font-size: 0.875rem;
+    }
+
+    .diagram-content {
+      grid-template-columns: 1fr;
+    }
+
+    .diagram-visual {
+      border-right: none;
+      border-bottom: 1px solid var(--border-color);
+      min-height: 400px;
+    }
+
+    .diagram-explanation {
+      max-height: none;
+    }
+  }
+
+  @media (max-width: 992px) {
+    :root {
+      --header-height: 65px;
+    }
+
+    .header-content {
+      padding: 0 20px;
+      gap: 16px;
+    }
+
+    .console-home-title {
+      font-size: 1.25rem;
+    }
+
+    .title-icon {
+      font-size: 1.25rem;
+    }
+
+    .quick-nav .nav-pill span:last-child {
+      display: none;
+    }
+
+    .quick-nav {
+      gap: 6px;
+    }
+
+    .nav-pill {
+      padding: 8px 12px;
+      min-width: 40px;
+      justify-content: center;
+    }
+
+    .diagram-title {
+      font-size: 1.5rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    :root {
+      --header-height: 60px;
+    }
+
+    .menu-toggle {
+      display: flex;
+    }
+
+    .sidebar {
+      position: fixed;
+      left: -280px;
+      top: var(--header-height);
+      height: calc(100vh - var(--header-height));
+      z-index: 999;
+      width: 260px;
+      transition: left 0.3s ease;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .sidebar.open {
+      left: 0;
+    }
+
+    .sidebar.collapsed {
+      left: -280px;
+    }
+
+    .quick-nav {
+      display: none;
+    }
+
+    .console-home-title {
+      font-size: 1rem;
+    }
+
+    .console-home-title span:last-child {
+      display: none;
+    }
+
+    .title-icon {
+      font-size: 1.5rem;
+    }
+
+    .header-content {
+      padding: 0 12px;
+      gap: 8px;
+    }
+
+    .theme-toggle-btn {
+      width: 45px;
+      height: 45px;
+      font-size: 1.25rem;
+    }
+
+    .header-btn-profile {
+      padding: 8px 12px;
+      font-size: 0.875rem;
+      min-width: 45px;
+    }
+
+    #profileName {
+      display: none;
+    }
+
+    #profileAvatar {
+      font-size: 1.25rem;
+    }
+
+    .header-divider {
+      height: 30px;
+      margin: 0 4px;
+    }
+
+    .main-content {
+      padding: 16px;
+    }
+
+    .page-header {
+      margin-bottom: 24px;
+    }
+
+    .page-title {
+      font-size: 1.75rem;
+    }
+
+    .page-subtitle {
+      font-size: 0.9375rem;
+    }
+
+    .diagram-header {
+      padding: 20px;
+    }
+
+    .diagram-title {
+      font-size: 1.25rem;
+    }
+
+    .diagram-number {
+      width: 35px;
+      height: 35px;
+      font-size: 1rem;
+    }
+
+    .diagram-subtitle {
+      font-size: 0.875rem;
+    }
+
+    .diagram-content {
+      min-height: auto;
+    }
+
+    .diagram-visual {
+      padding: 20px;
+      min-height: 250px;
+      border-right: none;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .diagram-explanation {
+      padding: 20px;
+    }
+
+    .explanation-intro h3 {
+      font-size: 1.125rem;
+    }
+
+    .explanation h4 {
+      font-size: 1rem;
+    }
+
+    .key-takeaways {
+      padding: 16px;
+    }
+
+    .close {
+      top: 10px;
+      right: 10px;
+      width: 45px;
+      height: 45px;
+      font-size: 30px;
+    }
+
+    .back-to-top {
+      bottom: 20px;
+      right: 20px;
+      width: 45px;
+      height: 45px;
+      font-size: 1.25rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .header-content {
+      padding: 0 10px;
+      gap: 6px;
+    }
+
+    .theme-toggle-btn {
+      width: 40px;
+      height: 40px;
+      font-size: 1.125rem;
+    }
+
+    .header-btn-profile {
+      padding: 8px;
+      min-width: 40px;
+    }
+
+    #profileAvatar {
+      font-size: 1.125rem;
+    }
+
+    .main-content {
+      padding: 12px;
+    }
+
+    .page-title {
+      font-size: 1.5rem;
+    }
+
+    .page-subtitle {
+      font-size: 0.875rem;
+    }
+
+    .diagram-header {
+      padding: 16px;
+    }
+
+    .diagram-title {
+      font-size: 1.125rem;
+    }
+
+    .diagram-number {
+      width: 32px;
+      height: 32px;
+      font-size: 0.9375rem;
+    }
+
+    .diagram-subtitle {
+      font-size: 0.8125rem;
+    }
+
+    .diagram-tag {
+      font-size: 0.6875rem;
+      padding: 4px 8px;
+    }
+
+    .diagram-visual {
+      padding: 16px;
+      min-height: 200px;
+    }
+
+    .diagram-explanation {
+      padding: 16px;
+    }
+
+    .explanation-intro {
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+    }
+
+    .explanation-intro h3 {
+      font-size: 1rem;
+    }
+
+    .explanation-intro p,
+    .explanation p,
+    .key-takeaways li {
+      font-size: 0.875rem;
+    }
+
+    .explanation h4 {
+      font-size: 0.9375rem;
+    }
+
+    .key-takeaways {
+      padding: 12px;
+      margin-top: 16px;
+    }
+
+    .key-takeaways h4 {
+      font-size: 0.9375rem;
+    }
+
+    .diagrams-container {
+      gap: 20px;
+    }
+  }
+
+  /* Scrollbar Styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--border-light);
+  }
+
+  /* Better touch targets for mobile */
+  @media (hover: none) and (pointer: coarse) {
+    .sidebar-item,
+    .nav-pill,
+    .theme-toggle-btn,
+    .header-btn-profile,
+    .menu-toggle {
+      min-height: 44px;
+    }
+  }
+</style>
+</head>
+
+<body>
+
+<div class="particles"></div>
+
+<!-- Mobile Menu Overlay -->
+<div class="mobile-menu-overlay" id="mobileOverlay" onclick="closeSidebar()"></div>
+
+<!-- AWS Console Header -->
+<header class="aws-header">
+  <div class="header-content">
+    <!-- Mobile Menu Toggle -->
+    <button class="menu-toggle" onclick="toggleSidebar()" aria-label="Toggle menu">☰</button>
+
+    <!-- Console Home Title -->
+    <div class="console-title-container">
+      <h1 class="console-home-title">
+        <span class="title-icon">🏗️</span>
+        <span>Architectural Diagrams</span>
+      </h1>
+    </div>
+
+    <!-- Quick Navigation Pills -->
+    <div class="quick-nav">
+      <div class="nav-pill" onclick="window.location.href='index.html'" role="button" tabindex="0">
+        <span>🏠</span>
+        <span>Home</span>
+      </div>
+      <div class="nav-pill" onclick="window.location.href='categories.html'" role="button" tabindex="0">
+        <span>🗂️</span>
+        <span>Services</span>
+      </div>
+      <div class="nav-pill" onclick="window.location.href='quizzes.html'" role="button" tabindex="0">
+        <span>🧠</span>
+        <span>Quizzes</span>
+      </div>
+      <div class="nav-pill" onclick="window.location.href='keywords.html'" role="button" tabindex="0">
+        <span>🔑</span>
+        <span>Keywords</span>
+      </div>
+      <div class="nav-pill active" onclick="window.location.href='architectural-diagrams.html'" role="button" tabindex="0">
+        <span>🏗️</span>
+        <span>Diagrams</span>
+      </div>
+      <div class="nav-pill" onclick="window.location.href='roadmap.html'" role="button" tabindex="0">
+        <span>🗺️</span>
+        <span>Roadmap</span>
+      </div>
+    </div>
+
+    <!-- Right Side Controls -->
+    <div class="header-right">
+      <!-- Theme Toggle -->
+      <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeToggleBtn" title="Toggle Theme" aria-label="Toggle theme">
+        <span class="theme-icon" id="themeIcon">🌙</span>
+      </button>
+
+      <div class="header-divider"></div>
+
+      <!-- Profile Button -->
+      <div class="header-btn-profile" onclick="toggleUserMenu()" title="Account" id="profileBtn" role="button" tabindex="0">
+        <span id="profileAvatar">👤</span>
+        <span id="profileName"></span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Main Console Container -->
+<div class="console-container">
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-toggle" onclick="toggleSidebarCollapse()" title="Toggle sidebar">
+      <span class="toggle-icon">◀</span>
+    </div>
+    
+    <div class="sidebar-content">
+      <div class="sidebar-section">
+        <div class="sidebar-title">Navigation</div>
+        <div class="sidebar-item" onclick="navigateTo('index.html')" data-tooltip="Console Home" role="button" tabindex="0">
+          <span class="sidebar-item-icon">🏠</span>
+          <span class="sidebar-item-text">Console Home</span>
+        </div>
+        <div class="sidebar-item" onclick="navigateTo('categories.html')" data-tooltip="Service Cards" role="button" tabindex="0">
+          <span class="sidebar-item-icon">🗂️</span>
+          <span class="sidebar-item-text">Service Cards</span>
+        </div>
+        <div class="sidebar-item" onclick="navigateTo('quizzes.html')" data-tooltip="Quizzes" role="button" tabindex="0">
+          <span class="sidebar-item-icon">🧠</span>
+          <span class="sidebar-item-text">Quizzes</span>
+        </div>
+        <div class="sidebar-item" onclick="navigateTo('keywords.html')" data-tooltip="Keywords" role="button" tabindex="0">
+          <span class="sidebar-item-icon">🔑</span>
+          <span class="sidebar-item-text">Keywords</span>
+        </div>
+        <div class="sidebar-item active" onclick="navigateTo('architectural-diagrams.html')" data-tooltip="Diagrams" role="button" tabindex="0">
+          <span class="sidebar-item-icon">🏗️</span>
+          <span class="sidebar-item-text">Diagrams</span>
+        </div>
+        <div class="sidebar-item" onclick="navigateTo('roadmap.html')" data-tooltip="Roadmap" role="button" tabindex="0">
+          <span class="sidebar-item-icon">🗺️</span>
+          <span class="sidebar-item-text">Roadmap</span>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Resources</div>
+        <div class="sidebar-item" onclick="window.open('https://docs.aws.amazon.com/', '_blank')" data-tooltip="Documentation" role="button" tabindex="0">
+          <span class="sidebar-item-icon">📚</span>
+          <span class="sidebar-item-text">AWS Documentation</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="main-content">
+    <div class="page-header">
+      <h1 class="page-title">AWS Architectural Diagrams</h1>
+      <p class="page-subtitle">Explore real-world AWS architecture patterns with interactive diagrams and detailed explanations to master cloud infrastructure design</p>
+    </div>
+
+    <div class="diagrams-container">
+
+      <!-- DIAGRAM 1: Serverless Java Container -->
+      <div class="diagram-card">
+        <div class="diagram-header">
+          <div class="diagram-title-row">
+            <h2 class="diagram-title">Serverless Java Container with API Gateway & DynamoDB</h2>
+            <div class="diagram-number">01</div>
+          </div>
+          <p class="diagram-subtitle">Event-driven serverless architecture using Lambda, API Gateway, DynamoDB, and S3 with comprehensive audit logging via CloudTrail and X-Ray tracing</p>
+          <div class="diagram-tags">
+            <span class="diagram-tag primary">Serverless</span>
+            <span class="diagram-tag">Lambda</span>
+            <span class="diagram-tag">API Gateway</span>
+            <span class="diagram-tag">DynamoDB</span>
+          </div>
+        </div>
+
+        <div class="diagram-content">
+          <div class="diagram-visual">
+            <div class="diagram-image-wrapper">
+              <img src="images/a1.jpg" alt="Serverless Java Container Diagram" onclick="openModal(this.src)" loading="lazy">
+              <div class="zoom-hint">🔍 Click to enlarge</div>
+            </div>
+          </div>
+
+          <div class="diagram-explanation">
+            <div class="explanation-intro">
+              <h3>📋 Architecture Overview</h3>
+              <p>This serverless architecture demonstrates a fully managed solution for processing JSON documents. Clients upload bundled documents that trigger Lambda functions via API Gateway, which parse and validate the data before storing it in DynamoDB and S3.</p>
+            </div>
+
+            <h4>🔐 Key Components:</h4>
+            <p><strong>Amazon Cognito:</strong> Manages user authentication and generates authorization tokens for secure API access with MFA support</p>
+            <p><strong>API Gateway with FHIR Endpoints:</strong> RESTful API that creates patient resources using JSON payloads with request validation and rate limiting</p>
+            <p><strong>AWS Lambda:</strong> Serverless functions parse and validate JSON payloads with automatic scaling and pay-per-invocation pricing</p>
+            <p><strong>Storage Layer:</strong> DynamoDB stores structured FHIR fields while S3 stores complete document bundles with versioning</p>
+            <p><strong>Monitoring:</strong> X-Ray tracks message flow across services and CloudTrail provides comprehensive audit logs for compliance</p>
+
+            <div class="key-takeaways">
+              <h4>💡 Key Takeaways</h4>
+              <ul>
+                <li>Zero server management with fully serverless architecture</li>
+                <li>Automatic scaling from zero to enterprise-level traffic</li>
+                <li>Pay-per-use pricing reduces operational costs significantly</li>
+                <li>Comprehensive observability with X-Ray and CloudTrail</li>
+                <li>FHIR-compliant healthcare data handling</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DIAGRAM 2: Three-Tier Web Application -->
+      <div class="diagram-card">
+        <div class="diagram-header">
+          <div class="diagram-title-row">
+            <h2 class="diagram-title">Three-Tier Web Application with Multi-AZ Deployment</h2>
+            <div class="diagram-number">02</div>
+          </div>
+          <p class="diagram-subtitle">Highly available three-tier architecture with presentation, application, and database layers spanning multiple Availability Zones with Route 53, CloudFront, and ElastiCache</p>
+          <div class="diagram-tags">
+            <span class="diagram-tag primary">Multi-AZ</span>
+            <span class="diagram-tag">High Availability</span>
+            <span class="diagram-tag">CloudFront</span>
+            <span class="diagram-tag">Aurora</span>
+          </div>
+        </div>
+
+        <div class="diagram-content">
+          <div class="diagram-visual">
+            <div class="diagram-image-wrapper">
+              <img src="images/a2.png" alt="Three-Tier Architecture Diagram" onclick="openModal(this.src)" loading="lazy">
+              <div class="zoom-hint">🔍 Click to enlarge</div>
+            </div>
+          </div>
+
+          <div class="diagram-explanation">
+            <div class="explanation-intro">
+              <h3>📋 Architecture Overview</h3>
+              <p>This production-grade three-tier web application features complete redundancy across two Availability Zones. Each layer (presentation, application, database) is isolated in separate subnets with Auto Scaling groups ensuring high availability.</p>
+            </div>
+
+            <h4>🌐 Architecture Layers:</h4>
+            <p><strong>Global Layer:</strong> Route 53 for DNS management and CloudFront CDN for global content delivery with edge caching and DDoS protection</p>
+            <p><strong>Presentation Tier:</strong> Auto Scaling group of front-end servers behind Application Load Balancer serving user interfaces with health checks</p>
+            <p><strong>Application Tier:</strong> Business logic servers with ElastiCache for in-memory caching, reducing database load by 80%</p>
+            <p><strong>Database Tier:</strong> Aurora Primary in AZ1 with Aurora Replica in AZ2 for read scaling and automatic failover within 30 seconds</p>
+            <p><strong>Storage:</strong> Amazon S3 for static assets with lifecycle policies and Amazon EFS for shared file system</p>
+
+            <div class="key-takeaways">
+              <h4>💡 Key Takeaways</h4>
+              <ul>
+                <li>Complete redundancy across two Availability Zones</li>
+                <li>Auto Scaling ensures optimal resource utilization</li>
+                <li>ElastiCache significantly improves performance</li>
+                <li>CloudFront provides global content delivery</li>
+                <li>Three-tier architecture separates concerns for maintainability</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DIAGRAM 3: Location-Based Mobile Application -->
+      <div class="diagram-card">
+        <div class="diagram-header">
+          <div class="diagram-title-row">
+            <h2 class="diagram-title">Location-Based Mobile Application with AWS Amplify</h2>
+            <div class="diagram-number">03</div>
+          </div>
+          <p class="diagram-subtitle">Real-time geolocation application leveraging AWS Amplify, Location Service, AppSync, and EventBridge for event-driven geofencing and location tracking</p>
+          <div class="diagram-tags">
+            <span class="diagram-tag primary">Mobile</span>
+            <span class="diagram-tag">Location Services</span>
+            <span class="diagram-tag">Amplify</span>
+            <span class="diagram-tag">Real-time</span>
+          </div>
+        </div>
+
+        <div class="diagram-content">
+          <div class="diagram-visual">
+            <div class="diagram-image-wrapper">
+              <img src="images/a3.png" alt="Location-Based Mobile App Diagram" onclick="openModal(this.src)" loading="lazy">
+              <div class="zoom-hint">🔍 Click to enlarge</div>
+            </div>
+          </div>
+
+          <div class="diagram-explanation">
+            <div class="explanation-intro">
+              <h3>📋 Architecture Overview</h3>
+              <p>This location-aware mobile and web application uses AWS Amplify framework to track user locations, define geofences, and trigger events when users enter/exit zones with real-time updates via AppSync GraphQL subscriptions.</p>
+            </div>
+
+            <h4>📱 Key Components:</h4>
+            <p><strong>AWS Amplify (Steps 1-2):</strong> Unified framework accelerating mobile/web development with pre-built UI components, offline sync, and authentication</p>
+            <p><strong>AppSync (Step 3):</strong> Managed GraphQL API providing real-time subscriptions for live location updates with DynamoDB integration and conflict resolution</p>
+            <p><strong>Location Service (Step 4):</strong> Provides Track for real-time monitoring, Geofence for virtual perimeters, Map rendering, geocoding, and routing</p>
+            <p><strong>EventBridge (Step 6):</strong> Routes geofence entry/exit events to Lambda functions with event filtering and schema registry</p>
+            <p><strong>Lambda (Step 7):</strong> Executes business logic like sending notifications via SNS and updating location history in DynamoDB</p>
+            <p><strong>Amazon Pinpoint:</strong> Delivers push notifications, emails, SMS for user engagement with campaign analytics and A/B testing</p>
+
+            <div class="key-takeaways">
+              <h4>💡 Key Takeaways</h4>
+              <ul>
+                <li>AWS Amplify simplifies multi-platform development</li>
+                <li>Real-time location updates via AppSync subscriptions</li>
+                <li>Event-driven architecture with geofencing capabilities</li>
+                <li>Cross-platform support (iOS, Android, Web)</li>
+                <li>Serverless scalability for variable workloads</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DIAGRAM 4: VPC Peering with Multi-Team Access -->
+      <div class="diagram-card">
+        <div class="diagram-header">
+          <div class="diagram-title-row">
+            <h2 class="diagram-title">VPC Peering with Production & Development Environments</h2>
+            <div class="diagram-number">04</div>
+          </div>
+          <p class="diagram-subtitle">Multi-team AWS account structure with isolated Production and Development VPCs connected via VPC Peering, enabling controlled cross-environment access and cost visibility through AWS Cost Management</p>
+          <div class="diagram-tags">
+            <span class="diagram-tag primary">Networking</span>
+            <span class="diagram-tag">VPC Peering</span>
+            <span class="diagram-tag">EC2</span>
+            <span class="diagram-tag">Cost Management</span>
+          </div>
+        </div>
+
+        <div class="diagram-content">
+          <div class="diagram-visual">
+            <div class="diagram-image-wrapper">
+              <img src="images/a4.png" alt="VPC Peering Architecture Diagram" onclick="openModal(this.src)" loading="lazy">
+              <div class="zoom-hint">🔍 Click to enlarge</div>
+            </div>
+          </div>
+
+          <div class="diagram-explanation">
+            <div class="explanation-intro">
+              <h3>📋 Architecture Overview</h3>
+              <p>This architecture illustrates a real-world multi-team AWS setup within a single AWS account and Region. Two isolated VPCs — Production and Development — are connected through a VPC Peering Connection, allowing internal traffic to flow securely between environments without traversing the public internet. Different teams interact with different EC2 instances based on their role, while the Finance team uses AWS Cost Management Services to track spending across both environments.</p>
+            </div>
+
+            <h4>🏗️ Key Components:</h4>
+            <p><strong>Production VPC:</strong> Hosts the customer-facing EC2 instance serving live traffic from Customers and the Sales team. This VPC is the primary environment with strict access controls and higher security posture.</p>
+            <p><strong>Development VPC:</strong> A separate isolated VPC hosting a dedicated EC2 instance used by Engineering and Product teams for building, testing, and validating features before they reach production.</p>
+            <p><strong>VPC Peering Connection:</strong> A private, non-transitive network link between the Production and Development VPCs. It allows EC2 instances in both VPCs to communicate using private IP addresses — no NAT gateway, VPN, or internet exposure required. Peering is region-local here but can span regions.</p>
+            <p><strong>Team Access Model:</strong> Customers and the Sales team access the Production EC2 instance directly. The Engineering team accesses both EC2 instances (cross-environment capability), while the Product team accesses the Development EC2 instance for validation. This role-based model enforces least-privilege access.</p>
+            <p><strong>AWS Cost Management Services:</strong> The Finance team uses services like AWS Cost Explorer, Budgets, and Cost and Usage Reports to monitor spending across both VPCs. Tags applied to resources in each VPC enable granular cost attribution by environment and team.</p>
+
+            <div class="key-takeaways">
+              <h4>💡 Key Takeaways</h4>
+              <ul>
+                <li>VPC Peering enables private, low-latency cross-VPC communication without public internet exposure</li>
+                <li>Separating Production and Development VPCs prevents accidental changes to live environments</li>
+                <li>Peering connections are non-transitive — a third VPC cannot route through an existing peer</li>
+                <li>Role-based team access enforces least-privilege and reduces blast radius of mistakes</li>
+                <li>AWS Cost Management enables per-environment and per-team cost visibility for chargeback or showback models</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DIAGRAM 5: EKS on VMware Cloud with CI/CD -->
+      <div class="diagram-card">
+        <div class="diagram-header">
+          <div class="diagram-title-row">
+            <h2 class="diagram-title">Amazon EKS with VMware Cloud on AWS & CI/CD Pipeline</h2>
+            <div class="diagram-number">05</div>
+          </div>
+          <p class="diagram-subtitle">Hybrid cloud architecture combining Amazon EKS on a private subnet with VMware Cloud on AWS SDDC, backed by a fully automated CodePipeline CI/CD pipeline for container delivery</p>
+          <div class="diagram-tags">
+            <span class="diagram-tag primary">Hybrid Cloud</span>
+            <span class="diagram-tag">EKS</span>
+            <span class="diagram-tag">VMware</span>
+            <span class="diagram-tag">CI/CD</span>
+          </div>
+        </div>
+
+        <div class="diagram-content">
+          <div class="diagram-visual">
+            <div class="diagram-image-wrapper">
+              <img src="images/a5.png" alt="EKS VMware Hybrid Architecture Diagram" onclick="openModal(this.src)" loading="lazy">
+              <div class="zoom-hint">🔍 Click to enlarge</div>
+            </div>
+          </div>
+
+          <div class="diagram-explanation">
+            <div class="explanation-intro">
+              <h3>📋 Architecture Overview</h3>
+              <p>This hybrid architecture bridges a native AWS environment and a VMware Cloud on AWS Software-Defined Data Center (SDDC). Application workloads run in a managed Amazon EKS cluster inside a private VPC subnet, while legacy or specialized database workloads remain on VMware VMs within the SDDC. A CI/CD pipeline automates container image building and deployment, and Route 53 with a Network Load Balancer handles user traffic routing.</p>
+            </div>
+
+            <h4>⚙️ Key Components:</h4>
+            <p><strong>Amazon EKS Cluster (Step 2):</strong> A fully managed Kubernetes cluster deployed in a private subnet. It runs two logical deployment groups — <em>deployment-ui</em> (frontend services and pods) and <em>deployment-app</em> (backend services and pods) — separated for independent scaling and lifecycle management.</p>
+            <p><strong>Kubernetes Ingress & Network Load Balancer (Step 5):</strong> Traffic from the internet enters via Route 53 DNS (Step 6), is directed to a Network Load Balancer (NLB), which forwards it through the Kubernetes Ingress controller to the appropriate UI or app service inside the EKS cluster.</p>
+            <p><strong>Elastic Network Interface & NSX-T Router (Steps 1 & 4):</strong> The EKS cluster connects to the VMware SDDC via an Elastic Network Interface (ENI). The NSX-T Tier-0 Router within the SDDC compute network routes traffic between AWS and the VMware VMs hosting database workloads, enabling seamless hybrid connectivity.</p>
+            <p><strong>CI/CD Pipeline (Steps 7–11):</strong> The dev team commits code to AWS CodeCommit (Step 7). CodePipeline orchestrates the workflow — triggering CodeBuild (Step 8) to compile and containerize the application, push the resulting image to Amazon ECR (Step 9), and then deploy updated containers to the EKS cluster (Steps 10 & 11) automatically.</p>
+            <p><strong>VMware Cloud on AWS SDDC:</strong> The SDDC hosts EC2 bare metal instances (ESXi clusters) and VMware VMs running database workloads within an NSX-T overlay network. This allows enterprises to run VMware-native workloads on AWS hardware without re-platforming.</p>
+
+            <div class="key-takeaways">
+              <h4>💡 Key Takeaways</h4>
+              <ul>
+                <li>VMware Cloud on AWS lets enterprises extend on-premises VMware workloads to AWS without re-architecting</li>
+                <li>EKS in a private subnet keeps container workloads secure and isolated from direct public access</li>
+                <li>The CodePipeline + CodeBuild + ECR chain provides a fully managed, serverless CI/CD workflow</li>
+                <li>NSX-T networking enables micro-segmentation and overlay networking within the SDDC</li>
+                <li>Route 53 + NLB provides highly available, DNS-level traffic routing to Kubernetes Ingress</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DIAGRAM 6: Industrial IoT with Kelvin Platform on AWS -->
+      <div class="diagram-card">
+        <div class="diagram-header">
+          <div class="diagram-title-row">
+            <h2 class="diagram-title">Industrial IoT Platform with Kelvin on Amazon EKS</h2>
+            <div class="diagram-number">06</div>
+          </div>
+          <p class="diagram-subtitle">End-to-end industrial IoT architecture connecting factory edge gateways to AWS EKS-hosted Kelvin platform, with customer-side EC2 deployments and integrations for analytics, ML, and monitoring</p>
+          <div class="diagram-tags">
+            <span class="diagram-tag primary">Industrial IoT</span>
+            <span class="diagram-tag">EKS</span>
+            <span class="diagram-tag">Edge Computing</span>
+            <span class="diagram-tag">SageMaker</span>
+          </div>
+        </div>
+
+        <div class="diagram-content">
+          <div class="diagram-visual">
+            <div class="diagram-image-wrapper">
+              <img src="images/a6.png" alt="Industrial IoT Kelvin Architecture Diagram" onclick="openModal(this.src)" loading="lazy">
+              <div class="zoom-hint">🔍 Click to enlarge</div>
+            </div>
+          </div>
+
+          <div class="diagram-explanation">
+            <div class="explanation-intro">
+              <h3>📋 Architecture Overview</h3>
+              <p>This architecture shows how Kelvin, an industrial intelligence platform, connects physical factory assets to cloud-scale analytics and AI. Industrial machines and PLCs feed data to edge gateways, which relay it to the Kelvin platform running on Amazon EKS within a dedicated AWS account. Customer workloads run in a separate account and integrate with a rich ecosystem of AWS services for storage, analytics, and machine learning.</p>
+            </div>
+
+            <h4>🏭 Key Components:</h4>
+            <p><strong>Industrial Edge (Step 1):</strong> Physical industrial data stores and gateway/PLC devices at the factory floor collect sensor readings, operational telemetry, and machine states. This raw operational technology (OT) data is the foundation of the architecture.</p>
+            <p><strong>Kelvin Node & Bridges (Step 2):</strong> Edge Gateway components running inside the factory. Kelvin Nodes act as local compute agents that pre-process and buffer data before securely transmitting it to the cloud. Kelvin Bridges handle the protocol translation between industrial equipment and cloud APIs.</p>
+            <p><strong>Amazon EKS — Kelvin Cluster (Step 5):</strong> The core platform runs as a containerized Kubernetes workload on Amazon EKS within Kelvin's own AWS account. An Application Load Balancer routes external traffic into the cluster. Amazon RDS provides persistent relational storage for platform metadata, while Amazon SNS (Step 9) handles event-driven notifications and alerting across the system.</p>
+            <p><strong>Kelvin Applications (Steps 3 & 4):</strong> Kelvin Manager and Kelvin SDK expose platform capabilities to Kelvin users through web and mobile interfaces (Step 7, Kelvin Maps/Copilots), enabling real-time monitoring, configuration, and AI-assisted decision making.</p>
+            <p><strong>Customer Account & Integrations (Steps 6 & 8):</strong> Customer EC2 instances (running Kelvin Nodes) sit in a separate AWS account. These connect to a suite of AWS integration services: <em>Amazon S3</em> for raw data archiving, <em>AWS IoT SiteWise</em> for industrial asset modeling and time-series data ingestion, <em>Amazon QuickSight</em> for BI dashboards, and <em>Amazon SageMaker</em> for training and deploying predictive maintenance and anomaly detection ML models.</p>
+
+            <div class="key-takeaways">
+              <h4>💡 Key Takeaways</h4>
+              <ul>
+                <li>Edge-to-cloud architecture ensures data collection even with intermittent connectivity at the factory floor</li>
+                <li>Separating Kelvin's platform account from the customer account enforces strong multi-tenancy and security boundaries</li>
+                <li>Amazon EKS provides the scalable, containerized runtime needed for a multi-tenant SaaS platform</li>
+                <li>IoT SiteWise bridges the gap between operational technology (OT) and IT data models</li>
+                <li>SageMaker integration enables predictive maintenance, quality control, and process optimization at scale</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DIAGRAM 7: IBM Instana Observability on AWS -->
+      <div class="diagram-card">
+        <div class="diagram-header">
+          <div class="diagram-title-row">
+            <h2 class="diagram-title">IBM Instana Observability Across AWS & Hybrid Environments</h2>
+            <div class="diagram-number">07</div>
+          </div>
+          <p class="diagram-subtitle">Full-stack observability platform using IBM Instana SaaS to monitor AWS-native services (EC2, EKS, ECS, ROSA, Lambda) alongside corporate data center infrastructure, with alerts delivered via email, webhooks, and chat</p>
+          <div class="diagram-tags">
+            <span class="diagram-tag primary">Observability</span>
+            <span class="diagram-tag">Monitoring</span>
+            <span class="diagram-tag">Hybrid</span>
+            <span class="diagram-tag">ROSA</span>
+          </div>
+        </div>
+
+        <div class="diagram-content">
+          <div class="diagram-visual">
+            <div class="diagram-image-wrapper">
+              <img src="images/a7.png" alt="IBM Instana Observability Architecture Diagram" onclick="openModal(this.src)" loading="lazy">
+              <div class="zoom-hint">🔍 Click to enlarge</div>
+            </div>
+          </div>
+
+          <div class="diagram-explanation">
+            <div class="explanation-intro">
+              <h3>📋 Architecture Overview</h3>
+              <p>This architecture demonstrates enterprise-grade observability using IBM Instana as a SaaS monitoring platform spanning both an AWS customer environment and an on-premises corporate data center. Lightweight Instana agents are deployed across all compute targets and feed telemetry into the Instana SaaS backend for processing, visualization, and alerting. Developers and SREs receive actionable alerts through multiple channels while the sensor repository ensures agent configurations are always current.</p>
+            </div>
+
+            <h4>🔭 Key Components:</h4>
+            <p><strong>IBM Instana SaaS — Stream Processor & UI Backend:</strong> The centralized Instana control plane ingests high-frequency telemetry from all agent sources, processes it in real time using a stream processing engine, and serves dashboards, traces, and alerts through the UI backend. Developers and SREs access full-stack visibility without managing the Instana infrastructure itself.</p>
+            <p><strong>Customer Environment — Instana Agents on Compute Targets:</strong> Agents are deployed directly onto <em>Amazon EC2</em> instances, within <em>Amazon EKS</em> pods (as a DaemonSet), on <em>Amazon ECS</em> tasks, and inside <em>Red Hat OpenShift Service on AWS (ROSA)</em> clusters. Each agent automatically discovers running processes, services, and dependencies with zero-configuration auto-instrumentation.</p>
+            <p><strong>Amazon CloudWatch Integration:</strong> CloudWatch acts as the central metrics aggregation layer for AWS-native services. Instana pulls CloudWatch metrics for managed services — including <em>AWS Lambda</em>, <em>Amazon DynamoDB</em>, <em>Amazon S3</em>, <em>Amazon SQS</em>, <em>Amazon Aurora</em>, and <em>Amazon MSK</em> — to provide correlated observability across both custom and managed workloads.</p>
+            <p><strong>ROSA with IBM MQ & IBM Db2:</strong> A special ROSA cluster (Red Hat OpenShift on AWS) runs IBM middleware workloads — IBM MQ for message queuing and IBM Db2 for relational data. Instana monitors both the OpenShift platform layer and the IBM application layer, enabling end-to-end distributed tracing across hybrid stacks.</p>
+            <p><strong>Corporate Data Center — On-Premises Agents:</strong> Instana agents installed on on-premises servers, applications, and databases feed the same SaaS backend, creating a unified observability plane that spans both cloud and on-premises infrastructure without siloed tooling.</p>
+            <p><strong>Alerting Channels:</strong> When Instana detects anomalies, threshold breaches, or incidents, it delivers alerts to developers and SREs via <em>email</em>, <em>webhooks</em> (for integration with ITSM tools like PagerDuty or ServiceNow), and <em>chat platforms</em> (Slack, Microsoft Teams).</p>
+
+            <div class="key-takeaways">
+              <h4>💡 Key Takeaways</h4>
+              <ul>
+                <li>Instana's agent-based model provides automatic discovery and instrumentation with no code changes required</li>
+                <li>A single SaaS control plane unifies observability across cloud, containers, serverless, and on-premises infrastructure</li>
+                <li>CloudWatch bridges the gap between Instana and AWS managed services that cannot host agents</li>
+                <li>ROSA enables running Red Hat OpenShift workloads on AWS with full managed control plane support</li>
+                <li>Multi-channel alerting ensures incidents reach the right responders through their preferred notification method</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DIAGRAM 8: Multi-Region Active/Passive DR with Aurora Global Database -->
+      <div class="diagram-card">
+        <div class="diagram-header">
+          <div class="diagram-title-row">
+            <h2 class="diagram-title">Multi-Region Active/Passive Disaster Recovery with Aurora Global Database</h2>
+            <div class="diagram-number">08</div>
+          </div>
+          <p class="diagram-subtitle">Production-grade disaster recovery architecture spanning two AWS Regions using Route 53 failover routing, Auto Scaling EC2 fleets, Aurora Global Database with asynchronous cross-region replication, and automated cluster snapshots</p>
+          <div class="diagram-tags">
+            <span class="diagram-tag primary">Disaster Recovery</span>
+            <span class="diagram-tag">Multi-Region</span>
+            <span class="diagram-tag">Aurora Global</span>
+            <span class="diagram-tag">Route 53</span>
+          </div>
+        </div>
+
+        <div class="diagram-content">
+          <div class="diagram-visual">
+            <div class="diagram-image-wrapper">
+              <img src="images/a8.png" alt="Multi-Region Active Passive DR Architecture Diagram" onclick="openModal(this.src)" loading="lazy">
+              <div class="zoom-hint">🔍 Click to enlarge</div>
+            </div>
+          </div>
+
+          <div class="diagram-explanation">
+            <div class="explanation-intro">
+              <h3>📋 Architecture Overview</h3>
+              <p>This architecture implements a classic active/passive disaster recovery (DR) strategy across two AWS Regions. The active region handles all production traffic with fully provisioned compute resources. The passive region stays in warm standby — database replicas and Auto Scaling group configurations are in place, but no EC2 instances are actively running, keeping DR costs low. Route 53 health checks detect failures and automatically redirect traffic to the passive region within seconds.</p>
+            </div>
+
+            <h4>🛡️ Key Components:</h4>
+            <p><strong>Route 53 Failover Routing:</strong> Route 53 is configured with a <em>primary</em> record pointing to the active region and a <em>secondary</em> record pointing to the passive region. Health checks continuously probe the active region's load balancer. If the health check fails, Route 53 automatically promotes the secondary record, routing all DNS queries to the passive region without manual intervention. TTL tuning controls propagation speed.</p>
+            <p><strong>Active Region — Elastic Load Balancing & Auto Scaling:</strong> Production traffic enters through an Elastic Load Balancer (ELB), which distributes requests across Front End Servers and Application Servers in two Availability Zones. Auto Scaling groups maintain the desired instance count and replace unhealthy instances automatically, ensuring high availability within the region.</p>
+            <p><strong>Active Region — Aurora Primary & Replica:</strong> The active region runs an Aurora Primary instance in one AZ and an Aurora Replica in a second AZ, both sharing a distributed Aurora cluster storage volume. The replica enables read offloading and provides sub-30-second automatic failover if the primary fails within the region — independent of the cross-region DR mechanism.</p>
+            <p><strong>Passive Region — Warm Standby with No Running Instances:</strong> The passive region has its ELB, Auto Scaling groups, and Aurora Replica configured and ready, but <em>no EC2 instances are running</em>. This warm standby approach eliminates the compute cost of a fully active standby while dramatically reducing RTO compared to a cold standby. When failover occurs, Auto Scaling launches instances rapidly from the existing launch configurations.</p>
+            <p><strong>Aurora Global Database — Asynchronous Cross-Region Replication:</strong> Aurora Global Database replicates data from the active region's Aurora cluster to the passive region's Aurora Replica with typical replication lag under one second. This RPO (Recovery Point Objective) means virtually no data loss during a regional failure. In a DR event, the passive region's replica can be promoted to a standalone primary cluster within minutes.</p>
+            <p><strong>Aurora Cluster Snapshot:</strong> The passive region also maintains periodic Aurora cluster snapshots stored in Amazon S3. Snapshots provide a point-in-time recovery option independent of the live replica, protecting against logical data corruption or accidental deletion scenarios that replication alone cannot address.</p>
+
+            <div class="key-takeaways">
+              <h4>💡 Key Takeaways</h4>
+              <ul>
+                <li>Active/passive DR balances cost efficiency with fast recovery — warm standby keeps RTO low without paying for idle compute</li>
+                <li>Aurora Global Database delivers sub-second RPO with asynchronous cross-region replication at the storage layer</li>
+                <li>Route 53 health-check-based failover automates DNS redirection without manual runbook execution</li>
+                <li>Multi-AZ within each region handles availability zone failures independently from the cross-region DR strategy</li>
+                <li>Cluster snapshots in the passive region guard against logical failures that live replication propagates automatically</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- DIAGRAM 9: VPC Routing with Public/Private Subnets and VPN -->
+      <div class="diagram-card">
+        <div class="diagram-header">
+          <div class="diagram-title-row">
+            <h2 class="diagram-title">VPC Routing with Public & Private Subnets, Internet Gateway & VPN</h2>
+            <div class="diagram-number">09</div>
+          </div>
+          <p class="diagram-subtitle">Foundational VPC networking architecture showing explicit and implicit route table associations, security group isolation across public and private subnets, and site-to-site VPN connectivity to a corporate data center</p>
+          <div class="diagram-tags">
+            <span class="diagram-tag primary">Networking</span>
+            <span class="diagram-tag">VPC</span>
+            <span class="diagram-tag">VPN</span>
+            <span class="diagram-tag">Route Tables</span>
+          </div>
+        </div>
+
+        <div class="diagram-content">
+          <div class="diagram-visual">
+            <div class="diagram-image-wrapper">
+              <img src="images/a9.png" alt="VPC Routing Public Private Subnets VPN Diagram" onclick="openModal(this.src)" loading="lazy">
+              <div class="zoom-hint">🔍 Click to enlarge</div>
+            </div>
+          </div>
+
+          <div class="diagram-explanation">
+            <div class="explanation-intro">
+              <h3>📋 Architecture Overview</h3>
+              <p>This diagram illustrates the core VPC networking concepts every AWS architect must understand: how route tables control traffic flow, how public and private subnets differ, and how a Site-to-Site VPN extends a corporate data center into the AWS cloud. All components sit within a single Region and a single Availability Zone, making it ideal for understanding subnet-level routing before scaling to multi-AZ designs.</p>
+            </div>
+
+            <h4>🌐 Key Components:</h4>
+            <p><strong>Public Subnet with Security Group A:</strong> Hosts EC2 instances that need direct internet access — typically web servers or bastion hosts. The subnet is "public" because its associated Route Table A contains an explicit route directing internet-bound traffic (0.0.0.0/0) to the Internet Gateway. Security Group A defines the allowed inbound/outbound rules at the instance level (e.g., HTTP/HTTPS inbound).</p>
+            <p><strong>Private Subnet with Security Group B:</strong> Hosts EC2 instances that must not be directly reachable from the internet — typically application servers, databases, or internal microservices. Route Table B is implicitly associated with this subnet and routes outbound traffic through the VPN Gateway rather than the Internet Gateway, keeping traffic on private networks. Security Group B is typically more restrictive, only permitting traffic from Security Group A.</p>
+            <p><strong>Route Table A (Explicit Association):</strong> Explicitly associated with the public subnet. Contains routing rules that send 172.16.0.0, 172.16.1.0, and 172.16.2.0 prefixes through the VPC Router, plus a default route to the Internet Gateway. Explicit association means this route table was manually linked to the subnet.</p>
+            <p><strong>Route Table B (Implicit Association):</strong> Implicitly associated with the private subnet — meaning it is the VPC's main route table and applies to any subnet not explicitly linked to another route table. It routes the same 172.16.x.x prefixes through the router, with private traffic directed toward the VPN Gateway instead of the Internet Gateway.</p>
+            <p><strong>VPC Router:</strong> The implicit, always-on routing component inside every VPC. It handles local routing between subnets and forwards traffic to the correct gateway (Internet Gateway or VPN Gateway) based on the destination IP and the route table entries.</p>
+            <p><strong>Internet Gateway:</strong> An AWS-managed, horizontally scaled gateway attached to the VPC that enables bidirectional internet communication for instances in public subnets. It performs NAT for instances with public IP addresses.</p>
+            <p><strong>VPN Gateway, VPN Connection & Customer Gateway:</strong> Together these three components establish an AWS Site-to-Site VPN tunnel. The VPN Gateway is the AWS-side endpoint attached to the VPC. The Customer Gateway represents the on-premises router or firewall device. The VPN Connection is the encrypted IPsec tunnel between them, enabling private EC2 instances to communicate securely with the corporate data center over the public internet.</p>
+
+            <div class="key-takeaways">
+              <h4>💡 Key Takeaways</h4>
+              <ul>
+                <li>The only difference between a public and private subnet is whether its route table has a route to an Internet Gateway</li>
+                <li>Route Table A uses explicit association (manually linked); Route Table B uses implicit association (main route table fallback)</li>
+                <li>Security groups are stateful firewalls that operate at the instance level — NACLs operate at the subnet level</li>
+                <li>A VPN Gateway + Customer Gateway + VPN Connection creates an encrypted Site-to-Site IPsec tunnel for hybrid connectivity</li>
+                <li>The VPC Router is implicit — you configure it through route tables, not directly</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DIAGRAM 10: Serverless Web App with Cognito, CloudFront & Lambda -->
+      <div class="diagram-card">
+        <div class="diagram-header">
+          <div class="diagram-title-row">
+            <h2 class="diagram-title">Serverless Web Application with Cognito Auth, CloudFront & Lambda</h2>
+            <div class="diagram-number">10</div>
+          </div>
+          <p class="diagram-subtitle">Production serverless architecture featuring CloudFront CDN delivery, Cognito token-based authentication, API Gateway routing to role-isolated Lambda functions, DynamoDB data retrieval, and ACM-managed SSL/TLS certificates on a custom domain</p>
+          <div class="diagram-tags">
+            <span class="diagram-tag primary">Serverless</span>
+            <span class="diagram-tag">Cognito</span>
+            <span class="diagram-tag">CloudFront</span>
+            <span class="diagram-tag">Lambda</span>
+          </div>
+        </div>
+
+        <div class="diagram-content">
+          <div class="diagram-visual">
+            <div class="diagram-image-wrapper">
+              <img src="images/a10.png" alt="Serverless Web App Cognito CloudFront Lambda Diagram" onclick="openModal(this.src)" loading="lazy">
+              <div class="zoom-hint">🔍 Click to enlarge</div>
+            </div>
+          </div>
+
+          <div class="diagram-explanation">
+            <div class="explanation-intro">
+              <h3>📋 Architecture Overview</h3>
+              <p>This architecture represents a complete, production-ready serverless web application. A browser client accesses the app through a custom domain secured by SSL/TLS. CloudFront accelerates global delivery, Cognito handles identity and token verification, and API Gateway routes requests to three dedicated Lambda functions — each scoped to its own IAM role and backed by DynamoDB. The design demonstrates clean separation of concerns: every resource path (/tickets, /shows, /info) has its own Lambda with its own least-privilege IAM role.</p>
+            </div>
+
+            <h4>⚡ Key Components:</h4>
+            <p><strong>Client & Custom Domain:</strong> The user's browser navigates to a custom domain (e.g., https://example.com). The client-side app issues HTTPS API requests to a separate API subdomain (e.g., https://api-example.com), sending a third-party token along with each request for authorization.</p>
+            <p><strong>Amazon CloudFront:</strong> Acts as the global CDN and HTTPS termination point for the web application. CloudFront caches static assets at edge locations worldwide, reducing latency for geographically distributed users and offloading origin traffic. It integrates with Route 53 for custom domain mapping and with ACM for free SSL/TLS certificates.</p>
+            <p><strong>Amazon Route 53:</strong> Manages DNS records for the custom domain, mapping the friendly domain name to the CloudFront distribution and the API Gateway endpoint. Route 53 also supports health checks and latency-based routing for multi-region deployments.</p>
+            <p><strong>AWS Certificate Manager (ACM):</strong> Provisions and auto-renews a free SSL/TLS certificate bound to the custom domain. CloudFront uses this certificate to enable HTTPS, ensuring all data in transit is encrypted. ACM certificates for CloudFront must be created in the us-east-1 region.</p>
+            <p><strong>Amazon Cognito:</strong> Handles user authentication and authorization. The client logs in using a Cognito User Pool ID or a third-party identity provider (e.g., Google, SAML). Cognito issues a JWT access token, which the client app attaches to every API Gateway request. API Gateway verifies this token with Cognito before forwarding the request to Lambda — acting as a zero-code authorizer.</p>
+            <p><strong>Amazon API Gateway:</strong> The unified API entry point that receives HTTPS requests, validates Cognito tokens, and routes each request to the appropriate Lambda function based on the URL path: <em>/tickets</em>, <em>/shows</em>, or <em>/info</em>. API Gateway also handles rate limiting, request validation, and CORS configuration.</p>
+            <p><strong>AWS Lambda Functions with IAM Roles:</strong> Three dedicated Lambda functions each handle one API resource. Each function is assigned its own IAM execution role (<em>lambda-ticket-role</em>, <em>lambda-show-role</em>, <em>lambda-info-role</em>), enforcing least-privilege access — each Lambda can only read the specific DynamoDB table items it needs, preventing over-permissioning.</p>
+            <p><strong>Amazon DynamoDB:</strong> A fully managed NoSQL database storing the application data (ticket, show, and info records). Lambda functions retrieve the appropriate DynamoDB information based on incoming request parameters and return the result to the API Gateway response chain.</p>
+
+            <div class="key-takeaways">
+              <h4>💡 Key Takeaways</h4>
+              <ul>
+                <li>Separate IAM roles per Lambda function enforces least-privilege — a compromised function cannot access other resources</li>
+                <li>Cognito token verification at API Gateway provides zero-code authentication without custom Lambda authorizer logic</li>
+                <li>ACM certificates are free, auto-renewing, and eliminate the operational burden of manual certificate management</li>
+                <li>CloudFront + Route 53 enables custom domain HTTPS for serverless apps without managing any web servers</li>
+                <li>Path-based Lambda routing keeps function responsibilities small, independently deployable, and easier to test</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DIAGRAM 11: Multi-AZ ECS Fargate with CloudFront, Cognito & DynamoDB -->
+      <div class="diagram-card">
+        <div class="diagram-header">
+          <div class="diagram-title-row">
+            <h2 class="diagram-title">Multi-AZ Containerized App with ECS Fargate, Cognito & DynamoDB</h2>
+            <div class="diagram-number">11</div>
+          </div>
+          <p class="diagram-subtitle">Highly available containerized web application using ECS Fargate across two Availability Zones, fronted by CloudFront and Cognito for global delivery and authentication, with DynamoDB for data storage, CloudWatch for monitoring, and ECR for container image management</p>
+          <div class="diagram-tags">
+            <span class="diagram-tag primary">Containers</span>
+            <span class="diagram-tag">ECS Fargate</span>
+            <span class="diagram-tag">Multi-AZ</span>
+            <span class="diagram-tag">DynamoDB</span>
+          </div>
+        </div>
+
+        <div class="diagram-content">
+          <div class="diagram-visual">
+            <div class="diagram-image-wrapper">
+              <img src="images/a11.png" alt="Multi-AZ ECS Fargate Architecture Diagram" onclick="openModal(this.src)" loading="lazy">
+              <div class="zoom-hint">🔍 Click to enlarge</div>
+            </div>
+          </div>
+
+          <div class="diagram-explanation">
+            <div class="explanation-intro">
+              <h3>📋 Architecture Overview</h3>
+              <p>This architecture delivers a highly available containerized web application without managing any servers. AWS Fargate eliminates EC2 instance management, while ECS provides container orchestration across two Availability Zones. The front-end delivery stack (Route 53 → Cognito → CloudFront → S3) handles authentication and global content delivery, while the backend stack (API Gateway → ALB → ECS/Fargate → DynamoDB) processes application logic. CloudWatch provides end-to-end observability, and ECR stores container images close to where they run.</p>
+            </div>
+
+            <h4>🐳 Key Components:</h4>
+            <p><strong>Step 1 — Amazon Route 53:</strong> Resolves the web client's custom domain to the CloudFront distribution. Route 53 also supports latency-based routing and health checks if the architecture scales to multiple regions.</p>
+            <p><strong>Step 2 — Amazon Cognito:</strong> Authenticates users before they access the application. Cognito issues JWT tokens validated by API Gateway, enabling token-based authorization across all backend API calls without custom auth code in the application containers.</p>
+            <p><strong>Step 3 — Amazon CloudFront:</strong> A global CDN that caches and delivers static web assets from the nearest edge location, drastically reducing latency for international users. CloudFront also enforces HTTPS and integrates with ACM for certificate management.</p>
+            <p><strong>Step 4 — Amazon S3 (Static Storage):</strong> Stores the static frontend assets (HTML, CSS, JavaScript, images) that CloudFront distributes. S3 serves as the CloudFront origin for static content, decoupling it from the dynamic containerized backend.</p>
+            <p><strong>Step 5 — Amazon API Gateway:</strong> The single entry point for all dynamic API requests. After verifying the Cognito token, API Gateway forwards requests to the Application Load Balancer, which routes them to the appropriate ECS service.</p>
+            <p><strong>Step 6 — Application Load Balancer (ALB):</strong> Distributes incoming API traffic across ECS Fargate tasks in both Availability Zones. The ALB performs health checks on tasks and automatically stops routing to unhealthy containers, ensuring zero-downtime deployments and fault tolerance.</p>
+            <p><strong>Steps 7 — Amazon ECS + AWS Fargate (AZ 1 & AZ 2):</strong> ECS manages container task scheduling and service definitions, while Fargate provides the serverless compute layer — no EC2 instances to patch or right-size. Tasks run in <em>private app subnets</em> in both AZ 1 and AZ 2, providing resilience against an AZ failure. Container images are pulled from ECR at task launch.</p>
+            <p><strong>Step 8 — Amazon DynamoDB (Private Database Subnets):</strong> A fully managed, serverless NoSQL database deployed in private database subnets in both AZs. DynamoDB stores application state and data, responding to read/write requests from ECS Fargate tasks. DynamoDB's built-in multi-AZ replication means the application's data layer is inherently highly available.</p>
+            <p><strong>Step 9 — Amazon ECR:</strong> A fully managed container registry storing the Docker images deployed to ECS Fargate. ECR integrates with IAM for access control and with CI/CD pipelines (CodePipeline, GitHub Actions) to push new image versions. ECS pulls images from ECR when launching or updating tasks.</p>
+            <p><strong>Step 10 — Amazon CloudWatch:</strong> Provides comprehensive monitoring for the entire stack — ECS task metrics (CPU, memory), ALB access logs, DynamoDB read/write capacity, and custom application metrics. CloudWatch Alarms can trigger Auto Scaling policies for ECS services based on traffic patterns.</p>
+
+            <div class="key-takeaways">
+              <h4>💡 Key Takeaways</h4>
+              <ul>
+                <li>AWS Fargate eliminates EC2 instance management — you pay per task vCPU/memory second, not per idle instance</li>
+                <li>Separating static assets (S3 + CloudFront) from dynamic workloads (ECS + ALB) optimizes cost and performance independently</li>
+                <li>Private app and private database subnets in both AZs create two independent failure domains at every tier</li>
+                <li>ECR + ECS native integration streamlines container image deployment with built-in IAM-based access control</li>
+                <li>CloudWatch enables a single-pane-of-glass for metrics, logs, and alarms across all managed services in the stack</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DIAGRAM 12: EKS Private CA Certificate Management with cert-manager -->
+      <div class="diagram-card">
+        <div class="diagram-header">
+          <div class="diagram-title-row">
+            <h2 class="diagram-title">EKS Private Certificate Authority with cert-manager & ACM PCA</h2>
+            <div class="diagram-number">12</div>
+          </div>
+          <p class="diagram-subtitle">Automated TLS certificate lifecycle management inside Amazon EKS using AWS Private CA (ACM PCA), the cert-manager Certificate Controller, Kubernetes Secrets, and an NLB Ingress controller with SSL termination at the edge</p>
+          <div class="diagram-tags">
+            <span class="diagram-tag primary">Security</span>
+            <span class="diagram-tag">EKS</span>
+            <span class="diagram-tag">TLS/PKI</span>
+            <span class="diagram-tag">cert-manager</span>
+          </div>
+        </div>
+
+        <div class="diagram-content">
+          <div class="diagram-visual">
+            <div class="diagram-image-wrapper">
+              <img src="images/a12.jpg" alt="EKS Private CA cert-manager Architecture Diagram" onclick="openModal(this.src)" loading="lazy">
+              <div class="zoom-hint">🔍 Click to enlarge</div>
+            </div>
+          </div>
+
+          <div class="diagram-explanation">
+            <div class="explanation-intro">
+              <h3>📋 Architecture Overview</h3>
+              <p>This architecture solves a critical operational challenge in enterprise Kubernetes: automating the full lifecycle of private TLS certificates for internal services. Rather than manually generating, distributing, and rotating certificates, this design uses ACM Private CA as the trusted root authority and cert-manager as the Kubernetes-native automation engine. The result is certificates that are automatically requested, issued, stored as Kubernetes Secrets, consumed by application pods, and rotated before expiry — with SSL terminated at the NLB Ingress layer.</p>
+            </div>
+
+            <h4>🔐 Key Components:</h4>
+            <p><strong>ACM Private Certificate Authority (ACM PCA):</strong> AWS's fully managed private CA service acts as the root or subordinate certificate authority for the organization. It issues X.509 certificates signed by the private CA, enabling mTLS and internal service-to-service encryption without relying on public CAs. ACM PCA is referenced by its ARN (Amazon Resource Name) when configuring the issuer controller.</p>
+            <p><strong>AWS Private CA Issuer Controller:</strong> A Kubernetes controller (deployed as a pod in EKS) that bridges cert-manager with ACM PCA. When cert-manager creates a certificate request, the Issuer Controller intercepts it, calls the ACM PCA API using the configured PCA ARN, and retrieves the signed certificate. It watches for certificate request events and updates their status once the CA responds.</p>
+            <p><strong>cert-manager Certificate Controller:</strong> The core cert-manager component running inside the EKS control plane. It watches Kubernetes Certificate custom resources, creates CertificateRequest objects, monitors their status, and stores the resulting signed certificate and private key as a Kubernetes Secret. It also handles automatic certificate renewal before expiry (typically at 2/3 of the certificate's lifetime).</p>
+            <p><strong>Kubernetes API Server & ETCD:</strong> The API Server is the central management plane for all Kubernetes resources — it receives certificate requests from cert-manager and stores the resulting certificate Secrets. ETCD is the distributed key-value store backing the API Server, persisting all cluster state including Secrets. Secrets containing TLS certificates are encrypted at rest in ETCD when EKS envelope encryption is enabled.</p>
+            <p><strong>Kubernetes Secret (TLS Certificate):</strong> The certificate and private key issued by ACM PCA are stored as a Kubernetes TLS Secret. Application workloads consume certificates by mounting this Secret as a volume or referencing it in an Ingress resource — decoupling certificate management from application deployment.</p>
+            <p><strong>EC2 Node Compute Group — Pods & Hello World Services:</strong> Application pods (Pod 1 and Pod 2) run on EC2 worker nodes in the EKS cluster. Each pod runs a Hello World Service that consumes TLS certificates via the Kubernetes Secret, enabling encrypted communication between internal services or exposing HTTPS endpoints to the Ingress controller.</p>
+            <p><strong>Ingress Controller & AWS Network Load Balancer (NLB):</strong> The Ingress controller (e.g., AWS Load Balancer Controller) routes external HTTPS traffic into the appropriate pods based on Ingress rules. SSL is terminated at the Ingress layer using the ACM-issued certificate — the NLB handles TLS handshake at the edge, forwarding decrypted traffic to the pods over the cluster network.</p>
+
+            <div class="key-takeaways">
+              <h4>💡 Key Takeaways</h4>
+              <ul>
+                <li>cert-manager automates the full certificate lifecycle — no manual CSR generation, signing, or rotation required</li>
+                <li>ACM PCA provides a managed, auditable private CA without running your own CA infrastructure</li>
+                <li>Certificates stored as Kubernetes Secrets are accessible to any pod in the namespace — RBAC controls who can read them</li>
+                <li>SSL termination at the NLB/Ingress layer means backend pods can run plain HTTP internally, simplifying service code</li>
+                <li>The Issuer Controller pattern decouples Kubernetes cert-manager from the specific CA backend — you can swap ACM PCA for Vault or Let's Encrypt without changing application code</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DIAGRAM 13: Multi-AZ HA with EC2, ALB, EFS & RDS Read Replica -->
+      <div class="diagram-card">
+        <div class="diagram-header">
+          <div class="diagram-title-row">
+            <h2 class="diagram-title">Multi-AZ High Availability with EC2, ALB, EFS Shared Storage & RDS Read Replica</h2>
+            <div class="diagram-number">13</div>
+          </div>
+          <p class="diagram-subtitle">Classic high-availability web architecture spanning two Availability Zones with an Application Load Balancer across public EC2 instances, a shared EFS file system with per-AZ mount targets, and RDS with asynchronous read replica replication in private subnets</p>
+          <div class="diagram-tags">
+            <span class="diagram-tag primary">High Availability</span>
+            <span class="diagram-tag">Multi-AZ</span>
+            <span class="diagram-tag">EFS</span>
+            <span class="diagram-tag">RDS</span>
+          </div>
+        </div>
+
+        <div class="diagram-content">
+          <div class="diagram-visual">
+            <div class="diagram-image-wrapper">
+              <img src="images/a13.png" alt="Multi-AZ EC2 ALB EFS RDS Architecture Diagram" onclick="openModal(this.src)" loading="lazy">
+              <div class="zoom-hint">🔍 Click to enlarge</div>
+            </div>
+          </div>
+
+          <div class="diagram-explanation">
+            <div class="explanation-intro">
+              <h3>📋 Architecture Overview</h3>
+              <p>This architecture represents a well-established, production-proven pattern for running stateful web applications with high availability. Two EC2 instances in separate Availability Zones handle compute, an Application Load Balancer distributes traffic between them, Amazon EFS provides a shared POSIX-compliant file system accessible from both AZs simultaneously, and Amazon RDS with a Read Replica in the second AZ handles the database tier. Security groups control traffic at both the compute and database layers, clearly separating the network security boundary for each tier.</p>
+            </div>
+
+            <h4>🖥️ Key Components:</h4>
+            <p><strong>Internet Gateway:</strong> The VPC-level gateway that allows the EC2 instances in the public subnets to receive inbound traffic from the internet and send outbound traffic. The Internet Gateway is attached to the VPC and referenced in the public subnet route tables.</p>
+            <p><strong>Application Load Balancer (EC2 Security Group):</strong> An ALB deployed across both public subnets, covered by the EC2 Security Group. The ALB receives all inbound HTTP/HTTPS traffic from the Internet Gateway and distributes it evenly (or via sticky sessions) to the EC2 instances in AZ 1 and AZ 2. ALB health checks automatically stop routing to unhealthy instances, maintaining uptime during instance failures or deployments.</p>
+            <p><strong>Amazon EC2 Instances (Public Subnets — AZ 1 & AZ 2):</strong> Two EC2 web/application servers, one in each Availability Zone's public subnet. Both instances are covered by the EC2 Security Group, which permits inbound traffic only from the ALB (not directly from the internet). Running instances in public subnets here allows them to receive load-balanced traffic while still providing direct outbound internet access for package updates or API calls.</p>
+            <p><strong>Amazon EFS with Mount Targets:</strong> Amazon Elastic File System provides a fully managed, scalable NFS file system shared across both EC2 instances simultaneously. Each AZ has its own EFS Mount Target — a network endpoint within that AZ's subnet — ensuring low-latency, in-AZ access to the shared file system. The left EC2 instance is labelled "Reads only" from EFS, indicating a common pattern where one node writes (e.g., uploaded content) and replicas serve reads. EFS automatically replicates data across multiple AZs within the region for durability.</p>
+            <p><strong>Amazon RDS (Private Subnet — AZ 2) & RDS Read Replica (Private Subnet — AZ 1):</strong> The primary Amazon RDS instance resides in the private subnet of AZ 2, covered by the DB Security Group which only permits inbound connections from the EC2 Security Group. A Read Replica in AZ 1's private subnet receives asynchronous replication from the primary RDS instance — write transactions commit to the primary and are replicated to the replica with minimal lag. The Read Replica offloads read-heavy queries (reporting, search) from the primary, improving overall database throughput. In a failure scenario, the Read Replica can be promoted to a standalone primary.</p>
+            <p><strong>DB Security Group:</strong> A dedicated security group applied to both the RDS primary and Read Replica. It only allows inbound database port traffic (e.g., port 3306 for MySQL or 5432 for PostgreSQL) from instances within the EC2 Security Group — blocking all other traffic, including direct internet access. This enforces strict network segmentation between the application and database tiers.</p>
+
+            <div class="key-takeaways">
+              <h4>💡 Key Takeaways</h4>
+              <ul>
+                <li>Amazon EFS enables true shared storage across multiple EC2 instances — unlike EBS which is attached to a single instance at a time</li>
+                <li>EFS Mount Targets are per-AZ — each AZ needs its own mount target for low-latency, local access to the shared file system</li>
+                <li>RDS Read Replicas use asynchronous replication — there may be slight replication lag, so replicas are best for eventually-consistent read workloads</li>
+                <li>Separate DB Security Groups enforce the principle of network segmentation — database ports are never exposed directly to the internet</li>
+                <li>Placing the ALB in public subnets while keeping EC2 instances reachable only through the ALB is a common pattern to reduce the public attack surface</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- Back to Top Button -->
+<button class="back-to-top" id="backToTop" onclick="scrollToTop()" aria-label="Back to top">
+  ↑
+</button>
+
+<!-- IMAGE MODAL -->
+<div id="image-modal" class="modal">
+  <span class="close" onclick="closeModal()" aria-label="Close">&times;</span>
+  <img class="modal-content" id="modal-image" alt="Enlarged diagram">
+</div>
+
+<script>
+// Theme Toggle Functionality
+function toggleTheme() {
+  const body = document.body;
+  const themeIcon = document.getElementById('themeIcon');
+  
+  body.classList.toggle('light-mode');
+  
+  if (body.classList.contains('light-mode')) {
+    themeIcon.textContent = '☀️';
+    localStorage.setItem('theme', 'light');
+  } else {
+    themeIcon.textContent = '🌙';
+    localStorage.setItem('theme', 'dark');
+  }
+}
+
+// Sidebar functions
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('mobileOverlay');
+  
+  sidebar.classList.toggle('open');
+  overlay.classList.toggle('active');
+  
+  if (sidebar.classList.contains('open')) {
+    overlay.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+  } else {
+    overlay.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+}
+
+function closeSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('mobileOverlay');
+  
+  sidebar.classList.remove('open');
+  overlay.classList.remove('active');
+  overlay.style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+function toggleSidebarCollapse() {
+  const sidebar = document.getElementById('sidebar');
+  
+  // Only allow collapse on desktop
+  if (window.innerWidth > 768) {
+    sidebar.classList.toggle('collapsed');
+    localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
+  }
+}
+
+// Navigation helper
+function navigateTo(url) {
+  // Close mobile sidebar if open
+  if (window.innerWidth <= 768) {
+    closeSidebar();
+  }
+  window.location.href = url;
+}
+
+// User menu
+function toggleUserMenu() {
+  const userName = localStorage.getItem('userName');
+  
+  if (!userName) {
+    const name = prompt('Welcome! Please enter your name to personalize your experience:');
+    if (name && name.trim() !== '') {
+      localStorage.setItem('userName', name.trim());
+      updateProfileDisplay(name.trim());
+      alert('Welcome, ' + name.trim() + '! Your profile has been set up.');
+    }
+  } else {
+    const choice = prompt(
+      'Account Menu - ' + userName + '\n\n' +
+      '1. View Profile\n' +
+      '2. Settings\n' +
+      '3. Sign Out\n\n' +
+      'Enter your choice (1-3):'
+    );
+    
+    if (choice === '1') viewProfile();
+    else if (choice === '2') manageSettings();
+    else if (choice === '3') signOut();
+  }
+}
+
+function viewProfile() {
+  const userName = localStorage.getItem('userName');
+  const joinDate = localStorage.getItem('userJoinDate') || new Date().toISOString();
+  
+  const joinDateFormatted = new Date(joinDate).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+  
+  alert(
+    '👤 Profile Information\n\n' +
+    'Name: ' + userName + '\n' +
+    'Member Since: ' + joinDateFormatted
+  );
+}
+
+function manageSettings() {
+  alert('⚙️ Settings\n\nFeature coming soon!\n\nYou\'ll be able to:\n- Customize dashboard\n- Set study reminders\n- Manage notifications\n- Export progress data');
+}
+
+function signOut() {
+  if (confirm('Are you sure you want to sign out?')) {
+    localStorage.removeItem('userName');
+    updateProfileDisplay('');
+    alert('👋 You have been signed out successfully!');
+  }
+}
+
+function updateProfileDisplay(name) {
+  const profileName = document.getElementById('profileName');
+  if (name && name.trim() !== '') {
+    profileName.textContent = name;
+    profileName.style.display = 'inline';
+  } else {
+    profileName.textContent = '';
+    profileName.style.display = 'none';
+  }
+}
+
+// Particles animation
+function createParticles() {
+  const particles = document.querySelector('.particles');
+  const colors = ['#0972d3', '#00a1c9', '#ff9900'];
+  const particleCount = window.innerWidth < 768 ? 15 : 25;
+
+  for (let i = 0; i < particleCount; i++) {
+    const p = document.createElement('div');
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    p.className = 'particle';
+    p.style.cssText = `
+      width:${Math.random()*6+2}px;
+      height:${Math.random()*6+2}px;
+      background:${color};
+      left:${Math.random()*100}%;
+      top:${Math.random()*100}%;
+      opacity:${Math.random()*0.6+0.2};
+      animation-duration:${Math.random()*30+20}s;
+      box-shadow:0 0 10px ${color};
+    `;
+    particles.appendChild(p);
+  }
+}
+
+// Modal functions
+function openModal(src) {
+  const modal = document.getElementById('image-modal');
+  const modalImg = document.getElementById('modal-image');
+  modal.style.display = 'flex';
+  modalImg.src = src;
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  const modal = document.getElementById('image-modal');
+  modal.style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+// Back to top functionality
+function scrollToTop() {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+}
+
+// Show/hide back to top button
+function handleScroll() {
+  const backToTop = document.getElementById('backToTop');
+  if (window.pageYOffset > 300) {
+    backToTop.classList.add('visible');
+  } else {
+    backToTop.classList.remove('visible');
+  }
+}
+
+// Handle window resize
+function handleResize() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('mobileOverlay');
+  
+  if (window.innerWidth > 768) {
+    sidebar.classList.remove('open');
+    overlay.style.display = 'none';
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+  } else {
+    sidebar.classList.remove('collapsed');
+  }
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', () => {
+  const sidebar = document.getElementById('sidebar');
+  const sidebarCollapsed = localStorage.getItem('sidebarCollapsed');
+  const userName = localStorage.getItem('userName');
+  const savedTheme = localStorage.getItem('theme');
+  const themeIcon = document.getElementById('themeIcon');
+  
+  // Only apply collapsed state on desktop
+  if (window.innerWidth > 768 && sidebarCollapsed === 'true') {
+    sidebar.classList.add('collapsed');
+  }
+
+  if (userName) {
+    updateProfileDisplay(userName);
+  }
+
+  // Restore theme
+  if (savedTheme === 'light') {
+    document.body.classList.add('light-mode');
+    themeIcon.textContent = '☀️';
+  } else {
+    themeIcon.textContent = '🌙';
+  }
+
+  // Set join date if not exists
+  if (!localStorage.getItem('userJoinDate')) {
+    localStorage.setItem('userJoinDate', new Date().toISOString());
+  }
+
+  // Create particles
+  createParticles();
+
+  // Add scroll listener
+  window.addEventListener('scroll', handleScroll);
+  
+  // Add resize listener
+  window.addEventListener('resize', handleResize);
+
+  // Modal close on click outside
+  const modal = document.getElementById('image-modal');
+  modal.onclick = (e) => {
+    if (e.target === modal) {
+      closeModal();
+    }
+  };
+});
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeModal();
+    closeSidebar();
+  }
+});
+
+// Handle touch swipe to close sidebar on mobile
+let touchStartX = 0;
+let touchEndX = 0;
+
+document.addEventListener('touchstart', (e) => {
+  touchStartX = e.changedTouches[0].screenX;
+});
+
+document.addEventListener('touchend', (e) => {
+  touchEndX = e.changedTouches[0].screenX;
+  handleSwipe();
+});
+
+function handleSwipe() {
+  const sidebar = document.getElementById('sidebar');
+  if (window.innerWidth <= 768 && sidebar.classList.contains('open')) {
+    if (touchEndX < touchStartX - 50) {
+      closeSidebar();
+    }
+  }
+}
+</script>
+
+</body>
+</html>
